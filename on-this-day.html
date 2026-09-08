@@ -1,0 +1,2973 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+
+<title>On This Day — CrowRules Memorials</title>
+
+<meta
+  name="description"
+  content="Remember the lives connected to this day in the CrowRules Memorials archive."
+>
+
+<meta name="theme-color" content="#050505">
+
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+
+<link
+  href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;500;600;700;800&family=Orbitron:wght@500;600;700;800&display=swap"
+  rel="stylesheet"
+>
+
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+
+<style>
+
+:root{
+  --bg:#050505;
+  --bg2:#080808;
+  --panel:#0c0c0c;
+  --panel2:#111;
+  --panel3:#161616;
+  --line:#242424;
+  --line2:#333;
+
+  --text:#f0ede5;
+  --muted:#888;
+  --dim:#555;
+
+  --gold:#c9a85f;
+  --gold2:#e1c982;
+  --gold3:#82682f;
+
+  --radius:16px;
+  --shadow:0 25px 80px rgba(0,0,0,.55);
+}
+
+*{
+  box-sizing:border-box;
+  margin:0;
+  padding:0;
+}
+
+html{
+  scroll-behavior:smooth;
+}
+
+body{
+  min-height:100vh;
+
+  color:var(--text);
+
+  background:
+    radial-gradient(
+      circle at 50% -5%,
+      rgba(201,168,95,.1),
+      transparent 32%
+    ),
+    #050505;
+
+  font-family:Montserrat,Arial,sans-serif;
+}
+
+body::before{
+  content:"";
+
+  position:fixed;
+  inset:0;
+  z-index:-1;
+
+  pointer-events:none;
+
+  opacity:.022;
+
+  background-image:
+    linear-gradient(
+      rgba(255,255,255,.5) 1px,
+      transparent 1px
+    ),
+    linear-gradient(
+      90deg,
+      rgba(255,255,255,.5) 1px,
+      transparent 1px
+    );
+
+  background-size:50px 50px;
+}
+
+a{
+  color:inherit;
+  text-decoration:none;
+}
+
+button,
+input{
+  font:inherit;
+}
+
+button{
+  cursor:pointer;
+}
+
+.container{
+  width:min(1380px,calc(100% - 36px));
+  margin:auto;
+}
+
+/* =========================================================
+   HEADER
+========================================================= */
+
+.site-header{
+  position:sticky;
+  top:0;
+  z-index:1000;
+
+  background:rgba(5,5,5,.95);
+
+  border-bottom:1px solid rgba(255,255,255,.06);
+
+  backdrop-filter:blur(18px);
+}
+
+.header-inner{
+  min-height:76px;
+
+  display:flex;
+  align-items:center;
+
+  gap:25px;
+}
+
+.brand{
+  display:flex;
+  align-items:center;
+  gap:12px;
+
+  min-width:max-content;
+}
+
+.brand-mark{
+  width:40px;
+  height:40px;
+
+  display:grid;
+  place-items:center;
+
+  border:1px solid var(--gold);
+
+  transform:rotate(45deg);
+}
+
+.brand-mark span{
+  transform:rotate(-45deg);
+
+  color:var(--gold2);
+
+  font-family:Orbitron,sans-serif;
+  font-size:11px;
+  font-weight:800;
+}
+
+.brand-text strong{
+  display:block;
+
+  font-family:Orbitron,sans-serif;
+  font-size:14px;
+  letter-spacing:2px;
+}
+
+.brand-text small{
+  display:block;
+
+  color:#626262;
+
+  margin-top:3px;
+
+  font-size:8px;
+  letter-spacing:3px;
+  text-transform:uppercase;
+}
+
+.main-nav{
+  display:flex;
+  align-items:center;
+
+  gap:2px;
+
+  margin-left:auto;
+}
+
+.main-nav a{
+  padding:9px 10px;
+
+  color:#888;
+
+  border-radius:7px;
+
+  font-size:9px;
+  font-weight:600;
+}
+
+.main-nav a:hover,
+.main-nav a.active{
+  color:var(--gold2);
+
+  background:rgba(201,168,95,.08);
+}
+
+.create-btn{
+  padding:11px 15px;
+
+  color:#050505;
+  background:var(--gold);
+
+  border:1px solid var(--gold);
+  border-radius:7px;
+
+  font-size:8px;
+  font-weight:800;
+  letter-spacing:1px;
+}
+
+.create-btn:hover{
+  background:var(--gold2);
+}
+
+.mobile-toggle{
+  display:none;
+
+  width:42px;
+  height:42px;
+
+  margin-left:auto;
+
+  color:#ddd;
+  background:#111;
+
+  border:1px solid var(--line);
+  border-radius:8px;
+}
+
+.mobile-menu{
+  display:none;
+
+  padding:8px 0 15px;
+
+  border-top:1px solid #171717;
+}
+
+.mobile-menu.open{
+  display:block;
+}
+
+.mobile-menu a{
+  display:block;
+
+  padding:11px 4px;
+
+  color:#888;
+
+  font-size:10px;
+}
+
+.mobile-menu a:hover{
+  color:var(--gold2);
+}
+
+/* =========================================================
+   HERO
+========================================================= */
+
+.hero{
+  position:relative;
+  overflow:hidden;
+
+  min-height:630px;
+
+  display:flex;
+  align-items:center;
+
+  border-bottom:1px solid var(--line);
+}
+
+.hero::before{
+  content:"";
+
+  position:absolute;
+
+  width:620px;
+  height:620px;
+
+  right:-250px;
+  top:-180px;
+
+  border:1px solid rgba(201,168,95,.12);
+
+  border-radius:50%;
+
+  box-shadow:
+    0 0 0 70px rgba(201,168,95,.018),
+    0 0 0 145px rgba(201,168,95,.01);
+}
+
+.hero::after{
+  content:"";
+
+  position:absolute;
+
+  width:320px;
+  height:320px;
+
+  left:-180px;
+  bottom:-180px;
+
+  border:1px solid rgba(201,168,95,.06);
+
+  border-radius:50%;
+}
+
+.hero-inner{
+  position:relative;
+  z-index:2;
+
+  display:grid;
+
+  grid-template-columns:1.15fr .85fr;
+
+  gap:70px;
+
+  align-items:center;
+}
+
+.hero-label{
+  display:flex;
+  align-items:center;
+  gap:12px;
+
+  color:var(--gold);
+
+  font-family:Orbitron,sans-serif;
+
+  font-size:8px;
+  letter-spacing:4px;
+
+  text-transform:uppercase;
+}
+
+.hero-label::before{
+  content:"";
+
+  width:45px;
+  height:1px;
+
+  background:var(--gold);
+}
+
+.hero h1{
+  margin-top:21px;
+
+  font-family:Orbitron,sans-serif;
+
+  font-size:clamp(45px,7vw,88px);
+
+  line-height:.95;
+
+  letter-spacing:-4px;
+}
+
+.hero h1 span{
+  color:var(--gold2);
+}
+
+.hero-copy{
+  max-width:640px;
+
+  margin-top:27px;
+
+  color:#7c7c7c;
+
+  font-size:12px;
+
+  line-height:1.9;
+}
+
+.hero-actions{
+  display:flex;
+
+  gap:8px;
+
+  margin-top:30px;
+
+  flex-wrap:wrap;
+}
+
+.btn{
+  display:inline-flex;
+
+  align-items:center;
+  justify-content:center;
+
+  padding:11px 14px;
+
+  color:#aaa;
+  background:#101010;
+
+  border:1px solid #2b2b2b;
+  border-radius:7px;
+
+  font-size:8px;
+  font-weight:700;
+  letter-spacing:.8px;
+}
+
+.btn:hover{
+  color:var(--gold2);
+
+  border-color:var(--gold);
+}
+
+.btn.gold{
+  color:#050505;
+
+  background:var(--gold);
+
+  border-color:var(--gold);
+}
+
+/* =========================================================
+   MEMORY CLOCK
+========================================================= */
+
+.clock-wrap{
+  min-height:390px;
+
+  display:grid;
+  place-items:center;
+}
+
+.clock{
+  position:relative;
+
+  width:min(360px,75vw);
+  aspect-ratio:1;
+
+  display:grid;
+  place-items:center;
+
+  border:1px solid rgba(201,168,95,.25);
+
+  border-radius:50%;
+
+  background:
+    radial-gradient(
+      circle,
+      rgba(201,168,95,.07),
+      transparent 56%
+    );
+
+  box-shadow:
+    0 0 0 15px rgba(201,168,95,.012),
+    0 0 0 45px rgba(201,168,95,.008),
+    inset 0 0 70px rgba(0,0,0,.7);
+}
+
+.clock::before{
+  content:"";
+
+  position:absolute;
+
+  inset:25px;
+
+  border:1px dashed rgba(201,168,95,.15);
+
+  border-radius:50%;
+}
+
+.clock::after{
+  content:"";
+
+  position:absolute;
+
+  inset:70px;
+
+  border:1px solid rgba(201,168,95,.08);
+
+  border-radius:50%;
+}
+
+.clock-center{
+  position:relative;
+  z-index:3;
+
+  width:120px;
+  height:120px;
+
+  display:grid;
+  place-items:center;
+
+  text-align:center;
+
+  border:1px solid rgba(201,168,95,.4);
+
+  border-radius:50%;
+
+  background:#080808;
+}
+
+.clock-day{
+  color:var(--gold2);
+
+  font-family:Orbitron,sans-serif;
+
+  font-size:34px;
+  line-height:1;
+}
+
+.clock-month{
+  margin-top:7px;
+
+  color:#777;
+
+  font-size:8px;
+
+  letter-spacing:3px;
+
+  text-transform:uppercase;
+}
+
+.clock-year{
+  margin-top:4px;
+
+  color:#444;
+
+  font-family:Orbitron,sans-serif;
+
+  font-size:8px;
+}
+
+.clock-mark{
+  position:absolute;
+
+  width:8px;
+  height:8px;
+
+  border:1px solid var(--gold);
+
+  background:#050505;
+
+  border-radius:50%;
+
+  transform:translate(-50%,-50%);
+}
+
+.clock-mark.m1{
+  top:9%;
+  left:50%;
+}
+
+.clock-mark.m2{
+  top:25%;
+  left:83%;
+}
+
+.clock-mark.m3{
+  top:50%;
+  left:92%;
+}
+
+.clock-mark.m4{
+  top:75%;
+  left:83%;
+}
+
+.clock-mark.m5{
+  top:91%;
+  left:50%;
+}
+
+.clock-mark.m6{
+  top:75%;
+  left:17%;
+}
+
+.clock-mark.m7{
+  top:50%;
+  left:8%;
+}
+
+.clock-mark.m8{
+  top:25%;
+  left:17%;
+}
+
+.clock-orbit{
+  position:absolute;
+
+  inset:42px;
+
+  border:1px solid rgba(201,168,95,.05);
+
+  border-radius:50%;
+
+  animation:orbit 30s linear infinite;
+}
+
+.clock-orbit::after{
+  content:"";
+
+  position:absolute;
+
+  top:-4px;
+  left:50%;
+
+  width:7px;
+  height:7px;
+
+  background:var(--gold);
+
+  border-radius:50%;
+
+  box-shadow:0 0 18px rgba(201,168,95,.3);
+}
+
+@keyframes orbit{
+  to{
+    transform:rotate(360deg);
+  }
+}
+
+.clock-caption{
+  position:absolute;
+
+  bottom:-30px;
+
+  color:#4f4f4f;
+
+  font-family:Orbitron,sans-serif;
+
+  font-size:7px;
+
+  letter-spacing:3px;
+
+  text-transform:uppercase;
+}
+
+/* =========================================================
+   CONTENT
+========================================================= */
+
+.day-section{
+  padding:90px 0 110px;
+}
+
+.section-heading{
+  display:flex;
+
+  justify-content:space-between;
+  align-items:end;
+
+  gap:30px;
+
+  margin-bottom:35px;
+}
+
+.kicker{
+  color:var(--gold);
+
+  font-family:Orbitron,sans-serif;
+
+  font-size:8px;
+  letter-spacing:4px;
+
+  text-transform:uppercase;
+}
+
+.section-heading h2{
+  margin-top:11px;
+
+  font-family:Orbitron,sans-serif;
+
+  font-size:30px;
+
+  letter-spacing:-1px;
+}
+
+.section-heading p{
+  max-width:450px;
+
+  color:#646464;
+
+  font-size:10px;
+  line-height:1.8;
+
+  text-align:right;
+}
+
+/* =========================================================
+   DAY STATUS
+========================================================= */
+
+.day-status{
+  display:grid;
+
+  grid-template-columns:repeat(3,1fr);
+
+  gap:12px;
+
+  margin-bottom:35px;
+}
+
+.status-box{
+  padding:19px;
+
+  border:1px solid var(--line);
+
+  border-radius:10px;
+
+  background:#0b0b0b;
+}
+
+.status-box strong{
+  display:block;
+
+  color:var(--gold2);
+
+  font-family:Orbitron,sans-serif;
+
+  font-size:21px;
+}
+
+.status-box span{
+  display:block;
+
+  margin-top:5px;
+
+  color:#555;
+
+  font-size:8px;
+
+  letter-spacing:1px;
+
+  text-transform:uppercase;
+}
+
+/* =========================================================
+   MEMORY LIST
+========================================================= */
+
+.memory-list{
+  display:grid;
+
+  gap:15px;
+}
+
+.memory{
+  display:grid;
+
+  grid-template-columns:115px 1fr auto;
+
+  min-height:170px;
+
+  overflow:hidden;
+
+  border:1px solid var(--line);
+
+  border-radius:13px;
+
+  background:#0b0b0b;
+
+  transition:
+    transform .25s ease,
+    border-color .25s ease;
+}
+
+.memory:hover{
+  transform:translateY(-2px);
+
+  border-color:rgba(201,168,95,.35);
+}
+
+.memory-image{
+  position:relative;
+
+  overflow:hidden;
+
+  background:#111;
+}
+
+.memory-image img{
+  width:100%;
+  height:100%;
+
+  display:block;
+
+  object-fit:cover;
+}
+
+.memory-image::after{
+  content:"";
+
+  position:absolute;
+  inset:0;
+
+  background:linear-gradient(
+    90deg,
+    transparent,
+    rgba(0,0,0,.35)
+  );
+}
+
+.memory-fallback{
+  width:100%;
+  height:100%;
+
+  min-height:170px;
+
+  display:grid;
+  place-items:center;
+}
+
+.fallback-ring{
+  width:70px;
+  height:70px;
+
+  display:grid;
+  place-items:center;
+
+  color:var(--gold);
+
+  border:1px solid rgba(201,168,95,.3);
+
+  border-radius:50%;
+
+  font-family:Orbitron,sans-serif;
+
+  font-size:14px;
+}
+
+.memory-info{
+  padding:24px 25px;
+
+  display:flex;
+  flex-direction:column;
+  justify-content:center;
+}
+
+.memory-type{
+  color:var(--gold);
+
+  font-size:7px;
+  font-weight:700;
+
+  letter-spacing:1.5px;
+
+  text-transform:uppercase;
+}
+
+.memory-info h3{
+  margin-top:8px;
+
+  font-family:Orbitron,sans-serif;
+
+  font-size:20px;
+
+  line-height:1.2;
+}
+
+.life-dates{
+  color:var(--gold2);
+
+  margin-top:6px;
+
+  font-size:9px;
+  font-weight:600;
+}
+
+.location{
+  color:#555;
+
+  margin-top:4px;
+
+  font-size:8px;
+}
+
+.memory-info p{
+  max-width:650px;
+
+  margin-top:13px;
+
+  color:#717171;
+
+  font-size:9px;
+
+  line-height:1.7;
+}
+
+.memory-side{
+  min-width:175px;
+
+  padding:23px;
+
+  display:flex;
+  flex-direction:column;
+
+  justify-content:center;
+  align-items:flex-end;
+
+  border-left:1px solid #1d1d1d;
+
+  text-align:right;
+}
+
+.anniversary{
+  color:#777;
+
+  font-family:Orbitron,sans-serif;
+
+  font-size:8px;
+
+  line-height:1.6;
+}
+
+.anniversary strong{
+  display:block;
+
+  color:var(--gold2);
+
+  font-size:17px;
+}
+
+.memory-actions{
+  display:flex;
+
+  gap:7px;
+
+  margin-top:14px;
+}
+
+.memory-actions .btn{
+  white-space:nowrap;
+}
+
+/* =========================================================
+   EMPTY
+========================================================= */
+
+.empty{
+  padding:85px 25px;
+
+  border:1px dashed #292929;
+
+  border-radius:16px;
+
+  text-align:center;
+}
+
+.empty-symbol{
+  width:70px;
+  height:70px;
+
+  display:grid;
+  place-items:center;
+
+  margin:0 auto 20px;
+
+  color:var(--gold);
+
+  border:1px solid rgba(201,168,95,.25);
+
+  border-radius:50%;
+
+  font-family:Orbitron,sans-serif;
+
+  font-size:20px;
+}
+
+.empty h2{
+  font-family:Orbitron,sans-serif;
+
+  font-size:22px;
+}
+
+.empty p{
+  max-width:520px;
+
+  margin:12px auto 22px;
+
+  color:#606060;
+
+  font-size:10px;
+
+  line-height:1.8;
+}
+
+/* =========================================================
+   MEMORY MESSAGE
+========================================================= */
+
+.message-band{
+  padding:100px 0;
+
+  border-top:1px solid var(--line);
+  border-bottom:1px solid var(--line);
+
+  background:
+    radial-gradient(
+      circle at center,
+      rgba(201,168,95,.045),
+      transparent 55%
+    );
+}
+
+.message-grid{
+  display:grid;
+
+  grid-template-columns:1fr 1fr;
+
+  gap:80px;
+
+  align-items:center;
+}
+
+.message-title h2{
+  margin-top:14px;
+
+  font-family:Orbitron,sans-serif;
+
+  font-size:clamp(28px,4vw,50px);
+
+  line-height:1.08;
+}
+
+.message-title h2 span{
+  color:var(--gold2);
+}
+
+.message-copy{
+  color:#707070;
+
+  font-size:11px;
+
+  line-height:2;
+}
+
+.message-copy p+p{
+  margin-top:16px;
+}
+
+.quote{
+  margin-top:25px;
+
+  padding:18px 20px;
+
+  color:#999;
+
+  background:#0b0b0b;
+
+  border-left:2px solid var(--gold);
+
+  font-family:Georgia,serif;
+
+  font-size:13px;
+
+  font-style:italic;
+
+  line-height:1.7;
+}
+
+/* =========================================================
+   CTA
+========================================================= */
+
+.cta{
+  padding:90px 0;
+}
+
+.cta-box{
+  padding:55px 30px;
+
+  border:1px solid var(--line);
+
+  border-radius:18px;
+
+  text-align:center;
+
+  background:
+    linear-gradient(
+      135deg,
+      rgba(201,168,95,.05),
+      transparent 60%
+    ),
+    #0c0c0c;
+}
+
+.cta-box h2{
+  margin-top:13px;
+
+  font-family:Orbitron,sans-serif;
+
+  font-size:clamp(25px,4vw,42px);
+}
+
+.cta-box p{
+  max-width:600px;
+
+  margin:14px auto 25px;
+
+  color:#696969;
+
+  font-size:10px;
+
+  line-height:1.8;
+}
+
+/* =========================================================
+   MODAL
+========================================================= */
+
+.modal{
+  position:fixed;
+  inset:0;
+
+  z-index:3000;
+
+  display:none;
+
+  align-items:center;
+  justify-content:center;
+
+  padding:20px;
+
+  background:rgba(0,0,0,.88);
+
+  backdrop-filter:blur(12px);
+}
+
+.modal.open{
+  display:flex;
+}
+
+.modal-box{
+  width:min(500px,100%);
+
+  padding:28px;
+
+  background:#101010;
+
+  border:1px solid #303030;
+
+  border-radius:16px;
+
+  box-shadow:var(--shadow);
+}
+
+.modal-head{
+  display:flex;
+
+  justify-content:space-between;
+
+  gap:20px;
+
+  margin-bottom:23px;
+}
+
+.modal-head h2{
+  font-family:Orbitron,sans-serif;
+
+  font-size:19px;
+}
+
+.modal-head p{
+  margin-top:6px;
+
+  color:#666;
+
+  font-size:9px;
+}
+
+.close{
+  width:32px;
+  height:32px;
+
+  color:#777;
+
+  background:none;
+
+  border:0;
+
+  font-size:25px;
+}
+
+.field{
+  margin-bottom:14px;
+}
+
+.field label{
+  display:block;
+
+  margin-bottom:7px;
+
+  color:#777;
+
+  font-size:8px;
+
+  letter-spacing:1.4px;
+
+  text-transform:uppercase;
+}
+
+.field input{
+  width:100%;
+
+  padding:12px;
+
+  color:#eee;
+
+  background:#080808;
+
+  border:1px solid #292929;
+
+  border-radius:7px;
+
+  outline:none;
+}
+
+.field input:focus{
+  border-color:var(--gold);
+}
+
+.status{
+  min-height:20px;
+
+  margin-bottom:8px;
+
+  color:#777;
+
+  font-size:9px;
+}
+
+/* =========================================================
+   FOOTER
+========================================================= */
+
+footer{
+  padding:45px 0;
+
+  background:#030303;
+
+  border-top:1px solid var(--line);
+}
+
+.footer-grid{
+  display:grid;
+
+  grid-template-columns:2fr repeat(3,1fr);
+
+  gap:30px;
+}
+
+.footer-title{
+  color:var(--gold2);
+
+  font-family:Orbitron,sans-serif;
+
+  font-size:13px;
+
+  letter-spacing:2px;
+}
+
+.footer-copy{
+  max-width:390px;
+
+  margin-top:12px;
+
+  color:#4e4e4e;
+
+  font-size:9px;
+
+  line-height:1.8;
+}
+
+.footer-col h4{
+  margin-bottom:12px;
+
+  color:#666;
+
+  font-size:8px;
+
+  letter-spacing:2px;
+
+  text-transform:uppercase;
+}
+
+.footer-col a{
+  display:block;
+
+  margin:8px 0;
+
+  color:#555;
+
+  font-size:9px;
+}
+
+.footer-col a:hover{
+  color:var(--gold2);
+}
+
+.copyright{
+  margin-top:35px;
+
+  padding-top:20px;
+
+  color:#3d3d3d;
+
+  border-top:1px solid #171717;
+
+  text-align:center;
+
+  font-size:8px;
+}
+
+/* =========================================================
+   RESPONSIVE
+========================================================= */
+
+@media(max-width:1150px){
+
+  .main-nav,
+  .create-btn{
+    display:none;
+  }
+
+  .mobile-toggle{
+    display:block;
+  }
+
+}
+
+@media(max-width:900px){
+
+  .hero-inner{
+    grid-template-columns:1fr;
+
+    gap:40px;
+  }
+
+  .clock-wrap{
+    min-height:350px;
+  }
+
+  .section-heading{
+    display:block;
+  }
+
+  .section-heading p{
+    margin-top:12px;
+
+    text-align:left;
+  }
+
+  .memory{
+    grid-template-columns:120px 1fr;
+  }
+
+  .memory-side{
+    grid-column:2;
+
+    min-width:0;
+
+    padding:
+      0
+      22px
+      20px;
+
+    align-items:flex-start;
+
+    border-left:0;
+    border-top:1px solid #1d1d1d;
+
+    text-align:left;
+  }
+
+  .memory-actions{
+    flex-wrap:wrap;
+  }
+
+  .message-grid{
+    grid-template-columns:1fr;
+
+    gap:35px;
+  }
+
+  .footer-grid{
+    grid-template-columns:1fr 1fr;
+  }
+
+}
+
+@media(max-width:600px){
+
+  .container{
+    width:calc(100% - 24px);
+  }
+
+  .hero{
+    min-height:650px;
+  }
+
+  .hero h1{
+    font-size:clamp(42px,13vw,70px);
+
+    letter-spacing:-2px;
+  }
+
+  .clock{
+    width:290px;
+  }
+
+  .clock-center{
+    width:105px;
+    height:105px;
+  }
+
+  .clock-day{
+    font-size:29px;
+  }
+
+  .day-status{
+    grid-template-columns:1fr;
+  }
+
+  .memory{
+    grid-template-columns:1fr;
+  }
+
+  .memory-image{
+    height:250px;
+  }
+
+  .memory-fallback{
+    min-height:250px;
+  }
+
+  .memory-side{
+    grid-column:auto;
+  }
+
+  .memory-actions{
+    width:100%;
+    flex-direction:column;
+  }
+
+  .memory-actions .btn{
+    width:100%;
+  }
+
+  .footer-grid{
+    grid-template-columns:1fr;
+  }
+
+  .cta-box{
+    padding:40px 20px;
+  }
+
+}
+
+</style>
+</head>
+
+<body>
+
+<!-- =========================================================
+     HEADER
+========================================================= -->
+
+<header class="site-header">
+
+  <div class="container header-inner">
+
+    <a
+      href="index.html"
+      class="brand"
+    >
+
+      <div class="brand-mark">
+        <span>CR</span>
+      </div>
+
+      <div class="brand-text">
+
+        <strong>
+          CROWRULES
+        </strong>
+
+        <small>
+          Memorials
+        </small>
+
+      </div>
+
+    </a>
+
+    <nav class="main-nav">
+
+      <a href="index.html">
+        Home
+      </a>
+
+      <a href="memorials.html">
+        Memorials
+      </a>
+
+      <a href="featured.html">
+        Featured
+      </a>
+
+      <a href="recent.html">
+        Recent
+      </a>
+
+      <a
+        href="on-this-day.html"
+        class="active"
+      >
+        On This Day
+      </a>
+
+      <a href="stories.html">
+        Stories
+      </a>
+
+      <a href="tributes.html">
+        Tributes
+      </a>
+
+      <a href="search.html">
+        Search
+      </a>
+
+    </nav>
+
+    <a
+      href="create.html"
+      class="create-btn"
+    >
+      CREATE MEMORIAL
+    </a>
+
+    <button
+      id="mobileToggle"
+      class="mobile-toggle"
+      aria-label="Open navigation"
+    >
+      ☰
+    </button>
+
+  </div>
+
+  <div class="container">
+
+    <div
+      id="mobileMenu"
+      class="mobile-menu"
+    >
+
+      <a href="index.html">Home</a>
+      <a href="memorials.html">Memorials</a>
+      <a href="featured.html">Featured</a>
+      <a href="recent.html">Recent</a>
+      <a href="on-this-day.html">On This Day</a>
+      <a href="stories.html">Stories</a>
+      <a href="tributes.html">Tributes</a>
+      <a href="search.html">Search</a>
+      <a href="create.html">Create Memorial</a>
+
+    </div>
+
+  </div>
+
+</header>
+
+<main>
+
+<!-- =========================================================
+     HERO
+========================================================= -->
+
+<section class="hero">
+
+  <div class="container hero-inner">
+
+    <div>
+
+      <div class="hero-label">
+        Today's Memory Signal
+      </div>
+
+      <h1>
+        On This<br>
+        <span>Day.</span>
+      </h1>
+
+      <p class="hero-copy">
+        Every day carries memories. This page connects today's
+        calendar date with the lives preserved within the
+        CrowRules Memorials archive — honoring birthdays,
+        anniversaries of passing and the stories attached to them.
+      </p>
+
+      <div class="hero-actions">
+
+        <a
+          href="memorials.html"
+          class="btn gold"
+        >
+          EXPLORE ARCHIVE
+        </a>
+
+        <a
+          href="create.html"
+          class="btn"
+        >
+          ADD A MEMORIAL
+        </a>
+
+      </div>
+
+    </div>
+
+    <div class="clock-wrap">
+
+      <div class="clock">
+
+        <div class="clock-orbit"></div>
+
+        <div class="clock-mark m1"></div>
+        <div class="clock-mark m2"></div>
+        <div class="clock-mark m3"></div>
+        <div class="clock-mark m4"></div>
+        <div class="clock-mark m5"></div>
+        <div class="clock-mark m6"></div>
+        <div class="clock-mark m7"></div>
+        <div class="clock-mark m8"></div>
+
+        <div class="clock-center">
+
+          <div>
+
+            <div
+              id="clockDay"
+              class="clock-day"
+            >
+              —
+            </div>
+
+            <div
+              id="clockMonth"
+              class="clock-month"
+            >
+              —
+            </div>
+
+            <div
+              id="clockYear"
+              class="clock-year"
+            >
+              —
+            </div>
+
+          </div>
+
+        </div>
+
+        <div class="clock-caption">
+          The Date We Remember
+        </div>
+
+      </div>
+
+    </div>
+
+  </div>
+
+</section>
+
+<!-- =========================================================
+     TODAY'S ARCHIVE
+========================================================= -->
+
+<section class="day-section">
+
+  <div class="container">
+
+    <div class="section-heading">
+
+      <div>
+
+        <div class="kicker">
+          Calendar Memory
+        </div>
+
+        <h2>
+          Connected to Today
+        </h2>
+
+      </div>
+
+      <p>
+        Memorials are matched by the month and day of their
+        birth or passing date. The year does not have to match.
+      </p>
+
+    </div>
+
+    <div class="day-status">
+
+      <div class="status-box">
+
+        <strong id="birthCount">
+          —
+        </strong>
+
+        <span>
+          Birthdays
+        </span>
+
+      </div>
+
+      <div class="status-box">
+
+        <strong id="passingCount">
+          —
+        </strong>
+
+        <span>
+          Passing Anniversaries
+        </span>
+
+      </div>
+
+      <div class="status-box">
+
+        <strong id="memoryCount">
+          —
+        </strong>
+
+        <span>
+          Lives Connected Today
+        </span>
+
+      </div>
+
+    </div>
+
+    <div id="memoryContent">
+
+      <div class="loading-placeholder">
+
+        <div class="empty">
+
+          <div class="empty-symbol">
+            ◇
+          </div>
+
+          <h2>
+            Loading Today's Memories
+          </h2>
+
+          <p>
+            Searching the CrowRules Memorials archive.
+          </p>
+
+        </div>
+
+      </div>
+
+    </div>
+
+  </div>
+
+</section>
+
+<!-- =========================================================
+     MESSAGE
+========================================================= -->
+
+<section class="message-band">
+
+  <div class="container message-grid">
+
+    <div class="message-title">
+
+      <div class="kicker">
+        A Living Calendar
+      </div>
+
+      <h2>
+        The date changes.<br>
+        <span>The memories remain.</span>
+      </h2>
+
+    </div>
+
+    <div class="message-copy">
+
+      <p>
+        Birthdays and anniversaries are more than numbers on a
+        calendar. They can become reminders of the people who
+        shaped our lives and the moments we continue to carry.
+      </p>
+
+      <p>
+        On This Day gives those dates a place inside the
+        CrowRules Memorials archive.
+      </p>
+
+      <div class="quote">
+        “Some dates are written on calendars. Others are written in us.”
+      </div>
+
+    </div>
+
+  </div>
+
+</section>
+
+<!-- =========================================================
+     CTA
+========================================================= -->
+
+<section class="cta">
+
+  <div class="container">
+
+    <div class="cta-box">
+
+      <div class="kicker">
+        Preserve The Date
+      </div>
+
+      <h2>
+        Give their story<br>
+        a place to live.
+      </h2>
+
+      <p>
+        Create a CrowRules Memorial and preserve the dates,
+        photographs, stories and memories that make a life
+        worth remembering.
+      </p>
+
+      <a
+        href="create.html"
+        class="btn gold"
+      >
+        CREATE A MEMORIAL
+      </a>
+
+    </div>
+
+  </div>
+
+</section>
+
+</main>
+
+<!-- =========================================================
+     FOOTER
+========================================================= -->
+
+<footer>
+
+  <div class="container">
+
+    <div class="footer-grid">
+
+      <div>
+
+        <div class="footer-title">
+          CROWRULES MEMORIALS
+        </div>
+
+        <div class="footer-copy">
+          A digital remembrance archive for lives, stories,
+          photographs, friendships, families and legacies.
+        </div>
+
+      </div>
+
+      <div class="footer-col">
+
+        <h4>
+          Explore
+        </h4>
+
+        <a href="memorials.html">
+          All Memorials
+        </a>
+
+        <a href="featured.html">
+          Featured
+        </a>
+
+        <a href="recent.html">
+          Recent
+        </a>
+
+        <a href="on-this-day.html">
+          On This Day
+        </a>
+
+      </div>
+
+      <div class="footer-col">
+
+        <h4>
+          Remember
+        </h4>
+
+        <a href="stories.html">
+          Stories
+        </a>
+
+        <a href="tributes.html">
+          Tributes
+        </a>
+
+        <a href="candles.html">
+          Candles
+        </a>
+
+        <a href="photos.html">
+          Photos
+        </a>
+
+      </div>
+
+      <div class="footer-col">
+
+        <h4>
+          Community
+        </h4>
+
+        <a href="create.html">
+          Create Memorial
+        </a>
+
+        <a href="categories.html">
+          Categories
+        </a>
+
+        <a href="guestbook.html">
+          Guestbook
+        </a>
+
+        <a href="contact.html">
+          Contact
+        </a>
+
+      </div>
+
+    </div>
+
+    <div class="copyright">
+
+      ©
+      <span id="year"></span>
+      CrowRules Entertainment · CrowRules Memorials
+
+    </div>
+
+  </div>
+
+</footer>
+
+<!-- =========================================================
+     CANDLE MODAL
+========================================================= -->
+
+<div
+  id="candleModal"
+  class="modal"
+>
+
+  <div class="modal-box">
+
+    <div class="modal-head">
+
+      <div>
+
+        <h2>
+          Light a Candle
+        </h2>
+
+        <p>
+          Leave a small light of remembrance.
+        </p>
+
+      </div>
+
+      <button
+        id="closeModal"
+        class="close"
+        aria-label="Close"
+      >
+        ×
+      </button>
+
+    </div>
+
+    <form id="candleForm">
+
+      <input
+        type="hidden"
+        id="memorialId"
+      >
+
+      <div class="field">
+
+        <label>
+          Your Name
+        </label>
+
+        <input
+          id="authorName"
+          maxlength="100"
+          placeholder="Your name"
+        >
+
+      </div>
+
+      <div class="field">
+
+        <label>
+          Message
+        </label>
+
+        <input
+          id="message"
+          maxlength="1000"
+          placeholder="A few words of remembrance..."
+        >
+
+      </div>
+
+      <div
+        id="status"
+        class="status"
+      ></div>
+
+      <button
+        type="submit"
+        class="btn gold"
+        style="width:100%;"
+      >
+        LIGHT CANDLE
+      </button>
+
+    </form>
+
+  </div>
+
+</div>
+
+<script>
+
+/* =========================================================
+   SUPABASE
+========================================================= */
+
+const SUPABASE_URL =
+  "https://cevylpnoexugwgygvtgu.supabase.co";
+
+const SUPABASE_KEY =
+  "sb_publishable_AdfM5y6RqvF3tbvEVzDZSg_JuGTQLD-";
+
+const db =
+  window.supabase.createClient(
+    SUPABASE_URL,
+    SUPABASE_KEY
+  );
+
+/* =========================================================
+   STATE
+========================================================= */
+
+let todayMemorials = [];
+
+const counts = {
+  candles:{},
+  tributes:{},
+  stories:{},
+  photos:{}
+};
+
+/* =========================================================
+   HELPERS
+========================================================= */
+
+function escapeHtml(value){
+
+  if(
+    value === null ||
+    value === undefined
+  ){
+    return "";
+  }
+
+  return String(value)
+    .replaceAll("&","&amp;")
+    .replaceAll("<","&lt;")
+    .replaceAll(">","&gt;")
+    .replaceAll('"',"&quot;")
+    .replaceAll("'","&#039;");
+}
+
+function countRows(rows){
+
+  const result = {};
+
+  (rows || []).forEach(row=>{
+
+    if(!row.memorial_id){
+      return;
+    }
+
+    result[row.memorial_id] =
+      (result[row.memorial_id] || 0) + 1;
+
+  });
+
+  return result;
+}
+
+function formatLifeDates(item){
+
+  const birth =
+    item.birth_date
+      ? new Date(
+          item.birth_date + "T00:00:00"
+        ).getFullYear()
+      : null;
+
+  const passing =
+    item.passing_date
+      ? new Date(
+          item.passing_date + "T00:00:00"
+        ).getFullYear()
+      : null;
+
+  if(birth && passing){
+    return `${birth} — ${passing}`;
+  }
+
+  if(birth){
+    return `${birth} —`;
+  }
+
+  if(passing){
+    return `— ${passing}`;
+  }
+
+  return "Life remembered";
+}
+
+function getToday(){
+
+  const now =
+    new Date();
+
+  return {
+    month:now.getMonth() + 1,
+    day:now.getDate(),
+    year:now.getFullYear()
+  };
+
+}
+
+/* =========================================================
+   UPDATE CLOCK
+========================================================= */
+
+function updateClock(){
+
+  const now =
+    new Date();
+
+  document.getElementById(
+    "clockDay"
+  ).textContent =
+    now.getDate();
+
+  document.getElementById(
+    "clockMonth"
+  ).textContent =
+    now.toLocaleDateString(
+      undefined,
+      {
+        month:"short"
+      }
+    );
+
+  document.getElementById(
+    "clockYear"
+  ).textContent =
+    now.getFullYear();
+
+}
+
+/* =========================================================
+   LOAD MEMORIALS
+========================================================= */
+
+async function loadMemorials(){
+
+  const {data,error} =
+    await db
+      .from("memorials")
+      .select(`
+        id,
+        slug,
+        full_name,
+        birth_date,
+        passing_date,
+        location,
+        short_bio,
+        portrait_url,
+        featured,
+        published,
+        created_at
+      `)
+      .eq("published",true)
+      .order("created_at",{ascending:false});
+
+  if(error){
+    throw error;
+  }
+
+  const today =
+    getToday();
+
+  todayMemorials =
+    (data || []).filter(item=>{
+
+      const birthMatch =
+        item.birth_date &&
+        (
+          new Date(
+            item.birth_date + "T00:00:00"
+          ).getMonth() + 1
+        ) === today.month &&
+        new Date(
+          item.birth_date + "T00:00:00"
+        ).getDate() === today.day;
+
+      const passingMatch =
+        item.passing_date &&
+        (
+          new Date(
+            item.passing_date + "T00:00:00"
+          ).getMonth() + 1
+        ) === today.month &&
+        new Date(
+          item.passing_date + "T00:00:00"
+        ).getDate() === today.day;
+
+      return birthMatch || passingMatch;
+
+    });
+}
+
+/* =========================================================
+   LOAD CHILD COUNTS
+========================================================= */
+
+async function loadCounts(){
+
+  const ids =
+    todayMemorials.map(
+      item=>item.id
+    );
+
+  if(!ids.length){
+    return;
+  }
+
+  const [
+    candles,
+    tributes,
+    stories,
+    photos
+  ] = await Promise.all([
+
+    db
+      .from("memorial_candles")
+      .select("memorial_id")
+      .in("memorial_id",ids),
+
+    db
+      .from("memorial_tributes")
+      .select("memorial_id")
+      .in("memorial_id",ids),
+
+    db
+      .from("memorial_stories")
+      .select("memorial_id")
+      .in("memorial_id",ids)
+      .eq("published",true),
+
+    db
+      .from("memorial_photos")
+      .select("memorial_id")
+      .in("memorial_id",ids)
+      .eq("published",true)
+
+  ]);
+
+  counts.candles =
+    countRows(candles.data);
+
+  counts.tributes =
+    countRows(tributes.data);
+
+  counts.stories =
+    countRows(stories.data);
+
+  counts.photos =
+    countRows(photos.data);
+}
+
+/* =========================================================
+   DATE TYPE
+========================================================= */
+
+function dateType(item){
+
+  const today =
+    getToday();
+
+  let birthday = false;
+  let passing = false;
+
+  if(item.birth_date){
+
+    const date =
+      new Date(
+        item.birth_date + "T00:00:00"
+      );
+
+    birthday =
+      date.getMonth() + 1 === today.month &&
+      date.getDate() === today.day;
+
+  }
+
+  if(item.passing_date){
+
+    const date =
+      new Date(
+        item.passing_date + "T00:00:00"
+      );
+
+    passing =
+      date.getMonth() + 1 === today.month &&
+      date.getDate() === today.day;
+
+  }
+
+  if(birthday && passing){
+    return "Birthday & Passing Anniversary";
+  }
+
+  if(birthday){
+    return "Birthday";
+  }
+
+  if(passing){
+    return "Passing Anniversary";
+  }
+
+  return "Remembered Today";
+}
+
+/* =========================================================
+   ANNIVERSARY
+========================================================= */
+
+function anniversaryText(item){
+
+  const today =
+    getToday();
+
+  const dates = [];
+
+  if(item.birth_date){
+
+    const d =
+      new Date(
+        item.birth_date + "T00:00:00"
+      );
+
+    if(
+      d.getMonth() + 1 === today.month &&
+      d.getDate() === today.day
+    ){
+
+      const years =
+        today.year -
+        d.getFullYear();
+
+      dates.push(
+        years > 0
+          ? `${years} years since birth`
+          : "Birthday"
+      );
+
+    }
+
+  }
+
+  if(item.passing_date){
+
+    const d =
+      new Date(
+        item.passing_date + "T00:00:00"
+      );
+
+    if(
+      d.getMonth() + 1 === today.month &&
+      d.getDate() === today.day
+    ){
+
+      const years =
+        today.year -
+        d.getFullYear();
+
+      dates.push(
+        years > 0
+          ? `${years} years remembered`
+          : "Passing anniversary"
+      );
+
+    }
+
+  }
+
+  return dates.join(" · ");
+
+}
+
+/* =========================================================
+   IMAGE
+========================================================= */
+
+function renderImage(item){
+
+  if(item.portrait_url){
+
+    return `
+
+      <img
+        src="${escapeHtml(item.portrait_url)}"
+        alt="${escapeHtml(item.full_name)}"
+        loading="lazy"
+
+        onerror="
+          this.style.display='none';
+          this.nextElementSibling.style.display='grid';
+        "
+      >
+
+      <div
+        class="memory-fallback"
+        style="display:none;position:absolute;inset:0;"
+      >
+
+        <div class="fallback-ring">
+          CR
+        </div>
+
+      </div>
+
+    `;
+
+  }
+
+  return `
+
+    <div class="memory-fallback">
+
+      <div class="fallback-ring">
+        CR
+      </div>
+
+    </div>
+
+  `;
+
+}
+
+/* =========================================================
+   RENDER STATUS
+========================================================= */
+
+function renderStatus(){
+
+  const birthdays =
+    todayMemorials.filter(
+      item=>dateType(item).includes("Birthday")
+    ).length;
+
+  const passing =
+    todayMemorials.filter(
+      item=>dateType(item).includes("Passing")
+    ).length;
+
+  document.getElementById(
+    "birthCount"
+  ).textContent =
+    birthdays;
+
+  document.getElementById(
+    "passingCount"
+  ).textContent =
+    passing;
+
+  document.getElementById(
+    "memoryCount"
+  ).textContent =
+    todayMemorials.length;
+
+}
+
+/* =========================================================
+   RENDER MEMORIALS
+========================================================= */
+
+function renderMemorials(){
+
+  const target =
+    document.getElementById(
+      "memoryContent"
+    );
+
+  if(!todayMemorials.length){
+
+    target.innerHTML = `
+
+      <div class="empty">
+
+        <div class="empty-symbol">
+          ◇
+        </div>
+
+        <h2>
+          No Matching Memorials Today
+        </h2>
+
+        <p>
+          There are currently no published memorials in the
+          archive connected to today's calendar date.
+          That does not mean there are no lives worth remembering.
+        </p>
+
+        <a
+          href="memorials.html"
+          class="btn"
+        >
+          EXPLORE ALL MEMORIALS
+        </a>
+
+      </div>
+
+    `;
+
+    return;
+  }
+
+  target.innerHTML = `
+
+    <div class="memory-list">
+
+      ${
+        todayMemorials.map(item=>{
+
+          return `
+
+            <article class="memory">
+
+              <div class="memory-image">
+
+                ${renderImage(item)}
+
+              </div>
+
+              <div class="memory-info">
+
+                <div class="memory-type">
+                  ${escapeHtml(
+                    dateType(item)
+                  )}
+                </div>
+
+                <h3>
+                  ${escapeHtml(item.full_name)}
+                </h3>
+
+                <div class="life-dates">
+                  ${escapeHtml(
+                    formatLifeDates(item)
+                  )}
+                </div>
+
+                ${
+                  item.location
+                    ? `
+                      <div class="location">
+                        ◇
+                        ${escapeHtml(
+                          item.location
+                        )}
+                      </div>
+                    `
+                    : ""
+                }
+
+                <p>
+                  ${
+                    escapeHtml(
+                      item.short_bio ||
+                      "A life remembered through stories, photographs and legacy."
+                    )
+                  }
+                </p>
+
+              </div>
+
+              <div class="memory-side">
+
+                <div class="anniversary">
+
+                  <strong>
+                    ${escapeHtml(
+                      anniversaryText(item)
+                    )}
+                  </strong>
+
+                  Today's connection
+
+                </div>
+
+                <div class="memory-actions">
+
+                  <a
+                    href="memorial.html?slug=${encodeURIComponent(item.slug)}"
+                    class="btn gold"
+                  >
+                    VIEW
+                  </a>
+
+                  <button
+                    class="btn candle-button"
+
+                    data-id="${escapeHtml(item.id)}"
+
+                    data-name="${escapeHtml(item.full_name)}"
+                  >
+                    🕯
+                  </button>
+
+                </div>
+
+              </div>
+
+            </article>
+
+          `;
+
+        }).join("")
+      }
+
+    </div>
+
+  `;
+
+  attachCandleButtons();
+
+}
+
+/* =========================================================
+   CANDLE MODAL
+========================================================= */
+
+function openCandle(id,name){
+
+  document.getElementById(
+    "memorialId"
+  ).value = id;
+
+  document.getElementById(
+    "authorName"
+  ).value = "";
+
+  document.getElementById(
+    "message"
+  ).value = "";
+
+  document.getElementById(
+    "status"
+  ).textContent =
+    `Lighting a candle for ${name}`;
+
+  document.getElementById(
+    "candleModal"
+  ).classList.add("open");
+
+  document.getElementById(
+    "authorName"
+  ).focus();
+
+}
+
+function closeCandle(){
+
+  document.getElementById(
+    "candleModal"
+  ).classList.remove("open");
+
+}
+
+function attachCandleButtons(){
+
+  document
+    .querySelectorAll(".candle-button")
+    .forEach(button=>{
+
+      button.addEventListener(
+        "click",
+        ()=>{
+
+          openCandle(
+            button.dataset.id,
+            button.dataset.name
+          );
+
+        }
+      );
+
+    });
+
+}
+
+/* =========================================================
+   CANDLE FORM
+========================================================= */
+
+document
+  .getElementById("candleForm")
+  .addEventListener(
+    "submit",
+    async event=>{
+
+      event.preventDefault();
+
+      const memorialId =
+        document.getElementById(
+          "memorialId"
+        ).value;
+
+      const author =
+        document.getElementById(
+          "authorName"
+        ).value.trim();
+
+      const message =
+        document.getElementById(
+          "message"
+        ).value.trim();
+
+      const status =
+        document.getElementById(
+          "status"
+        );
+
+      if(!message){
+
+        status.textContent =
+          "Please enter a remembrance message.";
+
+        return;
+      }
+
+      status.textContent =
+        "Lighting candle…";
+
+      const {error} =
+        await db
+          .from("memorial_candles")
+          .insert({
+
+            memorial_id:memorialId,
+
+            author_name:
+              author ||
+              "Community Member",
+
+            message
+
+          });
+
+      if(error){
+
+        console.error(error);
+
+        status.textContent =
+          "Unable to light candle. Please try again.";
+
+        return;
+      }
+
+      status.textContent =
+        "Candle lit successfully.";
+
+      counts.candles[memorialId] =
+        (counts.candles[memorialId] || 0) + 1;
+
+      setTimeout(
+        closeCandle,
+        700
+      );
+
+    }
+  );
+
+/* =========================================================
+   MODAL
+========================================================= */
+
+document
+  .getElementById("closeModal")
+  .addEventListener(
+    "click",
+    closeCandle
+  );
+
+document
+  .getElementById("candleModal")
+  .addEventListener(
+    "click",
+    event=>{
+
+      if(
+        event.target.id ===
+        "candleModal"
+      ){
+
+        closeCandle();
+
+      }
+
+    }
+  );
+
+document.addEventListener(
+  "keydown",
+  event=>{
+
+    if(event.key === "Escape"){
+      closeCandle();
+    }
+
+  }
+);
+
+/* =========================================================
+   MOBILE NAV
+========================================================= */
+
+document
+  .getElementById("mobileToggle")
+  .addEventListener(
+    "click",
+    ()=>{
+
+      document
+        .getElementById("mobileMenu")
+        .classList.toggle("open");
+
+    }
+  );
+
+/* =========================================================
+   INITIALIZE
+========================================================= */
+
+async function init(){
+
+  document.getElementById(
+    "year"
+  ).textContent =
+    new Date().getFullYear();
+
+  updateClock();
+
+  try{
+
+    await loadMemorials();
+
+    await loadCounts();
+
+    renderStatus();
+
+    renderMemorials();
+
+  }catch(error){
+
+    console.error(
+      "CrowRules On This Day Error:",
+      error
+    );
+
+    document.getElementById(
+      "memoryContent"
+    ).innerHTML = `
+
+      <div class="empty">
+
+        <div class="empty-symbol">
+          !
+        </div>
+
+        <h2>
+          Memory Archive Unavailable
+        </h2>
+
+        <p>
+          We could not connect to the memorial archive.
+          Please refresh the page and try again.
+        </p>
+
+        <button
+          class="btn gold"
+          onclick="location.reload()"
+        >
+          RELOAD ARCHIVE
+        </button>
+
+      </div>
+
+    `;
+
+  }
+
+}
+
+init();
+
+</script>
+
+</body>
+</html>

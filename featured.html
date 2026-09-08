@@ -1,0 +1,2352 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+
+<title>Featured — CrowRules Memorials</title>
+<meta name="theme-color" content="#050505">
+<meta name="description" content="Featured lives and lasting legacies remembered through CrowRules Memorials.">
+
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;500;600;700;800&family=Orbitron:wght@500;600;700;800&display=swap" rel="stylesheet">
+
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+
+<style>
+:root{
+  --bg:#050505;
+  --bg2:#090909;
+  --panel:#101010;
+  --panel2:#151515;
+  --line:#252525;
+  --line2:#333;
+  --text:#f2eee5;
+  --muted:#858585;
+  --muted2:#5d5d5d;
+  --gold:#c9a85d;
+  --gold2:#e2ca84;
+  --gold3:#8e7338;
+  --radius:18px;
+  --shadow:0 30px 90px rgba(0,0,0,.55);
+}
+
+*{
+  box-sizing:border-box;
+  margin:0;
+  padding:0;
+}
+
+html{
+  scroll-behavior:smooth;
+}
+
+body{
+  min-height:100vh;
+  background:
+    radial-gradient(circle at 50% -10%,rgba(201,168,93,.12),transparent 30%),
+    radial-gradient(circle at 90% 40%,rgba(201,168,93,.035),transparent 25%),
+    #050505;
+  color:var(--text);
+  font-family:Montserrat,Arial,sans-serif;
+}
+
+body::before{
+  content:"";
+  position:fixed;
+  inset:0;
+  z-index:-1;
+  pointer-events:none;
+  opacity:.025;
+  background-image:
+    linear-gradient(rgba(255,255,255,.5) 1px,transparent 1px),
+    linear-gradient(90deg,rgba(255,255,255,.5) 1px,transparent 1px);
+  background-size:48px 48px;
+}
+
+a{
+  color:inherit;
+  text-decoration:none;
+}
+
+button,
+input,
+textarea{
+  font:inherit;
+}
+
+button{
+  cursor:pointer;
+}
+
+.container{
+  width:min(1400px,calc(100% - 36px));
+  margin:auto;
+}
+
+/* ============================================================
+   HEADER
+============================================================ */
+
+.site-header{
+  position:sticky;
+  top:0;
+  z-index:1000;
+  background:rgba(5,5,5,.94);
+  border-bottom:1px solid rgba(255,255,255,.07);
+  backdrop-filter:blur(18px);
+}
+
+.header-inner{
+  min-height:76px;
+  display:flex;
+  align-items:center;
+  gap:28px;
+}
+
+.brand{
+  display:flex;
+  align-items:center;
+  gap:12px;
+  min-width:max-content;
+}
+
+.brand-mark{
+  width:42px;
+  height:42px;
+  border:1px solid var(--gold);
+  display:grid;
+  place-items:center;
+  transform:rotate(45deg);
+}
+
+.brand-mark span{
+  transform:rotate(-45deg);
+  color:var(--gold2);
+  font-family:Orbitron,sans-serif;
+  font-size:12px;
+  font-weight:700;
+}
+
+.brand-text strong{
+  display:block;
+  font-family:Orbitron,sans-serif;
+  font-size:14px;
+  letter-spacing:2px;
+}
+
+.brand-text small{
+  display:block;
+  color:#666;
+  font-size:8px;
+  letter-spacing:3px;
+  margin-top:3px;
+  text-transform:uppercase;
+}
+
+.main-nav{
+  display:flex;
+  align-items:center;
+  gap:4px;
+  margin-left:auto;
+}
+
+.main-nav a{
+  color:#999;
+  font-size:10px;
+  font-weight:600;
+  padding:9px 10px;
+  border-radius:7px;
+}
+
+.main-nav a:hover,
+.main-nav a.active{
+  color:var(--gold2);
+  background:rgba(201,168,93,.08);
+}
+
+.create-btn{
+  background:var(--gold);
+  color:#070707;
+  border:1px solid var(--gold);
+  border-radius:8px;
+  padding:11px 15px;
+  font-size:9px;
+  font-weight:800;
+  letter-spacing:1px;
+}
+
+.create-btn:hover{
+  background:var(--gold2);
+}
+
+.mobile-toggle{
+  display:none;
+  margin-left:auto;
+  width:42px;
+  height:42px;
+  border:1px solid var(--line);
+  background:#101010;
+  color:#ddd;
+  border-radius:8px;
+}
+
+/* ============================================================
+   HERO
+============================================================ */
+
+.hero{
+  min-height:650px;
+  position:relative;
+  overflow:hidden;
+  border-bottom:1px solid var(--line);
+  display:flex;
+  align-items:center;
+}
+
+.hero::after{
+  content:"";
+  position:absolute;
+  width:750px;
+  height:750px;
+  right:-350px;
+  top:-100px;
+  border:1px solid rgba(201,168,93,.1);
+  border-radius:50%;
+  box-shadow:
+    0 0 0 90px rgba(201,168,93,.018),
+    0 0 0 180px rgba(201,168,93,.012);
+}
+
+.hero-inner{
+  position:relative;
+  z-index:2;
+}
+
+.hero-label{
+  display:flex;
+  align-items:center;
+  gap:12px;
+  color:var(--gold);
+  font-family:Orbitron,sans-serif;
+  font-size:9px;
+  letter-spacing:4px;
+  text-transform:uppercase;
+  margin-bottom:22px;
+}
+
+.hero-label::before{
+  content:"";
+  width:45px;
+  height:1px;
+  background:var(--gold);
+}
+
+.hero h1{
+  max-width:1050px;
+  font-family:Orbitron,sans-serif;
+  font-size:clamp(42px,8vw,104px);
+  line-height:.93;
+  letter-spacing:-4px;
+}
+
+.hero h1 span{
+  color:var(--gold2);
+}
+
+.hero-description{
+  max-width:650px;
+  color:#929292;
+  font-size:13px;
+  line-height:1.9;
+  margin-top:27px;
+}
+
+.hero-bottom{
+  display:flex;
+  align-items:center;
+  gap:35px;
+  margin-top:38px;
+  flex-wrap:wrap;
+}
+
+.hero-stat{
+  padding-left:15px;
+  border-left:1px solid var(--gold3);
+}
+
+.hero-stat strong{
+  display:block;
+  color:var(--gold2);
+  font-family:Orbitron,sans-serif;
+  font-size:22px;
+}
+
+.hero-stat span{
+  display:block;
+  color:#666;
+  margin-top:4px;
+  font-size:8px;
+  letter-spacing:1.5px;
+  text-transform:uppercase;
+}
+
+/* ============================================================
+   FEATURED STAGE
+============================================================ */
+
+.stage{
+  padding:90px 0 110px;
+}
+
+.section-kicker{
+  color:var(--gold);
+  font-family:Orbitron,sans-serif;
+  font-size:9px;
+  letter-spacing:4px;
+  text-transform:uppercase;
+  margin-bottom:12px;
+}
+
+.stage-heading{
+  display:flex;
+  justify-content:space-between;
+  align-items:end;
+  gap:30px;
+  margin-bottom:32px;
+}
+
+.stage-heading h2{
+  font-family:Orbitron,sans-serif;
+  font-size:30px;
+  letter-spacing:-1px;
+}
+
+.stage-heading p{
+  max-width:440px;
+  color:#686868;
+  font-size:10px;
+  line-height:1.7;
+  text-align:right;
+}
+
+/* ============================================================
+   EDITORIAL FEATURE
+============================================================ */
+
+.editorial{
+  display:grid;
+  grid-template-columns:minmax(0,1.7fr) minmax(300px,.8fr);
+  min-height:590px;
+  border:1px solid var(--line);
+  border-radius:20px;
+  overflow:hidden;
+  background:#0b0b0b;
+  box-shadow:var(--shadow);
+}
+
+.editorial-image{
+  position:relative;
+  min-height:590px;
+  background:
+    radial-gradient(circle,rgba(201,168,93,.15),transparent 50%),
+    #111;
+  overflow:hidden;
+}
+
+.editorial-image img{
+  width:100%;
+  height:100%;
+  object-fit:cover;
+  display:block;
+  transition:transform .7s ease;
+}
+
+.editorial:hover .editorial-image img{
+  transform:scale(1.025);
+}
+
+.editorial-image::after{
+  content:"";
+  position:absolute;
+  inset:0;
+  background:
+    linear-gradient(
+      90deg,
+      transparent 45%,
+      rgba(0,0,0,.45)
+    ),
+    linear-gradient(
+      0deg,
+      rgba(0,0,0,.7),
+      transparent 45%
+    );
+  pointer-events:none;
+}
+
+.image-fallback{
+  width:100%;
+  height:100%;
+  display:grid;
+  place-items:center;
+}
+
+.fallback-circle{
+  width:180px;
+  height:180px;
+  border:1px solid rgba(201,168,93,.28);
+  border-radius:50%;
+  display:grid;
+  place-items:center;
+  position:relative;
+}
+
+.fallback-circle::before,
+.fallback-circle::after{
+  content:"";
+  position:absolute;
+  border:1px solid rgba(201,168,93,.12);
+  border-radius:50%;
+}
+
+.fallback-circle::before{
+  inset:20px;
+}
+
+.fallback-circle::after{
+  inset:45px;
+}
+
+.fallback-circle span{
+  color:var(--gold);
+  font-family:Orbitron,sans-serif;
+  font-size:30px;
+}
+
+.editorial-label{
+  position:absolute;
+  z-index:3;
+  left:25px;
+  top:25px;
+  padding:9px 12px;
+  border:1px solid var(--gold);
+  background:rgba(5,5,5,.8);
+  color:var(--gold2);
+  border-radius:6px;
+  font-family:Orbitron,sans-serif;
+  font-size:8px;
+  letter-spacing:2px;
+}
+
+.editorial-content{
+  padding:42px 38px;
+  display:flex;
+  flex-direction:column;
+  justify-content:center;
+  background:
+    linear-gradient(
+      135deg,
+      rgba(201,168,93,.045),
+      transparent 45%
+    ),
+    #0d0d0d;
+}
+
+.editorial-index{
+  color:#454545;
+  font-family:Orbitron,sans-serif;
+  font-size:11px;
+  letter-spacing:2px;
+  margin-bottom:30px;
+}
+
+.editorial-content h3{
+  font-family:Orbitron,sans-serif;
+  font-size:clamp(25px,3vw,42px);
+  line-height:1.1;
+  letter-spacing:-1px;
+}
+
+.editorial-dates{
+  color:var(--gold2);
+  font-size:11px;
+  font-weight:600;
+  margin-top:12px;
+}
+
+.editorial-location{
+  color:#666;
+  font-size:10px;
+  margin-top:8px;
+}
+
+.editorial-bio{
+  color:#888;
+  font-size:11px;
+  line-height:1.85;
+  margin-top:25px;
+}
+
+.editorial-rule{
+  width:55px;
+  height:1px;
+  background:var(--gold);
+  margin:28px 0;
+}
+
+.editorial-stats{
+  display:grid;
+  grid-template-columns:repeat(2,1fr);
+  gap:10px;
+}
+
+.editorial-stat{
+  border:1px solid #222;
+  padding:12px;
+  background:#0a0a0a;
+  border-radius:7px;
+}
+
+.editorial-stat strong{
+  color:#ddd;
+  font-family:Orbitron,sans-serif;
+  font-size:15px;
+}
+
+.editorial-stat span{
+  display:block;
+  color:#555;
+  margin-top:4px;
+  font-size:8px;
+  text-transform:uppercase;
+  letter-spacing:1px;
+}
+
+.editorial-actions{
+  display:flex;
+  gap:8px;
+  margin-top:25px;
+}
+
+.btn{
+  border:1px solid var(--line2);
+  background:#111;
+  color:#bbb;
+  padding:12px 14px;
+  border-radius:7px;
+  font-size:9px;
+  font-weight:700;
+  letter-spacing:.8px;
+}
+
+.btn:hover{
+  color:var(--gold2);
+  border-color:var(--gold);
+}
+
+.btn.gold{
+  color:#070707;
+  background:var(--gold);
+  border-color:var(--gold);
+}
+
+/* ============================================================
+   MEMORY RAIL
+============================================================ */
+
+.rail-section{
+  margin-top:55px;
+}
+
+.rail-header{
+  display:flex;
+  align-items:center;
+  justify-content:space-between;
+  margin-bottom:17px;
+}
+
+.rail-header h3{
+  font-family:Orbitron,sans-serif;
+  font-size:15px;
+}
+
+.rail-header a{
+  color:#666;
+  font-size:9px;
+  text-transform:uppercase;
+  letter-spacing:1px;
+}
+
+.rail-header a:hover{
+  color:var(--gold2);
+}
+
+.rail{
+  display:grid;
+  grid-template-columns:repeat(3,1fr);
+  gap:14px;
+}
+
+.rail-card{
+  display:grid;
+  grid-template-columns:110px 1fr;
+  min-height:130px;
+  border:1px solid var(--line);
+  background:#0c0c0c;
+  border-radius:12px;
+  overflow:hidden;
+  transition:.25s;
+}
+
+.rail-card:hover{
+  border-color:rgba(201,168,93,.4);
+  transform:translateY(-3px);
+}
+
+.rail-image{
+  background:#111;
+  overflow:hidden;
+}
+
+.rail-image img{
+  width:100%;
+  height:100%;
+  object-fit:cover;
+}
+
+.rail-fallback{
+  width:100%;
+  height:100%;
+  display:grid;
+  place-items:center;
+  color:var(--gold);
+  font-family:Orbitron,sans-serif;
+  font-size:16px;
+}
+
+.rail-info{
+  padding:15px;
+}
+
+.rail-info h4{
+  font-family:Orbitron,sans-serif;
+  font-size:12px;
+  line-height:1.3;
+}
+
+.rail-info .dates{
+  color:var(--gold2);
+  font-size:8px;
+  margin-top:5px;
+}
+
+.rail-info p{
+  color:#666;
+  font-size:8px;
+  line-height:1.55;
+  margin-top:9px;
+}
+
+.rail-view{
+  display:inline-block;
+  color:#777;
+  font-size:8px;
+  letter-spacing:1px;
+  text-transform:uppercase;
+  margin-top:10px;
+}
+
+.rail-card:hover .rail-view{
+  color:var(--gold2);
+}
+
+/* ============================================================
+   PHILOSOPHY
+============================================================ */
+
+.philosophy{
+  border-top:1px solid var(--line);
+  border-bottom:1px solid var(--line);
+  padding:100px 0;
+  background:
+    radial-gradient(
+      circle at center,
+      rgba(201,168,93,.045),
+      transparent 45%
+    );
+}
+
+.philosophy-grid{
+  display:grid;
+  grid-template-columns:1fr 1fr;
+  gap:70px;
+  align-items:center;
+}
+
+.philosophy h2{
+  font-family:Orbitron,sans-serif;
+  font-size:clamp(28px,4vw,48px);
+  line-height:1.1;
+}
+
+.philosophy h2 span{
+  color:var(--gold2);
+}
+
+.philosophy-copy{
+  color:#777;
+  font-size:12px;
+  line-height:2;
+}
+
+.philosophy-copy p+p{
+  margin-top:17px;
+}
+
+.principles{
+  display:grid;
+  grid-template-columns:repeat(2,1fr);
+  gap:12px;
+  margin-top:25px;
+}
+
+.principle{
+  padding:17px;
+  border:1px solid #222;
+  background:#0b0b0b;
+  border-radius:9px;
+}
+
+.principle-number{
+  color:var(--gold);
+  font-family:Orbitron,sans-serif;
+  font-size:9px;
+}
+
+.principle strong{
+  display:block;
+  font-size:10px;
+  margin-top:8px;
+}
+
+.principle p{
+  color:#5f5f5f;
+  font-size:8px;
+  line-height:1.6;
+  margin-top:5px;
+}
+
+/* ============================================================
+   CTA
+============================================================ */
+
+.cta{
+  padding:90px 0;
+}
+
+.cta-box{
+  border:1px solid var(--line);
+  border-radius:18px;
+  padding:55px;
+  text-align:center;
+  background:
+    linear-gradient(
+      135deg,
+      rgba(201,168,93,.055),
+      transparent 55%
+    ),
+    #0c0c0c;
+}
+
+.cta-box h2{
+  font-family:Orbitron,sans-serif;
+  font-size:clamp(25px,4vw,42px);
+}
+
+.cta-box p{
+  max-width:600px;
+  margin:14px auto 25px;
+  color:#777;
+  font-size:11px;
+  line-height:1.8;
+}
+
+/* ============================================================
+   LOADING / EMPTY
+============================================================ */
+
+.loading{
+  min-height:450px;
+  display:grid;
+  place-items:center;
+  border:1px dashed #292929;
+  border-radius:18px;
+}
+
+.spinner{
+  width:45px;
+  height:45px;
+  border:2px solid #292929;
+  border-top-color:var(--gold);
+  border-radius:50%;
+  animation:spin .8s linear infinite;
+}
+
+@keyframes spin{
+  to{
+    transform:rotate(360deg);
+  }
+}
+
+.empty{
+  padding:75px 20px;
+  border:1px dashed #292929;
+  border-radius:18px;
+  text-align:center;
+}
+
+.empty h2{
+  font-family:Orbitron,sans-serif;
+  font-size:22px;
+}
+
+.empty p{
+  color:#666;
+  font-size:10px;
+  margin:10px auto 20px;
+}
+
+/* ============================================================
+   CANDLE MODAL
+============================================================ */
+
+.modal{
+  position:fixed;
+  inset:0;
+  z-index:3000;
+  display:none;
+  align-items:center;
+  justify-content:center;
+  padding:20px;
+  background:rgba(0,0,0,.86);
+  backdrop-filter:blur(12px);
+}
+
+.modal.open{
+  display:flex;
+}
+
+.modal-box{
+  width:min(500px,100%);
+  background:#101010;
+  border:1px solid #303030;
+  border-radius:17px;
+  padding:27px;
+  box-shadow:var(--shadow);
+}
+
+.modal-head{
+  display:flex;
+  justify-content:space-between;
+  gap:15px;
+  margin-bottom:22px;
+}
+
+.modal-head h2{
+  font-family:Orbitron,sans-serif;
+  font-size:19px;
+}
+
+.modal-head p{
+  color:#666;
+  font-size:9px;
+  margin-top:6px;
+}
+
+.close{
+  border:0;
+  background:none;
+  color:#777;
+  font-size:25px;
+}
+
+.field{
+  margin-bottom:14px;
+}
+
+.field label{
+  display:block;
+  color:#777;
+  font-size:8px;
+  text-transform:uppercase;
+  letter-spacing:1.5px;
+  margin-bottom:7px;
+}
+
+.field input,
+.field textarea{
+  width:100%;
+  border:1px solid #292929;
+  background:#080808;
+  color:#eee;
+  border-radius:8px;
+  padding:12px;
+  outline:none;
+}
+
+.field textarea{
+  min-height:100px;
+  resize:vertical;
+}
+
+.field input:focus,
+.field textarea:focus{
+  border-color:var(--gold);
+}
+
+.status{
+  min-height:20px;
+  color:#777;
+  font-size:9px;
+  margin-bottom:10px;
+}
+
+/* ============================================================
+   FOOTER
+============================================================ */
+
+footer{
+  border-top:1px solid var(--line);
+  background:#030303;
+  padding:45px 0;
+}
+
+.footer-grid{
+  display:grid;
+  grid-template-columns:2fr repeat(3,1fr);
+  gap:30px;
+}
+
+.footer-title{
+  color:var(--gold2);
+  font-family:Orbitron,sans-serif;
+  font-size:13px;
+  letter-spacing:2px;
+}
+
+.footer-copy{
+  max-width:400px;
+  color:#505050;
+  font-size:9px;
+  line-height:1.8;
+  margin-top:12px;
+}
+
+.footer-col h4{
+  color:#666;
+  font-size:8px;
+  letter-spacing:2px;
+  text-transform:uppercase;
+  margin-bottom:12px;
+}
+
+.footer-col a{
+  display:block;
+  color:#5b5b5b;
+  font-size:9px;
+  margin:8px 0;
+}
+
+.footer-col a:hover{
+  color:var(--gold2);
+}
+
+.copyright{
+  border-top:1px solid #181818;
+  margin-top:35px;
+  padding-top:20px;
+  color:#3d3d3d;
+  text-align:center;
+  font-size:8px;
+}
+
+/* ============================================================
+   MOBILE MENU
+============================================================ */
+
+.mobile-menu{
+  display:none;
+  border-top:1px solid #191919;
+  padding:10px 0 15px;
+}
+
+.mobile-menu.open{
+  display:block;
+}
+
+.mobile-menu a{
+  display:block;
+  padding:11px 4px;
+  color:#999;
+  font-size:10px;
+}
+
+.mobile-menu a:hover{
+  color:var(--gold2);
+}
+
+/* ============================================================
+   RESPONSIVE
+============================================================ */
+
+@media(max-width:1150px){
+
+  .main-nav,
+  .create-btn{
+    display:none;
+  }
+
+  .mobile-toggle{
+    display:block;
+  }
+
+  .editorial{
+    grid-template-columns:1fr 1fr;
+  }
+
+  .rail{
+    grid-template-columns:1fr 1fr;
+  }
+
+}
+
+@media(max-width:800px){
+
+  .container{
+    width:calc(100% - 24px);
+  }
+
+  .hero{
+    min-height:560px;
+  }
+
+  .hero h1{
+    letter-spacing:-2px;
+  }
+
+  .stage-heading{
+    display:block;
+  }
+
+  .stage-heading p{
+    text-align:left;
+    margin-top:12px;
+  }
+
+  .editorial{
+    display:block;
+  }
+
+  .editorial-image{
+    min-height:430px;
+    height:430px;
+  }
+
+  .editorial-content{
+    padding:30px 24px;
+  }
+
+  .rail{
+    grid-template-columns:1fr;
+  }
+
+  .philosophy-grid{
+    grid-template-columns:1fr;
+    gap:35px;
+  }
+
+  .footer-grid{
+    grid-template-columns:1fr 1fr;
+  }
+
+}
+
+@media(max-width:520px){
+
+  .hero{
+    min-height:530px;
+  }
+
+  .hero-bottom{
+    gap:20px;
+  }
+
+  .hero-stat{
+    min-width:100px;
+  }
+
+  .editorial-image{
+    min-height:340px;
+    height:340px;
+  }
+
+  .editorial-stats{
+    grid-template-columns:1fr 1fr;
+  }
+
+  .editorial-actions{
+    flex-direction:column;
+  }
+
+  .editorial-actions .btn{
+    width:100%;
+  }
+
+  .principles{
+    grid-template-columns:1fr;
+  }
+
+  .cta-box{
+    padding:35px 20px;
+  }
+
+  .footer-grid{
+    grid-template-columns:1fr;
+  }
+
+}
+</style>
+</head>
+
+<body>
+
+<header class="site-header">
+
+  <div class="container header-inner">
+
+    <a href="index.html" class="brand">
+
+      <div class="brand-mark">
+        <span>CR</span>
+      </div>
+
+      <div class="brand-text">
+        <strong>CROWRULES</strong>
+        <small>Memorials</small>
+      </div>
+
+    </a>
+
+    <nav class="main-nav">
+
+      <a href="index.html">Home</a>
+      <a href="memorials.html">Memorials</a>
+      <a href="featured.html" class="active">Featured</a>
+      <a href="recent.html">Recent</a>
+      <a href="on-this-day.html">On This Day</a>
+      <a href="stories.html">Stories</a>
+      <a href="tributes.html">Tributes</a>
+      <a href="search.html">Search</a>
+
+    </nav>
+
+    <a href="create.html" class="create-btn">
+      CREATE MEMORIAL
+    </a>
+
+    <button
+      class="mobile-toggle"
+      id="mobileToggle"
+      aria-label="Open navigation"
+    >
+      ☰
+    </button>
+
+  </div>
+
+  <div class="container">
+
+    <div class="mobile-menu" id="mobileMenu">
+
+      <a href="index.html">Home</a>
+      <a href="memorials.html">Memorials</a>
+      <a href="featured.html">Featured</a>
+      <a href="recent.html">Recent</a>
+      <a href="on-this-day.html">On This Day</a>
+      <a href="stories.html">Stories</a>
+      <a href="tributes.html">Tributes</a>
+      <a href="search.html">Search</a>
+      <a href="create.html">Create Memorial</a>
+
+    </div>
+
+  </div>
+
+</header>
+
+<main>
+
+<!-- ========================================================
+     HERO
+========================================================= -->
+
+<section class="hero">
+
+  <div class="container hero-inner">
+
+    <div class="hero-label">
+      Featured Lives
+    </div>
+
+    <h1>
+      Some stories<br>
+      <span>deserve the spotlight.</span>
+    </h1>
+
+    <p class="hero-description">
+      CrowRules Memorials features selected lives whose stories,
+      creativity, friendships, families, contributions and memories
+      deserve a special place within the archive.
+    </p>
+
+    <div class="hero-bottom">
+
+      <div class="hero-stat">
+        <strong id="heroCount">—</strong>
+        <span>Featured Memorials</span>
+      </div>
+
+      <div class="hero-stat">
+        <strong id="heroCandles">—</strong>
+        <span>Candles</span>
+      </div>
+
+      <div class="hero-stat">
+        <strong id="heroTributes">—</strong>
+        <span>Tributes</span>
+      </div>
+
+    </div>
+
+  </div>
+
+</section>
+
+<!-- ========================================================
+     FEATURED STAGE
+========================================================= -->
+
+<section class="stage">
+
+<div class="container">
+
+  <div class="stage-heading">
+
+    <div>
+      <div class="section-kicker">
+        The Spotlight
+      </div>
+
+      <h2>Featured Memorial</h2>
+    </div>
+
+    <p>
+      One story takes center stage. Additional featured
+      memorials remain close at hand for exploration.
+    </p>
+
+  </div>
+
+  <div id="featuredStage">
+
+    <div class="loading">
+      <div class="spinner"></div>
+    </div>
+
+  </div>
+
+  <div class="rail-section">
+
+    <div class="rail-header">
+
+      <h3>More Featured Lives</h3>
+
+      <a href="memorials.html">
+        View Complete Archive →
+      </a>
+
+    </div>
+
+    <div id="featuredRail">
+
+      <div class="loading">
+        <div class="spinner"></div>
+      </div>
+
+    </div>
+
+  </div>
+
+</div>
+
+</section>
+
+<!-- ========================================================
+     PHILOSOPHY
+========================================================= -->
+
+<section class="philosophy">
+
+<div class="container">
+
+  <div class="philosophy-grid">
+
+    <div>
+
+      <div class="section-kicker">
+        Why We Remember
+      </div>
+
+      <h2>
+        A name is more<br>
+        than a name.<br>
+        <span>It's a story.</span>
+      </h2>
+
+    </div>
+
+    <div class="philosophy-copy">
+
+      <p>
+        CrowRules Memorials is designed around a simple idea:
+        people should be remembered for the lives they lived,
+        the relationships they built and the moments they left
+        behind.
+      </p>
+
+      <p>
+        A featured memorial is not simply a profile. It is an
+        invitation to stop, remember, learn something about a
+        life and perhaps add a memory of your own.
+      </p>
+
+      <div class="principles">
+
+        <div class="principle">
+          <div class="principle-number">01</div>
+          <strong>Preserve</strong>
+          <p>
+            Keep important stories available for future generations.
+          </p>
+        </div>
+
+        <div class="principle">
+          <div class="principle-number">02</div>
+          <strong>Remember</strong>
+          <p>
+            Give families, friends and communities a place to reflect.
+          </p>
+        </div>
+
+        <div class="principle">
+          <div class="principle-number">03</div>
+          <strong>Share</strong>
+          <p>
+            Stories and memories become part of a larger legacy.
+          </p>
+        </div>
+
+        <div class="principle">
+          <div class="principle-number">04</div>
+          <strong>Honor</strong>
+          <p>
+            Celebrate the impact each person made during their life.
+          </p>
+        </div>
+
+      </div>
+
+    </div>
+
+  </div>
+
+</div>
+
+</section>
+
+<!-- ========================================================
+     CTA
+========================================================= -->
+
+<section class="cta">
+
+<div class="container">
+
+  <div class="cta-box">
+
+    <div class="section-kicker">
+      Keep Their Story Alive
+    </div>
+
+    <h2>
+      Someone you love<br>
+      deserves to be remembered.
+    </h2>
+
+    <p>
+      Create a CrowRules Memorial and preserve their photographs,
+      stories, memories, tributes and legacy in one dedicated place.
+    </p>
+
+    <a
+      href="create.html"
+      class="btn gold"
+    >
+      CREATE A MEMORIAL
+    </a>
+
+  </div>
+
+</div>
+
+</section>
+
+</main>
+
+<!-- ========================================================
+     FOOTER
+========================================================= -->
+
+<footer>
+
+<div class="container">
+
+  <div class="footer-grid">
+
+    <div>
+
+      <div class="footer-title">
+        CROWRULES MEMORIALS
+      </div>
+
+      <div class="footer-copy">
+        A digital remembrance archive for lives, stories,
+        photographs, friendships, families and legacies.
+      </div>
+
+    </div>
+
+    <div class="footer-col">
+
+      <h4>Explore</h4>
+
+      <a href="memorials.html">All Memorials</a>
+      <a href="featured.html">Featured</a>
+      <a href="recent.html">Recent</a>
+      <a href="on-this-day.html">On This Day</a>
+
+    </div>
+
+    <div class="footer-col">
+
+      <h4>Remember</h4>
+
+      <a href="stories.html">Stories</a>
+      <a href="tributes.html">Tributes</a>
+      <a href="candles.html">Candles</a>
+      <a href="photos.html">Photos</a>
+
+    </div>
+
+    <div class="footer-col">
+
+      <h4>Community</h4>
+
+      <a href="create.html">Create Memorial</a>
+      <a href="categories.html">Categories</a>
+      <a href="guestbook.html">Guestbook</a>
+      <a href="contact.html">Contact</a>
+
+    </div>
+
+  </div>
+
+  <div class="copyright">
+    © <span id="year"></span>
+    CrowRules Entertainment · CrowRules Memorials
+  </div>
+
+</div>
+
+</footer>
+
+<!-- ========================================================
+     CANDLE MODAL
+========================================================= -->
+
+<div class="modal" id="candleModal">
+
+  <div class="modal-box">
+
+    <div class="modal-head">
+
+      <div>
+
+        <h2>Light a Candle</h2>
+
+        <p>
+          Leave a small light of remembrance.
+        </p>
+
+      </div>
+
+      <button
+        class="close"
+        id="closeModal"
+        aria-label="Close"
+      >
+        ×
+      </button>
+
+    </div>
+
+    <form id="candleForm">
+
+      <input
+        type="hidden"
+        id="memorialId"
+      >
+
+      <div class="field">
+
+        <label>Your Name</label>
+
+        <input
+          id="authorName"
+          maxlength="100"
+          placeholder="Your name"
+        >
+
+      </div>
+
+      <div class="field">
+
+        <label>Message</label>
+
+        <textarea
+          id="message"
+          maxlength="1000"
+          placeholder="A few words of remembrance..."
+        ></textarea>
+
+      </div>
+
+      <div
+        class="status"
+        id="status"
+      ></div>
+
+      <button
+        type="submit"
+        class="btn gold"
+        style="width:100%;"
+      >
+        LIGHT CANDLE
+      </button>
+
+    </form>
+
+  </div>
+
+</div>
+
+<script>
+/* ============================================================
+   SUPABASE CONFIG
+============================================================ */
+
+const SUPABASE_URL =
+  "https://cevylpnoexugwgygvtgu.supabase.co";
+
+const SUPABASE_KEY =
+  "sb_publishable_AdfM5y6RqvF3tbvEVzDZSg_JuGTQLD-";
+
+const db =
+  window.supabase.createClient(
+    SUPABASE_URL,
+    SUPABASE_KEY
+  );
+
+/* ============================================================
+   STATE
+============================================================ */
+
+const state = {
+  memorials: [],
+  candleCounts: {},
+  tributeCounts: {},
+  storyCounts: {},
+  photoCounts: {}
+};
+
+/* ============================================================
+   HELPERS
+============================================================ */
+
+function escapeHtml(value){
+
+  if(value === null || value === undefined){
+    return "";
+  }
+
+  return String(value)
+    .replaceAll("&","&amp;")
+    .replaceAll("<","&lt;")
+    .replaceAll(">","&gt;")
+    .replaceAll('"',"&quot;")
+    .replaceAll("'","&#039;");
+}
+
+function formatDates(item){
+
+  const birth =
+    item.birth_date
+      ? new Date(
+          item.birth_date + "T00:00:00"
+        ).getFullYear()
+      : null;
+
+  const passing =
+    item.passing_date
+      ? new Date(
+          item.passing_date + "T00:00:00"
+        ).getFullYear()
+      : null;
+
+  if(birth && passing){
+    return `${birth} — ${passing}`;
+  }
+
+  if(birth){
+    return `${birth} —`;
+  }
+
+  if(passing){
+    return `— ${passing}`;
+  }
+
+  return "Life remembered";
+}
+
+function countRows(rows){
+
+  const result = {};
+
+  (rows || []).forEach(row=>{
+
+    if(!row.memorial_id){
+      return;
+    }
+
+    result[row.memorial_id] =
+      (result[row.memorial_id] || 0) + 1;
+
+  });
+
+  return result;
+}
+
+/* ============================================================
+   LOAD MEMORIALS
+============================================================ */
+
+async function loadMemorials(){
+
+  const {data,error} =
+    await db
+      .from("memorials")
+      .select(`
+        id,
+        slug,
+        full_name,
+        birth_date,
+        passing_date,
+        location,
+        short_bio,
+        portrait_url,
+        featured,
+        published,
+        created_at
+      `)
+      .eq("published",true)
+      .eq("featured",true)
+      .order("created_at",{ascending:false});
+
+  if(error){
+    throw error;
+  }
+
+  state.memorials = data || [];
+}
+
+/* ============================================================
+   LOAD COUNTS
+============================================================ */
+
+async function loadCounts(){
+
+  if(!state.memorials.length){
+    return;
+  }
+
+  const ids =
+    state.memorials.map(
+      item=>item.id
+    );
+
+  const [
+    candles,
+    tributes,
+    stories,
+    photos
+  ] = await Promise.all([
+
+    db
+      .from("memorial_candles")
+      .select("memorial_id")
+      .in("memorial_id",ids),
+
+    db
+      .from("memorial_tributes")
+      .select("memorial_id")
+      .in("memorial_id",ids),
+
+    db
+      .from("memorial_stories")
+      .select("memorial_id")
+      .in("memorial_id",ids)
+      .eq("published",true),
+
+    db
+      .from("memorial_photos")
+      .select("memorial_id")
+      .in("memorial_id",ids)
+      .eq("published",true)
+
+  ]);
+
+  state.candleCounts =
+    countRows(candles.data);
+
+  state.tributeCounts =
+    countRows(tributes.data);
+
+  state.storyCounts =
+    countRows(stories.data);
+
+  state.photoCounts =
+    countRows(photos.data);
+}
+
+/* ============================================================
+   GLOBAL STATS
+============================================================ */
+
+async function loadGlobalStats(){
+
+  const [
+    candles,
+    tributes
+  ] = await Promise.all([
+
+    db
+      .from("memorial_candles")
+      .select("*",{count:"exact",head:true}),
+
+    db
+      .from("memorial_tributes")
+      .select("*",{count:"exact",head:true})
+
+  ]);
+
+  document.getElementById(
+    "heroCandles"
+  ).textContent =
+    (candles.count || 0).toLocaleString();
+
+  document.getElementById(
+    "heroTributes"
+  ).textContent =
+    (tributes.count || 0).toLocaleString();
+
+  document.getElementById(
+    "heroCount"
+  ).textContent =
+    state.memorials.length.toLocaleString();
+}
+
+/* ============================================================
+   PRIMARY FEATURE
+============================================================ */
+
+function renderPrimary(){
+
+  const target =
+    document.getElementById(
+      "featuredStage"
+    );
+
+  if(!state.memorials.length){
+
+    target.innerHTML = `
+      <div class="empty">
+        <h2>No Featured Memorials Yet</h2>
+        <p>
+          Featured memorials will appear here as the archive grows.
+        </p>
+        <a
+          href="memorials.html"
+          class="btn"
+        >
+          EXPLORE MEMORIALS
+        </a>
+      </div>
+    `;
+
+    return;
+  }
+
+  const item =
+    state.memorials[0];
+
+  let image;
+
+  if(item.portrait_url){
+
+    image = `
+      <img
+        src="${escapeHtml(item.portrait_url)}"
+        alt="${escapeHtml(item.full_name)}"
+        loading="eager"
+        onerror="
+          this.style.display='none';
+          this.nextElementSibling.style.display='grid';
+        "
+      >
+
+      <div
+        class="image-fallback"
+        style="display:none;position:absolute;inset:0;"
+      >
+        <div class="fallback-circle">
+          <span>CR</span>
+        </div>
+      </div>
+    `;
+
+  }else{
+
+    image = `
+      <div class="image-fallback">
+        <div class="fallback-circle">
+          <span>CR</span>
+        </div>
+      </div>
+    `;
+
+  }
+
+  target.innerHTML = `
+
+    <article class="editorial">
+
+      <div class="editorial-image">
+
+        <div class="editorial-label">
+          FEATURED LIFE
+        </div>
+
+        ${image}
+
+      </div>
+
+      <div class="editorial-content">
+
+        <div class="editorial-index">
+          01 / ${String(state.memorials.length).padStart(2,"0")}
+        </div>
+
+        <h3>
+          ${escapeHtml(item.full_name)}
+        </h3>
+
+        <div class="editorial-dates">
+          ${escapeHtml(formatDates(item))}
+        </div>
+
+        ${
+          item.location
+            ? `
+              <div class="editorial-location">
+                ◇ ${escapeHtml(item.location)}
+              </div>
+            `
+            : ""
+        }
+
+        <div class="editorial-rule"></div>
+
+        <div class="editorial-bio">
+          ${
+            escapeHtml(
+              item.short_bio ||
+              "A life remembered through stories, memories and legacy."
+            )
+          }
+        </div>
+
+        <div class="editorial-stats">
+
+          <div class="editorial-stat">
+            <strong>
+              ${state.candleCounts[item.id] || 0}
+            </strong>
+            <span>Candles</span>
+          </div>
+
+          <div class="editorial-stat">
+            <strong>
+              ${state.tributeCounts[item.id] || 0}
+            </strong>
+            <span>Tributes</span>
+          </div>
+
+          <div class="editorial-stat">
+            <strong>
+              ${state.storyCounts[item.id] || 0}
+            </strong>
+            <span>Stories</span>
+          </div>
+
+          <div class="editorial-stat">
+            <strong>
+              ${state.photoCounts[item.id] || 0}
+            </strong>
+            <span>Photos</span>
+          </div>
+
+        </div>
+
+        <div class="editorial-actions">
+
+          <a
+            class="btn gold"
+            href="memorial.html?slug=${encodeURIComponent(item.slug)}"
+          >
+            ENTER MEMORIAL
+          </a>
+
+          <button
+            class="btn"
+            data-candle="${escapeHtml(item.id)}"
+            data-name="${escapeHtml(item.full_name)}"
+          >
+            🕯 LIGHT A CANDLE
+          </button>
+
+        </div>
+
+      </div>
+
+    </article>
+  `;
+
+  attachCandleButtons();
+}
+
+/* ============================================================
+   RAIL
+============================================================ */
+
+function renderRail(){
+
+  const target =
+    document.getElementById(
+      "featuredRail"
+    );
+
+  if(state.memorials.length <= 1){
+
+    target.innerHTML = `
+      <div class="empty">
+        <h2>More Featured Lives Coming Soon</h2>
+        <p>
+          Additional featured memorials will appear here.
+        </p>
+      </div>
+    `;
+
+    return;
+  }
+
+  const items =
+    state.memorials.slice(1);
+
+  target.innerHTML = `
+
+    <div class="rail">
+
+      ${items.map(item=>{
+
+        const image =
+          item.portrait_url
+            ? `
+              <img
+                src="${escapeHtml(item.portrait_url)}"
+                alt="${escapeHtml(item.full_name)}"
+                loading="lazy"
+                onerror="
+                  this.style.display='none';
+                  this.nextElementSibling.style.display='grid';
+                "
+              >
+
+              <div
+                class="rail-fallback"
+                style="display:none;"
+              >
+                CR
+              </div>
+            `
+            : `
+              <div class="rail-fallback">
+                CR
+              </div>
+            `;
+
+        return `
+
+          <article class="rail-card">
+
+            <div class="rail-image">
+              ${image}
+            </div>
+
+            <div class="rail-info">
+
+              <h4>
+                ${escapeHtml(item.full_name)}
+              </h4>
+
+              <div class="dates">
+                ${escapeHtml(formatDates(item))}
+              </div>
+
+              <p>
+                ${
+                  escapeHtml(
+                    item.short_bio ||
+                    "A life remembered."
+                  )
+                }
+              </p>
+
+              <a
+                href="memorial.html?slug=${encodeURIComponent(item.slug)}"
+                class="rail-view"
+              >
+                View Memorial →
+              </a>
+
+            </div>
+
+          </article>
+
+        `;
+
+      }).join("")}
+
+    </div>
+  `;
+}
+
+/* ============================================================
+   CANDLE MODAL
+============================================================ */
+
+function openCandle(id,name){
+
+  document.getElementById(
+    "memorialId"
+  ).value = id;
+
+  document.getElementById(
+    "authorName"
+  ).value = "";
+
+  document.getElementById(
+    "message"
+  ).value = "";
+
+  document.getElementById(
+    "status"
+  ).textContent =
+    `Lighting a candle for ${name}`;
+
+  document
+    .getElementById("candleModal")
+    .classList.add("open");
+
+  document
+    .getElementById("authorName")
+    .focus();
+}
+
+function closeCandle(){
+
+  document
+    .getElementById("candleModal")
+    .classList.remove("open");
+}
+
+function attachCandleButtons(){
+
+  document
+    .querySelectorAll("[data-candle]")
+    .forEach(button=>{
+
+      button.addEventListener(
+        "click",
+        ()=>{
+          openCandle(
+            button.dataset.candle,
+            button.dataset.name
+          );
+        }
+      );
+
+    });
+
+}
+
+/* ============================================================
+   CANDLE FORM
+============================================================ */
+
+document
+  .getElementById("candleForm")
+  .addEventListener(
+    "submit",
+    async event=>{
+
+      event.preventDefault();
+
+      const memorialId =
+        document.getElementById(
+          "memorialId"
+        ).value;
+
+      const author =
+        document.getElementById(
+          "authorName"
+        ).value.trim();
+
+      const message =
+        document.getElementById(
+          "message"
+        ).value.trim();
+
+      const status =
+        document.getElementById(
+          "status"
+        );
+
+      if(!message){
+
+        status.textContent =
+          "Please enter a remembrance message.";
+
+        return;
+      }
+
+      status.textContent =
+        "Lighting candle…";
+
+      const {error} =
+        await db
+          .from("memorial_candles")
+          .insert({
+
+            memorial_id:memorialId,
+
+            author_name:
+              author ||
+              "Community Member",
+
+            message
+
+          });
+
+      if(error){
+
+        console.error(error);
+
+        status.textContent =
+          "Unable to light candle. Please try again.";
+
+        return;
+      }
+
+      status.textContent =
+        "Candle lit successfully.";
+
+      state.candleCounts[memorialId] =
+        (state.candleCounts[memorialId] || 0) + 1;
+
+      const heroCandles =
+        document.getElementById(
+          "heroCandles"
+        );
+
+      heroCandles.textContent =
+        (
+          Number(
+            heroCandles.textContent.replaceAll(",","")
+          ) + 1
+        ).toLocaleString();
+
+      setTimeout(()=>{
+
+        closeCandle();
+
+        renderPrimary();
+
+      },900);
+
+    }
+  );
+
+/* ============================================================
+   CLOSE MODAL
+============================================================ */
+
+document
+  .getElementById("closeModal")
+  .addEventListener(
+    "click",
+    closeCandle
+  );
+
+document
+  .getElementById("candleModal")
+  .addEventListener(
+    "click",
+    event=>{
+
+      if(
+        event.target.id ===
+        "candleModal"
+      ){
+        closeCandle();
+      }
+
+    }
+  );
+
+document.addEventListener(
+  "keydown",
+  event=>{
+
+    if(event.key === "Escape"){
+      closeCandle();
+    }
+
+  }
+);
+
+/* ============================================================
+   MOBILE NAV
+============================================================ */
+
+document
+  .getElementById("mobileToggle")
+  .addEventListener(
+    "click",
+    ()=>{
+
+      document
+        .getElementById("mobileMenu")
+        .classList.toggle("open");
+
+    }
+  );
+
+/* ============================================================
+   INITIALIZE
+============================================================ */
+
+async function init(){
+
+  document.getElementById(
+    "year"
+  ).textContent =
+    new Date().getFullYear();
+
+  try{
+
+    await loadMemorials();
+
+    await Promise.all([
+      loadCounts(),
+      loadGlobalStats()
+    ]);
+
+    renderPrimary();
+
+    renderRail();
+
+  }catch(error){
+
+    console.error(
+      "CrowRules Featured Memorials Error:",
+      error
+    );
+
+    document.getElementById(
+      "featuredStage"
+    ).innerHTML = `
+      <div class="empty">
+
+        <h2>
+          Featured Archive Unavailable
+        </h2>
+
+        <p>
+          The memorial archive could not be loaded.
+          Please refresh the page and try again.
+        </p>
+
+        <button
+          class="btn gold"
+          onclick="location.reload()"
+        >
+          RELOAD ARCHIVE
+        </button>
+
+      </div>
+    `;
+
+    document.getElementById(
+      "featuredRail"
+    ).innerHTML = "";
+
+  }
+
+}
+
+init();
+</script>
+
+</body>
+</html>

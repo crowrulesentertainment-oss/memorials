@@ -1,0 +1,2675 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+
+<title>Search — CrowRules Memorials</title>
+<meta name="theme-color" content="#070707">
+<meta name="description" content="Search the CrowRules Memorials archive for memorials, stories, tributes, and guestbook memories.">
+
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Libre+Baskerville:wght@400;700&family=Montserrat:wght@400;500;600;700;800&family=Orbitron:wght@500;600;700;800&display=swap" rel="stylesheet">
+
+<style>
+:root{
+  --bg:#070707;
+  --panel:#101011;
+  --panel2:#141415;
+  --line:rgba(255,255,255,.09);
+  --line2:rgba(255,255,255,.15);
+  --text:#f3efe7;
+  --muted:#9d9991;
+  --dim:#6e6a63;
+  --gold:#c6a768;
+  --gold2:#e0c98e;
+  --danger:#df7c7c;
+  --success:#b8c99c;
+  --max:1400px;
+  --radius:20px;
+  --shadow:0 30px 80px rgba(0,0,0,.5);
+}
+
+*{
+  box-sizing:border-box;
+}
+
+html{
+  scroll-behavior:smooth;
+}
+
+body{
+  margin:0;
+  min-height:100vh;
+  background:
+    radial-gradient(circle at 15% 0%,rgba(198,167,104,.09),transparent 28%),
+    radial-gradient(circle at 90% 20%,rgba(255,255,255,.035),transparent 26%),
+    linear-gradient(180deg,#070707 0%,#090909 55%,#050505 100%);
+  color:var(--text);
+  font-family:Montserrat,Arial,sans-serif;
+}
+
+body:before{
+  content:"";
+  position:fixed;
+  inset:0;
+  pointer-events:none;
+  opacity:.035;
+  background-image:
+    linear-gradient(rgba(255,255,255,.5) 1px,transparent 1px),
+    linear-gradient(90deg,rgba(255,255,255,.5) 1px,transparent 1px);
+  background-size:80px 80px;
+  mask-image:linear-gradient(to bottom,black,transparent 75%);
+}
+
+a{
+  color:inherit;
+  text-decoration:none;
+}
+
+button,
+input,
+select{
+  font:inherit;
+}
+
+button{
+  cursor:pointer;
+}
+
+.container{
+  width:min(var(--max),calc(100% - 40px));
+  margin:auto;
+}
+
+/* HEADER */
+
+.site-header{
+  position:sticky;
+  top:0;
+  z-index:100;
+  background:rgba(7,7,7,.84);
+  backdrop-filter:blur(18px);
+  border-bottom:1px solid var(--line);
+}
+
+.nav{
+  min-height:76px;
+  display:flex;
+  align-items:center;
+  gap:22px;
+}
+
+.brand{
+  display:flex;
+  align-items:center;
+  gap:12px;
+  min-width:max-content;
+}
+
+.brand-mark{
+  width:41px;
+  height:41px;
+  display:grid;
+  place-items:center;
+  border:1px solid rgba(198,167,104,.48);
+  border-radius:50%;
+  color:var(--gold2);
+  font:700 16px Orbitron,sans-serif;
+}
+
+.brand-copy strong{
+  display:block;
+  font:700 13px Orbitron,sans-serif;
+  letter-spacing:2px;
+}
+
+.brand-copy span{
+  display:block;
+  margin-top:3px;
+  color:var(--dim);
+  font-size:9px;
+  letter-spacing:2.5px;
+  text-transform:uppercase;
+}
+
+.nav-links{
+  display:flex;
+  align-items:center;
+  gap:3px;
+  margin-left:auto;
+}
+
+.nav-links a{
+  padding:10px;
+  border-radius:9px;
+  color:#b7b2aa;
+  font-size:10px;
+  font-weight:800;
+  letter-spacing:.65px;
+  text-transform:uppercase;
+}
+
+.nav-links a:hover,
+.nav-links a.active{
+  color:var(--gold2);
+  background:rgba(198,167,104,.07);
+}
+
+.nav-actions{
+  display:flex;
+  gap:8px;
+}
+
+.btn{
+  border:1px solid var(--line2);
+  border-radius:11px;
+  padding:11px 15px;
+  background:#111112;
+  color:var(--text);
+  font-size:10px;
+  font-weight:800;
+  letter-spacing:.7px;
+  text-transform:uppercase;
+  transition:.2s;
+}
+
+.btn:hover{
+  transform:translateY(-1px);
+  border-color:rgba(198,167,104,.4);
+}
+
+.btn.gold{
+  border-color:transparent;
+  background:linear-gradient(135deg,#dfc98e,#b89350);
+  color:#080706;
+}
+
+.btn.ghost{
+  background:transparent;
+}
+
+.mobile-toggle{
+  display:none;
+  margin-left:auto;
+  width:42px;
+  height:42px;
+  border:1px solid var(--line);
+  border-radius:10px;
+  background:#101011;
+  color:#fff;
+}
+
+/* HERO */
+
+.hero{
+  padding:88px 0 58px;
+}
+
+.hero-grid{
+  display:grid;
+  grid-template-columns:1fr 360px;
+  gap:60px;
+  align-items:end;
+}
+
+.eyebrow{
+  color:var(--gold2);
+  font:700 10px Orbitron,sans-serif;
+  letter-spacing:4px;
+  text-transform:uppercase;
+}
+
+.hero h1{
+  margin:18px 0;
+  max-width:900px;
+  font:700 clamp(40px,6vw,76px)/1.02 Orbitron,sans-serif;
+  letter-spacing:-2px;
+  text-transform:uppercase;
+}
+
+.hero h1 span{
+  color:var(--gold2);
+}
+
+.hero p{
+  max-width:720px;
+  margin:0;
+  color:var(--muted);
+  font-size:14px;
+  line-height:1.9;
+}
+
+.hero-note{
+  padding:18px 0 18px 24px;
+  border-left:1px solid rgba(198,167,104,.45);
+}
+
+.hero-note strong{
+  display:block;
+  color:#e8e1d4;
+  font:700 11px Orbitron,sans-serif;
+  letter-spacing:1.8px;
+  text-transform:uppercase;
+}
+
+.hero-note p{
+  margin-top:10px;
+  color:#98938a;
+  font:12px/1.9 "Libre Baskerville",serif;
+}
+
+/* SEARCH */
+
+.search-area{
+  padding:0 0 45px;
+}
+
+.search-box{
+  position:relative;
+  padding:8px;
+  border:1px solid rgba(198,167,104,.25);
+  border-radius:18px;
+  background:
+    radial-gradient(circle at 100% 0%,rgba(198,167,104,.08),transparent 35%),
+    #0e0e0f;
+  box-shadow:0 20px 60px rgba(0,0,0,.2);
+}
+
+.search-row{
+  display:grid;
+  grid-template-columns:minmax(0,1fr) auto;
+  gap:8px;
+}
+
+.search-input{
+  min-width:0;
+  border:0;
+  outline:0;
+  background:transparent;
+  color:#f5f0e8;
+  padding:18px;
+  font-size:16px;
+}
+
+.search-input::placeholder{
+  color:#64615b;
+}
+
+.search-submit{
+  min-width:130px;
+  border:0;
+  border-radius:12px;
+  background:var(--gold2);
+  color:#080706;
+  font-size:10px;
+  font-weight:800;
+  letter-spacing:1px;
+  text-transform:uppercase;
+}
+
+.search-help{
+  padding:9px 18px 12px;
+  color:#65615a;
+  font-size:9px;
+  letter-spacing:.5px;
+}
+
+/* STATS */
+
+.stats{
+  display:grid;
+  grid-template-columns:repeat(4,1fr);
+  border-top:1px solid var(--line);
+  border-bottom:1px solid var(--line);
+}
+
+.stat{
+  min-height:102px;
+  padding:24px 22px;
+  border-right:1px solid var(--line);
+}
+
+.stat:last-child{
+  border-right:0;
+}
+
+.stat-number{
+  color:var(--gold2);
+  font:500 27px Orbitron,sans-serif;
+}
+
+.stat-label{
+  margin-top:7px;
+  color:var(--dim);
+  font-size:9px;
+  font-weight:700;
+  letter-spacing:1.6px;
+  text-transform:uppercase;
+}
+
+/* RESULTS */
+
+.results{
+  padding:55px 0 90px;
+}
+
+.results-head{
+  display:flex;
+  justify-content:space-between;
+  align-items:end;
+  gap:20px;
+  margin-bottom:20px;
+}
+
+.results-head h2{
+  margin:0;
+  font:600 20px Orbitron,sans-serif;
+  letter-spacing:1px;
+  text-transform:uppercase;
+}
+
+.results-head p{
+  margin:7px 0 0;
+  color:var(--muted);
+  font-size:11px;
+}
+
+.result-filter{
+  padding:9px 11px;
+  border:1px solid var(--line);
+  border-radius:9px;
+  outline:none;
+  background:#101011;
+  color:#aaa59d;
+  font-size:9px;
+  font-weight:700;
+}
+
+/* RESULT GROUPS */
+
+.result-groups{
+  display:grid;
+  gap:32px;
+}
+
+.result-group{
+  min-width:0;
+}
+
+.group-head{
+  display:flex;
+  align-items:center;
+  gap:12px;
+  margin-bottom:13px;
+}
+
+.group-head h3{
+  margin:0;
+  font:600 12px Orbitron,sans-serif;
+  letter-spacing:1.4px;
+  text-transform:uppercase;
+}
+
+.group-line{
+  height:1px;
+  flex:1;
+  background:var(--line);
+}
+
+.group-count{
+  color:#68645d;
+  font:9px Orbitron,sans-serif;
+}
+
+.result-grid{
+  display:grid;
+  grid-template-columns:repeat(3,1fr);
+  gap:13px;
+}
+
+/* MEMORIAL CARD */
+
+.memorial-card{
+  position:relative;
+  overflow:hidden;
+  min-height:310px;
+  display:flex;
+  flex-direction:column;
+  justify-content:flex-end;
+  border:1px solid var(--line);
+  border-radius:17px;
+  background:#111;
+  transition:.25s;
+}
+
+.memorial-card:hover{
+  transform:translateY(-3px);
+  border-color:rgba(198,167,104,.3);
+  box-shadow:0 25px 60px rgba(0,0,0,.35);
+}
+
+.memorial-bg{
+  position:absolute;
+  inset:0;
+  background:
+    linear-gradient(180deg,rgba(0,0,0,.05) 0%,rgba(0,0,0,.92) 78%,#101011 100%),
+    radial-gradient(circle at 50% 25%,rgba(198,167,104,.2),transparent 43%),
+    #161616;
+  background-size:cover;
+  background-position:center;
+}
+
+.memorial-content{
+  position:relative;
+  z-index:2;
+  padding:21px;
+}
+
+.badge{
+  display:inline-flex;
+  padding:6px 8px;
+  border:1px solid rgba(198,167,104,.28);
+  border-radius:7px;
+  background:rgba(0,0,0,.35);
+  color:var(--gold2);
+  font:8px Orbitron,sans-serif;
+  letter-spacing:1px;
+  text-transform:uppercase;
+}
+
+.memorial-card h4{
+  margin:11px 0 5px;
+  color:#eee9df;
+  font:600 18px Orbitron,sans-serif;
+}
+
+.life-dates{
+  color:#99948b;
+  font:10px "Libre Baskerville",serif;
+}
+
+.location{
+  margin-top:6px;
+  color:#716d66;
+  font-size:9px;
+}
+
+.card-bio{
+  margin-top:10px;
+  color:#a9a49b;
+  font:10px/1.7 "Libre Baskerville",serif;
+  display:-webkit-box;
+  -webkit-line-clamp:3;
+  -webkit-box-orient:vertical;
+  overflow:hidden;
+}
+
+.card-action{
+  display:inline-block;
+  margin-top:13px;
+  color:var(--gold2);
+  font-size:8px;
+  font-weight:800;
+  letter-spacing:1px;
+  text-transform:uppercase;
+}
+
+/* STORY / MESSAGE CARDS */
+
+.story-card,
+.message-card{
+  padding:21px;
+  border:1px solid var(--line);
+  border-radius:16px;
+  background:#101011;
+  transition:.25s;
+}
+
+.story-card:hover,
+.message-card:hover{
+  border-color:rgba(198,167,104,.28);
+  transform:translateY(-2px);
+}
+
+.type-label{
+  color:var(--gold2);
+  font:8px Orbitron,sans-serif;
+  letter-spacing:2px;
+  text-transform:uppercase;
+}
+
+.story-card h4,
+.message-card h4{
+  margin:10px 0 7px;
+  color:#e8e3d9;
+  font:600 15px Orbitron,sans-serif;
+}
+
+.meta{
+  color:#706c65;
+  font-size:9px;
+}
+
+.excerpt{
+  margin:14px 0;
+  color:#a9a49b;
+  font:11px/1.8 "Libre Baskerville",serif;
+  display:-webkit-box;
+  -webkit-line-clamp:5;
+  -webkit-box-orient:vertical;
+  overflow:hidden;
+}
+
+.card-link{
+  color:var(--gold2);
+  font-size:8px;
+  font-weight:800;
+  letter-spacing:1px;
+  text-transform:uppercase;
+}
+
+/* EMPTY */
+
+.empty{
+  padding:75px 25px;
+  border:1px dashed var(--line2);
+  border-radius:18px;
+  text-align:center;
+  background:#0d0d0e;
+}
+
+.empty-symbol{
+  color:var(--gold2);
+  font:500 27px Orbitron,sans-serif;
+}
+
+.empty h3{
+  margin:15px 0 8px;
+  font:600 14px Orbitron,sans-serif;
+  text-transform:uppercase;
+}
+
+.empty p{
+  max-width:560px;
+  margin:0 auto;
+  color:#77736c;
+  font-size:11px;
+  line-height:1.8;
+}
+
+.suggestions{
+  display:flex;
+  justify-content:center;
+  flex-wrap:wrap;
+  gap:7px;
+  margin-top:20px;
+}
+
+.suggestion{
+  border:1px solid var(--line);
+  border-radius:9px;
+  background:#101010;
+  color:#918c84;
+  padding:9px 11px;
+  font-size:8px;
+  font-weight:800;
+  letter-spacing:.7px;
+  text-transform:uppercase;
+}
+
+.suggestion:hover{
+  color:var(--gold2);
+  border-color:rgba(198,167,104,.3);
+}
+
+/* LOADING */
+
+.loading{
+  padding:70px;
+  text-align:center;
+  color:#77736b;
+  font:9px Orbitron,sans-serif;
+  letter-spacing:2px;
+  text-transform:uppercase;
+}
+
+/* PAGINATION */
+
+.pagination{
+  display:flex;
+  justify-content:center;
+  gap:6px;
+  margin-top:28px;
+}
+
+.page-btn{
+  min-width:38px;
+  height:38px;
+  border:1px solid var(--line);
+  border-radius:9px;
+  background:#101010;
+  color:#908b83;
+  font-size:9px;
+  font-weight:800;
+}
+
+.page-btn:hover,
+.page-btn.active{
+  background:var(--gold2);
+  color:#080706;
+  border-color:var(--gold2);
+}
+
+.page-btn:disabled{
+  opacity:.3;
+  cursor:not-allowed;
+}
+
+/* HELP */
+
+.help{
+  padding:75px 0;
+  border-top:1px solid var(--line);
+}
+
+.help-inner{
+  max-width:1000px;
+  margin:auto;
+}
+
+.help-inner h2{
+  margin:15px 0;
+  text-align:center;
+  font:600 clamp(27px,4vw,45px)/1.1 Orbitron,sans-serif;
+}
+
+.help-intro{
+  max-width:700px;
+  margin:0 auto 30px;
+  color:#9b968d;
+  text-align:center;
+  font:12px/1.9 "Libre Baskerville",serif;
+}
+
+.help-grid{
+  display:grid;
+  grid-template-columns:repeat(3,1fr);
+  gap:13px;
+}
+
+.help-card{
+  padding:20px;
+  border:1px solid var(--line);
+  border-radius:15px;
+  background:#101011;
+}
+
+.help-card strong{
+  color:var(--gold2);
+  font:9px Orbitron,sans-serif;
+  letter-spacing:1.2px;
+  text-transform:uppercase;
+}
+
+.help-card p{
+  margin:9px 0 0;
+  color:#858078;
+  font:10px/1.8 "Libre Baskerville",serif;
+}
+
+/* FOOTER */
+
+footer{
+  padding:35px 0;
+  border-top:1px solid var(--line);
+}
+
+.footer-inner{
+  display:flex;
+  align-items:center;
+  justify-content:space-between;
+  gap:20px;
+}
+
+.footer-copy{
+  color:#66625c;
+  font-size:9px;
+  line-height:1.8;
+}
+
+.footer-links{
+  display:flex;
+  flex-wrap:wrap;
+  gap:15px;
+}
+
+.footer-links a{
+  color:#79756d;
+  font-size:8px;
+  font-weight:800;
+  letter-spacing:1px;
+  text-transform:uppercase;
+}
+
+.footer-links a:hover{
+  color:var(--gold2);
+}
+
+/* RESPONSIVE */
+
+@media(max-width:1150px){
+
+  .nav-links{
+    display:none;
+  }
+
+  .mobile-toggle{
+    display:block;
+  }
+
+  .nav-links.open{
+    position:absolute;
+    top:76px;
+    left:20px;
+    right:20px;
+    display:flex;
+    flex-direction:column;
+    align-items:stretch;
+    padding:12px;
+    border:1px solid var(--line);
+    border-radius:15px;
+    background:#0d0d0e;
+  }
+
+  .nav-links.open a{
+    padding:13px;
+  }
+
+  .nav-actions{
+    display:none;
+  }
+
+  .hero-grid{
+    grid-template-columns:1fr;
+    gap:30px;
+  }
+
+  .result-grid{
+    grid-template-columns:repeat(2,1fr);
+  }
+
+}
+
+@media(max-width:700px){
+
+  .container{
+    width:min(100% - 26px,var(--max));
+  }
+
+  .hero{
+    padding:63px 0 45px;
+  }
+
+  .hero h1{
+    letter-spacing:-1px;
+  }
+
+  .brand-copy span{
+    display:none;
+  }
+
+  .brand-copy strong{
+    font-size:11px;
+  }
+
+  .stats{
+    grid-template-columns:1fr 1fr;
+  }
+
+  .stat{
+    min-height:94px;
+  }
+
+  .stat:nth-child(2){
+    border-right:0;
+  }
+
+  .stat:nth-child(-n+2){
+    border-bottom:1px solid var(--line);
+  }
+
+  .search-row{
+    grid-template-columns:1fr;
+  }
+
+  .search-submit{
+    min-height:48px;
+  }
+
+  .results-head{
+    align-items:flex-start;
+    flex-direction:column;
+  }
+
+  .result-grid{
+    grid-template-columns:1fr;
+  }
+
+  .help-grid{
+    grid-template-columns:1fr;
+  }
+
+  .footer-inner{
+    align-items:flex-start;
+    flex-direction:column;
+  }
+
+}
+</style>
+</head>
+
+<body>
+
+<header class="site-header">
+
+  <div class="container nav">
+
+    <a href="index.html" class="brand">
+      <div class="brand-mark">CR</div>
+
+      <div class="brand-copy">
+        <strong>CROWRULES</strong>
+        <span>Memorials</span>
+      </div>
+    </a>
+
+    <nav class="nav-links" id="navLinks">
+      <a href="index.html">Home</a>
+      <a href="memorials.html">Memorials</a>
+      <a href="featured.html">Featured</a>
+      <a href="recent.html">Recent</a>
+      <a href="on-this-day.html">On This Day</a>
+      <a href="stories.html">Stories</a>
+      <a href="tributes.html">Tributes</a>
+      <a href="guestbook.html">Guestbook</a>
+      <a href="search.html" class="active">Search</a>
+    </nav>
+
+    <div class="nav-actions">
+      <a href="create-memorial.html" class="btn gold">
+        Create Memorial
+      </a>
+    </div>
+
+    <button
+      class="mobile-toggle"
+      id="mobileToggle"
+      aria-label="Open navigation">
+      ☰
+    </button>
+
+  </div>
+
+</header>
+
+<main>
+
+<!-- HERO -->
+
+<section class="hero">
+
+  <div class="container hero-grid">
+
+    <div>
+
+      <div class="eyebrow">
+        CrowRules Memorials / Archive Search
+      </div>
+
+      <h1>
+        Find A<br>
+        <span>Memory.</span>
+      </h1>
+
+      <p>
+        Search across the CrowRules Memorials archive.
+        Find a person's memorial, discover stories,
+        read community tributes, or revisit messages
+        left in the guestbook.
+      </p>
+
+    </div>
+
+    <div class="hero-note">
+
+      <strong>The archive remembers.</strong>
+
+      <p>
+        Search by name, place, story title, author,
+        or words contained within a remembrance.
+      </p>
+
+    </div>
+
+  </div>
+
+</section>
+
+<!-- SEARCH -->
+
+<section class="search-area">
+
+  <div class="container">
+
+    <div class="search-box">
+
+      <form id="searchForm">
+
+        <div class="search-row">
+
+          <input
+            id="searchInput"
+            class="search-input"
+            type="search"
+            autocomplete="off"
+            placeholder="Search names, stories, memories, places..."
+            aria-label="Search CrowRules Memorials">
+
+          <button
+            class="search-submit"
+            type="submit">
+            Search Archive
+          </button>
+
+        </div>
+
+        <div class="search-help">
+          Search memorial names, biographies, locations, stories,
+          tributes, and guestbook messages.
+        </div>
+
+      </form>
+
+    </div>
+
+  </div>
+
+</section>
+
+<!-- STATS -->
+
+<section class="container">
+
+  <div class="stats">
+
+    <div class="stat">
+      <div class="stat-number" id="statMemorials">—</div>
+      <div class="stat-label">Memorials</div>
+    </div>
+
+    <div class="stat">
+      <div class="stat-number" id="statStories">—</div>
+      <div class="stat-label">Stories</div>
+    </div>
+
+    <div class="stat">
+      <div class="stat-number" id="statTributes">—</div>
+      <div class="stat-label">Tributes</div>
+    </div>
+
+    <div class="stat">
+      <div class="stat-number" id="statGuestbook">—</div>
+      <div class="stat-label">Guestbook Entries</div>
+    </div>
+
+  </div>
+
+</section>
+
+<!-- RESULTS -->
+
+<section class="results">
+
+  <div class="container">
+
+    <div class="results-head">
+
+      <div>
+        <h2 id="resultsTitle">
+          Search The Archive
+        </h2>
+
+        <p id="resultsSummary">
+          Enter a name, word, place, or phrase above.
+        </p>
+      </div>
+
+      <select
+        class="result-filter"
+        id="resultType">
+
+        <option value="all">
+          All Results
+        </option>
+
+        <option value="memorials">
+          Memorials
+        </option>
+
+        <option value="stories">
+          Stories
+        </option>
+
+        <option value="tributes">
+          Tributes
+        </option>
+
+        <option value="guestbook">
+          Guestbook
+        </option>
+
+      </select>
+
+    </div>
+
+    <div id="resultsContainer">
+
+      <div class="empty">
+
+        <div class="empty-symbol">⌕</div>
+
+        <h3>Search The Memorial Archive</h3>
+
+        <p>
+          Start with a person's name, a location,
+          a story title, or a phrase you remember.
+        </p>
+
+        <div class="suggestions">
+
+          <button class="suggestion" data-query="Daniel">
+            Daniel
+          </button>
+
+          <button class="suggestion" data-query="community">
+            Community
+          </button>
+
+          <button class="suggestion" data-query="memory">
+            Memory
+          </button>
+
+          <button class="suggestion" data-query="Tacoma">
+            Tacoma
+          </button>
+
+        </div>
+
+      </div>
+
+    </div>
+
+    <div
+      id="pagination"
+      class="pagination">
+    </div>
+
+  </div>
+
+</section>
+
+<!-- HELP -->
+
+<section class="help">
+
+  <div class="container help-inner">
+
+    <div class="eyebrow" style="text-align:center">
+      Search Guide
+    </div>
+
+    <h2>Look beyond a name.</h2>
+
+    <p class="help-intro">
+      The archive contains more than memorial profiles.
+      A single search can uncover different pieces
+      of a person's remembrance.
+    </p>
+
+    <div class="help-grid">
+
+      <div class="help-card">
+        <strong>Memorials</strong>
+        <p>
+          Search names, locations, biographies,
+          and other memorial profile information.
+        </p>
+      </div>
+
+      <div class="help-card">
+        <strong>Stories</strong>
+        <p>
+          Discover longer memories and personal stories
+          written for the memorial archive.
+        </p>
+      </div>
+
+      <div class="help-card">
+        <strong>Community Words</strong>
+        <p>
+          Search tributes and guestbook entries
+          to discover what others have written.
+        </p>
+      </div>
+
+    </div>
+
+  </div>
+
+</section>
+
+</main>
+
+<footer>
+
+  <div class="container footer-inner">
+
+    <div class="footer-copy">
+      © <span id="year"></span> CrowRules Entertainment.<br>
+      CrowRules Memorials — Every Life Leaves A Story.
+    </div>
+
+    <div class="footer-links">
+      <a href="index.html">Memorials Home</a>
+      <a href="memorials.html">Archive</a>
+      <a href="featured.html">Featured</a>
+      <a href="stories.html">Stories</a>
+      <a href="tributes.html">Tributes</a>
+      <a href="guestbook.html">Guestbook</a>
+      <a href="search.html">Search</a>
+      <a href="create-memorial.html">Create Memorial</a>
+    </div>
+
+  </div>
+
+</footer>
+
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+
+<script>
+
+/* =========================================================
+   SUPABASE
+========================================================= */
+
+const SUPABASE_URL =
+  "https://cevylpnoexugwgygvtgu.supabase.co";
+
+const SUPABASE_KEY =
+  "sb_publishable_AdfM5y6RqvF3tbvEVzDZSg_JuGTQLD-";
+
+const db =
+  window.supabase.createClient(
+    SUPABASE_URL,
+    SUPABASE_KEY
+  );
+
+/* =========================================================
+   STATE
+========================================================= */
+
+const PAGE_SIZE = 12;
+
+let memorials = [];
+let stories = [];
+let tributes = [];
+let guestbook = [];
+
+let allResults = [];
+let filteredResults = [];
+
+let currentPage = 1;
+let currentQuery = "";
+
+/* =========================================================
+   HELPERS
+========================================================= */
+
+const $ = id =>
+  document.getElementById(id);
+
+function escapeHtml(value){
+
+  return String(value ?? "")
+    .replace(/&/g,"&amp;")
+    .replace(/</g,"&lt;")
+    .replace(/>/g,"&gt;")
+    .replace(/"/g,"&quot;")
+    .replace(/'/g,"&#039;");
+
+}
+
+function formatDate(value){
+
+  if(!value){
+    return "Date unknown";
+  }
+
+  const date =
+    new Date(value);
+
+  if(Number.isNaN(date.getTime())){
+    return "Date unknown";
+  }
+
+  return date.toLocaleDateString(
+    undefined,
+    {
+      month:"long",
+      day:"numeric",
+      year:"numeric"
+    }
+  );
+
+}
+
+function formatLifeDates(memorial){
+
+  if(!memorial){
+    return "";
+  }
+
+  const birth =
+    memorial.birth_date
+      ? new Date(
+          memorial.birth_date + "T00:00:00"
+        ).getFullYear()
+      : "";
+
+  const passing =
+    memorial.passing_date
+      ? new Date(
+          memorial.passing_date + "T00:00:00"
+        ).getFullYear()
+      : "";
+
+  if(birth && passing){
+    return `${birth} — ${passing}`;
+  }
+
+  if(birth){
+    return `Born ${birth}`;
+  }
+
+  if(passing){
+    return `Remembered ${passing}`;
+  }
+
+  return "Dates not listed";
+
+}
+
+function memorialUrl(memorial){
+
+  if(!memorial){
+    return "memorials.html";
+  }
+
+  return (
+    "memorial.html?slug=" +
+    encodeURIComponent(
+      memorial.slug
+    )
+  );
+
+}
+
+function storyUrl(story){
+
+  return (
+    "story.html?id=" +
+    encodeURIComponent(
+      story.id
+    )
+  );
+
+}
+
+function shorten(text,length=180){
+
+  const value =
+    String(text || "")
+      .trim();
+
+  if(value.length <= length){
+    return value;
+  }
+
+  return value.slice(0,length) + "…";
+
+}
+
+function getMemorial(id){
+
+  return memorials.find(
+    item => item.id === id
+  );
+
+}
+
+/* =========================================================
+   LOAD DATA
+========================================================= */
+
+async function loadMemorials(){
+
+  const {data,error} =
+    await db
+      .from("memorials")
+      .select(`
+        id,
+        slug,
+        full_name,
+        birth_date,
+        passing_date,
+        location,
+        short_bio,
+        portrait_url,
+        featured,
+        created_at
+      `)
+      .eq("published",true)
+      .order("full_name",{ascending:true});
+
+  if(error){
+    throw error;
+  }
+
+  memorials =
+    data || [];
+
+}
+
+async function loadStories(){
+
+  const {data,error} =
+    await db
+      .from("memorial_stories")
+      .select(`
+        id,
+        memorial_id,
+        title,
+        story,
+        author_name,
+        created_at
+      `)
+      .eq("published",true)
+      .order("created_at",{ascending:false});
+
+  if(error){
+    throw error;
+  }
+
+  stories =
+    data || [];
+
+}
+
+async function loadTributes(){
+
+  const {data,error} =
+    await db
+      .from("memorial_tributes")
+      .select(`
+        id,
+        memorial_id,
+        author_name,
+        message,
+        created_at
+      `)
+      .order("created_at",{ascending:false});
+
+  if(error){
+    throw error;
+  }
+
+  tributes =
+    data || [];
+
+}
+
+async function loadGuestbook(){
+
+  const {data,error} =
+    await db
+      .from("memorial_guestbook")
+      .select(`
+        id,
+        memorial_id,
+        author_name,
+        message,
+        created_at
+      `)
+      .eq("published",true)
+      .order("created_at",{ascending:false});
+
+  if(error){
+    throw error;
+  }
+
+  guestbook =
+    data || [];
+
+}
+
+/* =========================================================
+   STATS
+========================================================= */
+
+function updateStats(){
+
+  $("statMemorials").textContent =
+    memorials.length.toLocaleString();
+
+  $("statStories").textContent =
+    stories.length.toLocaleString();
+
+  $("statTributes").textContent =
+    tributes.length.toLocaleString();
+
+  $("statGuestbook").textContent =
+    guestbook.length.toLocaleString();
+
+}
+
+/* =========================================================
+   BUILD RESULTS
+========================================================= */
+
+function buildResults(query){
+
+  const q =
+    String(query || "")
+      .trim()
+      .toLowerCase();
+
+  if(!q){
+    return [];
+  }
+
+  const results = [];
+
+  /* MEMORIALS */
+
+  memorials.forEach(memorial => {
+
+    const haystack = [
+      memorial.full_name,
+      memorial.location,
+      memorial.short_bio
+    ]
+      .filter(Boolean)
+      .join(" ")
+      .toLowerCase();
+
+    if(haystack.includes(q)){
+
+      results.push({
+        type:"memorial",
+        id:memorial.id,
+        date:memorial.created_at,
+        data:memorial
+      });
+
+    }
+
+  });
+
+  /* STORIES */
+
+  stories.forEach(story => {
+
+    const memorial =
+      getMemorial(
+        story.memorial_id
+      );
+
+    const haystack = [
+      story.title,
+      story.story,
+      story.author_name,
+      memorial?.full_name,
+      memorial?.location
+    ]
+      .filter(Boolean)
+      .join(" ")
+      .toLowerCase();
+
+    if(haystack.includes(q)){
+
+      results.push({
+        type:"story",
+        id:story.id,
+        date:story.created_at,
+        data:story
+      });
+
+    }
+
+  });
+
+  /* TRIBUTES */
+
+  tributes.forEach(tribute => {
+
+    const memorial =
+      getMemorial(
+        tribute.memorial_id
+      );
+
+    const haystack = [
+      tribute.author_name,
+      tribute.message,
+      memorial?.full_name,
+      memorial?.location
+    ]
+      .filter(Boolean)
+      .join(" ")
+      .toLowerCase();
+
+    if(haystack.includes(q)){
+
+      results.push({
+        type:"tribute",
+        id:tribute.id,
+        date:tribute.created_at,
+        data:tribute
+      });
+
+    }
+
+  });
+
+  /* GUESTBOOK */
+
+  guestbook.forEach(entry => {
+
+    const memorial =
+      getMemorial(
+        entry.memorial_id
+      );
+
+    const haystack = [
+      entry.author_name,
+      entry.message,
+      memorial?.full_name,
+      memorial?.location
+    ]
+      .filter(Boolean)
+      .join(" ")
+      .toLowerCase();
+
+    if(haystack.includes(q)){
+
+      results.push({
+        type:"guestbook",
+        id:entry.id,
+        date:entry.created_at,
+        data:entry
+      });
+
+    }
+
+  });
+
+  return results;
+
+}
+
+/* =========================================================
+   APPLY SEARCH
+========================================================= */
+
+function performSearch(query){
+
+  currentQuery =
+    String(query || "")
+      .trim();
+
+  currentPage = 1;
+
+  if(!currentQuery){
+
+    allResults = [];
+    filteredResults = [];
+
+    $("resultsTitle").textContent =
+      "Search The Archive";
+
+    $("resultsSummary").textContent =
+      "Enter a name, word, place, or phrase above.";
+
+    renderEmpty();
+
+    updateUrl();
+
+    return;
+
+  }
+
+  allResults =
+    buildResults(
+      currentQuery
+    );
+
+  applyTypeFilter();
+
+  updateUrl();
+
+}
+
+function applyTypeFilter(){
+
+  const type =
+    $("resultType").value;
+
+  if(type === "all"){
+
+    filteredResults =
+      [...allResults];
+
+  }else{
+
+    filteredResults =
+      allResults.filter(
+        result =>
+          result.type ===
+          type.slice(0,-1)
+      );
+
+  }
+
+  currentPage = Math.min(
+    currentPage,
+    Math.max(
+      1,
+      Math.ceil(
+        filteredResults.length /
+        PAGE_SIZE
+      )
+    )
+  );
+
+  renderResults();
+
+  renderPagination();
+
+}
+
+/* =========================================================
+   RENDER RESULTS
+========================================================= */
+
+function renderResults(){
+
+  if(!currentQuery){
+
+    renderEmpty();
+
+    return;
+
+  }
+
+  $("resultsTitle").textContent =
+    `Results for “${currentQuery}”`;
+
+  $("resultsSummary").textContent =
+    `${filteredResults.length.toLocaleString()} result${
+      filteredResults.length === 1
+        ? ""
+        : "s"
+    } found across the archive.`;
+
+  if(!filteredResults.length){
+
+    renderNoResults();
+
+    return;
+
+  }
+
+  const start =
+    (currentPage - 1) *
+    PAGE_SIZE;
+
+  const page =
+    filteredResults.slice(
+      start,
+      start + PAGE_SIZE
+    );
+
+  const memorialResults =
+    page.filter(
+      result =>
+        result.type === "memorial"
+    );
+
+  const storyResults =
+    page.filter(
+      result =>
+        result.type === "story"
+    );
+
+  const tributeResults =
+    page.filter(
+      result =>
+        result.type === "tribute"
+    );
+
+  const guestResults =
+    page.filter(
+      result =>
+        result.type === "guestbook"
+    );
+
+  let html = `
+    <div class="result-groups">
+  `;
+
+  if(memorialResults.length){
+
+    html += `
+      <section class="result-group">
+
+        <div class="group-head">
+          <h3>Memorials</h3>
+          <div class="group-line"></div>
+          <div class="group-count">
+            ${memorialResults.length}
+          </div>
+        </div>
+
+        <div class="result-grid">
+          ${memorialResults
+            .map(renderMemorial)
+            .join("")}
+        </div>
+
+      </section>
+    `;
+
+  }
+
+  if(storyResults.length){
+
+    html += `
+      <section class="result-group">
+
+        <div class="group-head">
+          <h3>Stories</h3>
+          <div class="group-line"></div>
+          <div class="group-count">
+            ${storyResults.length}
+          </div>
+        </div>
+
+        <div class="result-grid">
+          ${storyResults
+            .map(renderStory)
+            .join("")}
+        </div>
+
+      </section>
+    `;
+
+  }
+
+  if(tributeResults.length){
+
+    html += `
+      <section class="result-group">
+
+        <div class="group-head">
+          <h3>Tributes</h3>
+          <div class="group-line"></div>
+          <div class="group-count">
+            ${tributeResults.length}
+          </div>
+        </div>
+
+        <div class="result-grid">
+          ${tributeResults
+            .map(renderMessage)
+            .join("")}
+        </div>
+
+      </section>
+    `;
+
+  }
+
+  if(guestResults.length){
+
+    html += `
+      <section class="result-group">
+
+        <div class="group-head">
+          <h3>Guestbook</h3>
+          <div class="group-line"></div>
+          <div class="group-count">
+            ${guestResults.length}
+          </div>
+        </div>
+
+        <div class="result-grid">
+          ${guestResults
+            .map(renderGuestbook)
+            .join("")}
+        </div>
+
+      </section>
+    `;
+
+  }
+
+  html += `
+    </div>
+  `;
+
+  $("resultsContainer").innerHTML =
+    html;
+
+}
+
+/* =========================================================
+   MEMORIAL RESULT
+========================================================= */
+
+function renderMemorial(result){
+
+  const memorial =
+    result.data;
+
+  const bg =
+    memorial.portrait_url
+      ? `background-image:
+          linear-gradient(
+            180deg,
+            rgba(0,0,0,.08),
+            rgba(0,0,0,.95)
+          ),
+          url("${escapeHtml(
+            memorial.portrait_url
+          )}");`
+      : "";
+
+  return `
+    <article class="memorial-card">
+
+      <div
+        class="memorial-bg"
+        style="${bg}">
+      </div>
+
+      <div class="memorial-content">
+
+        ${
+          memorial.featured
+            ? `
+              <span class="badge">
+                Featured Memorial
+              </span>
+            `
+            : `
+              <span class="badge">
+                Memorial
+              </span>
+            `
+        }
+
+        <h4>
+          ${escapeHtml(
+            memorial.full_name
+          )}
+        </h4>
+
+        <div class="life-dates">
+          ${escapeHtml(
+            formatLifeDates(
+              memorial
+            )
+          )}
+        </div>
+
+        ${
+          memorial.location
+            ? `
+              <div class="location">
+                ${escapeHtml(
+                  memorial.location
+                )}
+              </div>
+            `
+            : ""
+        }
+
+        ${
+          memorial.short_bio
+            ? `
+              <div class="card-bio">
+                ${escapeHtml(
+                  memorial.short_bio
+                )}
+              </div>
+            `
+            : ""
+        }
+
+        <a
+          class="card-action"
+          href="${memorialUrl(memorial)}">
+          Open Memorial →
+        </a>
+
+      </div>
+
+    </article>
+  `;
+
+}
+
+/* =========================================================
+   STORY RESULT
+========================================================= */
+
+function renderStory(result){
+
+  const story =
+    result.data;
+
+  const memorial =
+    getMemorial(
+      story.memorial_id
+    );
+
+  return `
+    <article class="story-card">
+
+      <div class="type-label">
+        Story
+      </div>
+
+      <h4>
+        ${escapeHtml(
+          story.title
+        )}
+      </h4>
+
+      <div class="meta">
+        ${
+          memorial
+            ? `For ${escapeHtml(
+                memorial.full_name
+              )} · `
+            : ""
+        }
+
+        ${escapeHtml(
+          story.author_name ||
+          "Community Member"
+        )}
+
+        ·
+
+        ${escapeHtml(
+          formatDate(
+            story.created_at
+          )
+        )}
+      </div>
+
+      <div class="excerpt">
+        ${escapeHtml(
+          shorten(
+            story.story,
+            260
+          )
+        )}
+      </div>
+
+      <a
+        class="card-link"
+        href="${storyUrl(story)}">
+        Read Story →
+      </a>
+
+    </article>
+  `;
+
+}
+
+/* =========================================================
+   TRIBUTE RESULT
+========================================================= */
+
+function renderMessage(result){
+
+  const tribute =
+    result.data;
+
+  const memorial =
+    getMemorial(
+      tribute.memorial_id
+    );
+
+  return `
+    <article class="message-card">
+
+      <div class="type-label">
+        Tribute
+      </div>
+
+      <h4>
+        ${
+          memorial
+            ? escapeHtml(
+                memorial.full_name
+              )
+            : "Community Memorial"
+        }
+      </h4>
+
+      <div class="meta">
+        ${escapeHtml(
+          tribute.author_name ||
+          "Community Member"
+        )}
+
+        ·
+
+        ${escapeHtml(
+          formatDate(
+            tribute.created_at
+          )
+        )}
+      </div>
+
+      <div class="excerpt">
+        ${escapeHtml(
+          shorten(
+            tribute.message,
+            270
+          )
+        )}
+      </div>
+
+      ${
+        memorial
+          ? `
+            <a
+              class="card-link"
+              href="${memorialUrl(memorial)}">
+              View Memorial →
+            </a>
+          `
+          : ""
+      }
+
+    </article>
+  `;
+
+}
+
+/* =========================================================
+   GUESTBOOK RESULT
+========================================================= */
+
+function renderGuestbook(result){
+
+  const entry =
+    result.data;
+
+  const memorial =
+    getMemorial(
+      entry.memorial_id
+    );
+
+  return `
+    <article class="message-card">
+
+      <div class="type-label">
+        Guestbook
+      </div>
+
+      <h4>
+        ${
+          memorial
+            ? escapeHtml(
+                memorial.full_name
+              )
+            : "Community Memorial"
+        }
+      </h4>
+
+      <div class="meta">
+        ${escapeHtml(
+          entry.author_name ||
+          "Community Member"
+        )}
+
+        ·
+
+        ${escapeHtml(
+          formatDate(
+            entry.created_at
+          )
+        )}
+      </div>
+
+      <div class="excerpt">
+        ${escapeHtml(
+          shorten(
+            entry.message,
+            270
+          )
+        )}
+      </div>
+
+      ${
+        memorial
+          ? `
+            <a
+              class="card-link"
+              href="${memorialUrl(memorial)}">
+              View Memorial →
+            </a>
+          `
+          : ""
+      }
+
+    </article>
+  `;
+
+}
+
+/* =========================================================
+   EMPTY STATES
+========================================================= */
+
+function renderEmpty(){
+
+  $("resultsContainer").innerHTML = `
+    <div class="empty">
+
+      <div class="empty-symbol">⌕</div>
+
+      <h3>Search The Memorial Archive</h3>
+
+      <p>
+        Start with a person's name, a location,
+        a story title, or a phrase you remember.
+      </p>
+
+      <div class="suggestions">
+
+        <button
+          class="suggestion"
+          data-query="Daniel">
+          Daniel
+        </button>
+
+        <button
+          class="suggestion"
+          data-query="community">
+          Community
+        </button>
+
+        <button
+          class="suggestion"
+          data-query="memory">
+          Memory
+        </button>
+
+        <button
+          class="suggestion"
+          data-query="Tacoma">
+          Tacoma
+        </button>
+
+      </div>
+
+    </div>
+  `;
+
+  bindSuggestions();
+
+}
+
+function renderNoResults(){
+
+  $("resultsContainer").innerHTML = `
+    <div class="empty">
+
+      <div class="empty-symbol">∅</div>
+
+      <h3>No Results Found</h3>
+
+      <p>
+        We couldn't find anything matching
+        “${escapeHtml(currentQuery)}”.
+        Try a different name, word, or phrase.
+      </p>
+
+      <div class="suggestions">
+
+        <button
+          class="suggestion"
+          data-query="Daniel">
+          Try Daniel
+        </button>
+
+        <button
+          class="suggestion"
+          data-query="community">
+          Try Community
+        </button>
+
+        <button
+          class="suggestion"
+          data-query="memory">
+          Try Memory
+        </button>
+
+      </div>
+
+    </div>
+  `;
+
+  bindSuggestions();
+
+}
+
+/* =========================================================
+   SUGGESTIONS
+========================================================= */
+
+function bindSuggestions(){
+
+  document
+    .querySelectorAll(
+      ".suggestion"
+    )
+    .forEach(button => {
+
+      button.addEventListener(
+        "click",
+        () => {
+
+          const query =
+            button.dataset.query;
+
+          $("searchInput").value =
+            query;
+
+          performSearch(query);
+
+          window.scrollTo({
+            top:
+              document.querySelector(
+                ".results"
+              ).offsetTop - 80,
+            behavior:"smooth"
+          });
+
+        }
+      );
+
+    });
+
+}
+
+/* =========================================================
+   PAGINATION
+========================================================= */
+
+function renderPagination(){
+
+  const container =
+    $("pagination");
+
+  const totalPages =
+    Math.max(
+      1,
+      Math.ceil(
+        filteredResults.length /
+        PAGE_SIZE
+      )
+    );
+
+  if(
+    totalPages <= 1 ||
+    !filteredResults.length
+  ){
+
+    container.innerHTML = "";
+
+    return;
+
+  }
+
+  let html = "";
+
+  html += `
+    <button
+      class="page-btn"
+      ${currentPage === 1 ? "disabled" : ""}
+      onclick="goPage(${currentPage - 1})">
+      ‹
+    </button>
+  `;
+
+  for(
+    let page=1;
+    page<=totalPages;
+    page++
+  ){
+
+    if(
+      page === 1 ||
+      page === totalPages ||
+      Math.abs(page-currentPage) <= 2
+    ){
+
+      html += `
+        <button
+          class="page-btn ${
+            page === currentPage
+              ? "active"
+              : ""
+          }"
+          onclick="goPage(${page})">
+          ${page}
+        </button>
+      `;
+
+    }else if(
+      page === currentPage - 3 ||
+      page === currentPage + 3
+    ){
+
+      html += `
+        <span style="
+          color:#555;
+          padding:10px 3px;
+          font-size:10px;
+        ">…</span>
+      `;
+
+    }
+
+  }
+
+  html += `
+    <button
+      class="page-btn"
+      ${
+        currentPage === totalPages
+          ? "disabled"
+          : ""
+      }
+      onclick="goPage(${currentPage + 1})">
+      ›
+    </button>
+  `;
+
+  container.innerHTML =
+    html;
+
+}
+
+function goPage(page){
+
+  const totalPages =
+    Math.max(
+      1,
+      Math.ceil(
+        filteredResults.length /
+        PAGE_SIZE
+      )
+    );
+
+  currentPage =
+    Math.min(
+      Math.max(1,page),
+      totalPages
+    );
+
+  renderResults();
+  renderPagination();
+  updateUrl();
+
+  window.scrollTo({
+    top:
+      document.querySelector(
+        ".results"
+      ).offsetTop - 80,
+    behavior:"smooth"
+  });
+
+}
+
+/* =========================================================
+   URL
+========================================================= */
+
+function readUrl(){
+
+  const params =
+    new URLSearchParams(
+      location.search
+    );
+
+  const q =
+    params.get("q") || "";
+
+  const type =
+    params.get("type") || "all";
+
+  const page =
+    parseInt(
+      params.get("page") || "1",
+      10
+    );
+
+  $("searchInput").value =
+    q;
+
+  $("resultType").value =
+    [
+      "all",
+      "memorials",
+      "stories",
+      "tributes",
+      "guestbook"
+    ].includes(type)
+      ? type
+      : "all";
+
+  currentPage =
+    Math.max(
+      1,
+      page || 1
+    );
+
+  if(q){
+
+    currentQuery = q;
+
+  }
+
+}
+
+function updateUrl(){
+
+  const params =
+    new URLSearchParams();
+
+  if(currentQuery){
+    params.set(
+      "q",
+      currentQuery
+    );
+  }
+
+  const type =
+    $("resultType").value;
+
+  if(type !== "all"){
+    params.set(
+      "type",
+      type
+    );
+  }
+
+  if(currentPage > 1){
+    params.set(
+      "page",
+      currentPage
+    );
+  }
+
+  const query =
+    params.toString();
+
+  history.replaceState(
+    null,
+    "",
+    "search.html" +
+    (query ? "?" + query : "")
+  );
+
+}
+
+/* =========================================================
+   EVENTS
+========================================================= */
+
+$("searchForm")
+  .addEventListener(
+    "submit",
+    event => {
+
+      event.preventDefault();
+
+      performSearch(
+        $("searchInput").value
+      );
+
+      window.scrollTo({
+        top:
+          document.querySelector(
+            ".results"
+          ).offsetTop - 80,
+        behavior:"smooth"
+      });
+
+    }
+  );
+
+$("resultType")
+  .addEventListener(
+    "change",
+    () => {
+
+      currentPage = 1;
+
+      applyTypeFilter();
+
+      updateUrl();
+
+    }
+  );
+
+$("mobileToggle")
+  .addEventListener(
+    "click",
+    () => {
+
+      $("navLinks")
+        .classList
+        .toggle("open");
+
+    }
+  );
+
+/* =========================================================
+   INIT
+========================================================= */
+
+async function init(){
+
+  $("year").textContent =
+    new Date().getFullYear();
+
+  try{
+
+    await Promise.all([
+      loadMemorials(),
+      loadStories(),
+      loadTributes(),
+      loadGuestbook()
+    ]);
+
+    updateStats();
+
+    readUrl();
+
+    if(currentQuery){
+
+      $("searchInput").value =
+        currentQuery;
+
+      allResults =
+        buildResults(
+          currentQuery
+        );
+
+      applyTypeFilter();
+
+    }else{
+
+      renderEmpty();
+
+    }
+
+  }catch(error){
+
+    console.error(error);
+
+    $("resultsContainer").innerHTML = `
+      <div class="empty">
+
+        <div class="empty-symbol">!</div>
+
+        <h3>Search Unavailable</h3>
+
+        <p>
+          The memorial archive could not be searched
+          right now. Please refresh the page and try again.
+        </p>
+
+      </div>
+    `;
+
+  }
+
+}
+
+init();
+
+</script>
+
+</body>
+</html>

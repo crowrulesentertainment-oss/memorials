@@ -1,0 +1,3091 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+
+<title>Candles — CrowRules Memorials</title>
+<meta name="theme-color" content="#050505">
+<meta name="description" content="A wall of lights honoring the lives remembered through CrowRules Memorials.">
+
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Libre+Baskerville:wght@400;700&family=Montserrat:wght@400;500;600;700;800&family=Orbitron:wght@500;600;700;800&display=swap" rel="stylesheet">
+
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+
+<style>
+:root{
+  --bg:#050505;
+  --bg2:#090909;
+  --panel:#101010;
+  --panel2:#151515;
+  --gold:#d4af37;
+  --gold2:#f1d77a;
+  --gold3:#fff0a8;
+  --text:#f3f0e8;
+  --muted:#9a958c;
+  --dim:#68645d;
+  --line:rgba(212,175,55,.17);
+  --white:#fff;
+  --danger:#d47b7b;
+  --success:#b9d89e;
+  --radius:20px;
+  --shadow:0 25px 70px rgba(0,0,0,.42);
+  --sans:"Montserrat",Arial,sans-serif;
+  --display:"Orbitron",Arial,sans-serif;
+  --serif:"Libre Baskerville",Georgia,serif;
+}
+
+*{
+  box-sizing:border-box;
+}
+
+html{
+  scroll-behavior:smooth;
+}
+
+body{
+  margin:0;
+  min-height:100vh;
+  color:var(--text);
+  font-family:var(--sans);
+  background:
+    radial-gradient(circle at 50% -10%,rgba(212,175,55,.11),transparent 34%),
+    radial-gradient(circle at 10% 40%,rgba(212,175,55,.035),transparent 28%),
+    #050505;
+}
+
+body.modal-open{
+  overflow:hidden;
+}
+
+a{
+  color:inherit;
+  text-decoration:none;
+}
+
+button,
+input,
+textarea,
+select{
+  font:inherit;
+}
+
+button{
+  cursor:pointer;
+}
+
+img{
+  max-width:100%;
+}
+
+/* HEADER */
+
+.header{
+  position:sticky;
+  top:0;
+  z-index:100;
+  background:rgba(5,5,5,.92);
+  backdrop-filter:blur(18px);
+  border-bottom:1px solid rgba(255,255,255,.06);
+}
+
+.nav{
+  width:min(1400px,calc(100% - 40px));
+  min-height:76px;
+  margin:auto;
+  display:flex;
+  align-items:center;
+  justify-content:space-between;
+  gap:24px;
+}
+
+.brand{
+  display:flex;
+  align-items:center;
+  gap:12px;
+  flex-shrink:0;
+}
+
+.brand-mark{
+  width:42px;
+  height:42px;
+  display:grid;
+  place-items:center;
+  border:1px solid rgba(212,175,55,.5);
+  border-radius:11px;
+  color:var(--gold2);
+  font-family:var(--display);
+  font-size:12px;
+  box-shadow:0 0 25px rgba(212,175,55,.08);
+}
+
+.brand-copy strong{
+  display:block;
+  font-family:var(--display);
+  font-size:13px;
+  letter-spacing:1.8px;
+}
+
+.brand-copy span{
+  display:block;
+  margin-top:3px;
+  color:var(--dim);
+  font-size:8px;
+  letter-spacing:2.5px;
+  text-transform:uppercase;
+}
+
+.nav-links{
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  gap:2px;
+}
+
+.nav-links a{
+  padding:10px 11px;
+  border-radius:9px;
+  color:#aaa59c;
+  font-size:10px;
+  font-weight:700;
+  transition:.2s ease;
+}
+
+.nav-links a:hover,
+.nav-links a.active{
+  color:var(--gold2);
+  background:rgba(212,175,55,.07);
+}
+
+.nav-actions{
+  display:flex;
+  align-items:center;
+  gap:8px;
+}
+
+.btn{
+  display:inline-flex;
+  align-items:center;
+  justify-content:center;
+  gap:7px;
+  min-height:42px;
+  padding:10px 15px;
+  border:1px solid rgba(212,175,55,.35);
+  border-radius:10px;
+  background:transparent;
+  color:var(--gold2);
+  font-size:9px;
+  font-weight:800;
+  letter-spacing:1px;
+  text-transform:uppercase;
+  transition:.2s ease;
+}
+
+.btn:hover{
+  transform:translateY(-1px);
+  border-color:rgba(212,175,55,.65);
+  background:rgba(212,175,55,.08);
+}
+
+.btn.primary{
+  background:var(--gold);
+  color:#090909;
+  border-color:var(--gold);
+}
+
+.btn.primary:hover{
+  background:var(--gold2);
+}
+
+.btn.small{
+  min-height:35px;
+  padding:8px 11px;
+  font-size:8px;
+}
+
+.menu-btn{
+  display:none;
+  width:42px;
+  height:42px;
+  border:1px solid var(--line);
+  border-radius:10px;
+  color:var(--gold2);
+  background:#0a0a0a;
+}
+
+/* HERO */
+
+.hero{
+  position:relative;
+  overflow:hidden;
+  border-bottom:1px solid rgba(255,255,255,.06);
+  padding:95px 0 90px;
+}
+
+.hero::before{
+  content:"";
+  position:absolute;
+  width:500px;
+  height:500px;
+  left:50%;
+  top:-300px;
+  transform:translateX(-50%);
+  border-radius:50%;
+  background:radial-gradient(circle,rgba(241,215,122,.16),transparent 65%);
+  pointer-events:none;
+}
+
+.hero-inner{
+  position:relative;
+  z-index:2;
+  width:min(1100px,calc(100% - 40px));
+  margin:auto;
+  text-align:center;
+}
+
+.candle-orbit{
+  width:110px;
+  height:110px;
+  margin:0 auto 28px;
+  position:relative;
+  display:grid;
+  place-items:center;
+  border:1px solid rgba(212,175,55,.18);
+  border-radius:50%;
+  box-shadow:
+    0 0 60px rgba(212,175,55,.08),
+    inset 0 0 30px rgba(212,175,55,.04);
+}
+
+.candle-orbit::before,
+.candle-orbit::after{
+  content:"";
+  position:absolute;
+  border:1px solid rgba(212,175,55,.10);
+  border-radius:50%;
+}
+
+.candle-orbit::before{
+  inset:-14px;
+}
+
+.candle-orbit::after{
+  inset:-28px;
+}
+
+.flame{
+  position:relative;
+  width:23px;
+  height:37px;
+  border-radius:65% 35% 65% 35%;
+  background:var(--gold3);
+  transform:rotate(3deg);
+  box-shadow:
+    0 0 15px rgba(255,240,168,.85),
+    0 0 40px rgba(241,215,122,.55),
+    0 0 80px rgba(212,175,55,.22);
+  animation:flicker 2.2s infinite ease-in-out;
+}
+
+.flame::after{
+  content:"";
+  position:absolute;
+  width:9px;
+  height:15px;
+  left:7px;
+  bottom:0;
+  border-radius:65% 35% 65% 35%;
+  background:#fff;
+}
+
+@keyframes flicker{
+  0%,100%{
+    transform:rotate(3deg) scale(1);
+  }
+  25%{
+    transform:rotate(-5deg) scale(.96);
+  }
+  50%{
+    transform:rotate(5deg) scale(1.04);
+  }
+  75%{
+    transform:rotate(-2deg) scale(.98);
+  }
+}
+
+.kicker{
+  color:var(--gold);
+  font-family:var(--display);
+  font-size:10px;
+  letter-spacing:3px;
+  text-transform:uppercase;
+}
+
+.hero h1{
+  margin:15px 0 0;
+  font-family:var(--display);
+  font-size:clamp(35px,6vw,72px);
+  line-height:1;
+  letter-spacing:-2px;
+}
+
+.hero-subtitle{
+  max-width:700px;
+  margin:23px auto 0;
+  color:#aaa59b;
+  font-family:var(--serif);
+  font-size:15px;
+  line-height:1.9;
+}
+
+.hero-actions{
+  display:flex;
+  justify-content:center;
+  gap:10px;
+  flex-wrap:wrap;
+  margin-top:28px;
+}
+
+/* MAIN */
+
+.main{
+  width:min(1400px,calc(100% - 40px));
+  margin:auto;
+}
+
+.section{
+  padding:65px 0;
+}
+
+.stats{
+  display:grid;
+  grid-template-columns:repeat(4,1fr);
+  gap:12px;
+}
+
+.stat{
+  padding:25px;
+  min-height:125px;
+  border:1px solid rgba(255,255,255,.07);
+  border-radius:17px;
+  background:linear-gradient(145deg,#111,#0b0b0b);
+}
+
+.stat-number{
+  color:var(--gold2);
+  font-family:var(--display);
+  font-size:28px;
+}
+
+.stat-label{
+  margin-top:8px;
+  color:#77736c;
+  font-size:8px;
+  letter-spacing:1.5px;
+  text-transform:uppercase;
+}
+
+/* CONTROLS */
+
+.controls{
+  display:grid;
+  grid-template-columns:minmax(250px,1.5fr) minmax(180px,.8fr) minmax(160px,.6fr);
+  gap:10px;
+  margin-bottom:24px;
+}
+
+.field{
+  width:100%;
+  min-height:45px;
+  border:1px solid rgba(255,255,255,.09);
+  border-radius:10px;
+  outline:none;
+  background:#0c0c0c;
+  color:#eee;
+  padding:11px 13px;
+}
+
+.field:focus{
+  border-color:rgba(212,175,55,.48);
+  box-shadow:0 0 0 3px rgba(212,175,55,.05);
+}
+
+.field::placeholder{
+  color:#5f5b55;
+}
+
+select.field{
+  appearance:auto;
+}
+
+.results-bar{
+  display:flex;
+  justify-content:space-between;
+  align-items:center;
+  gap:15px;
+  margin-bottom:17px;
+  color:#77736c;
+  font-size:9px;
+  letter-spacing:.7px;
+  text-transform:uppercase;
+}
+
+.results-bar strong{
+  color:var(--gold2);
+}
+
+/* LAYOUT */
+
+.content{
+  display:grid;
+  grid-template-columns:minmax(0,1.65fr) minmax(280px,.65fr);
+  gap:22px;
+  align-items:start;
+}
+
+.panel{
+  border:1px solid rgba(255,255,255,.07);
+  border-radius:20px;
+  background:linear-gradient(145deg,#111,#0b0b0b);
+  box-shadow:var(--shadow);
+}
+
+/* CANDLE WALL */
+
+.candle-wall{
+  display:grid;
+  grid-template-columns:repeat(2,1fr);
+  gap:12px;
+}
+
+.candle-card{
+  position:relative;
+  overflow:hidden;
+  min-height:205px;
+  padding:25px;
+  border:1px solid rgba(255,255,255,.07);
+  border-radius:17px;
+  background:
+    radial-gradient(circle at 90% 10%,rgba(212,175,55,.07),transparent 35%),
+    #0d0d0d;
+  transition:.25s ease;
+}
+
+.candle-card:hover{
+  border-color:rgba(212,175,55,.28);
+  transform:translateY(-2px);
+}
+
+.candle-card::before{
+  content:"";
+  position:absolute;
+  width:100px;
+  height:100px;
+  right:-35px;
+  top:-35px;
+  border-radius:50%;
+  background:radial-gradient(circle,rgba(241,215,122,.08),transparent 70%);
+}
+
+.candle-top{
+  display:flex;
+  align-items:center;
+  gap:13px;
+}
+
+.mini-flame-wrap{
+  width:42px;
+  height:42px;
+  flex-shrink:0;
+  border-radius:50%;
+  display:grid;
+  place-items:center;
+  background:rgba(212,175,55,.05);
+  border:1px solid rgba(212,175,55,.16);
+}
+
+.mini-flame{
+  width:10px;
+  height:17px;
+  border-radius:65% 35% 65% 35%;
+  background:var(--gold2);
+  transform:rotate(4deg);
+  box-shadow:0 0 13px rgba(241,215,122,.65);
+}
+
+.candle-author{
+  font-size:11px;
+  font-weight:800;
+  color:#d7d2c8;
+}
+
+.candle-date{
+  margin-top:4px;
+  color:#625f59;
+  font-size:8px;
+  letter-spacing:.5px;
+}
+
+.candle-message{
+  margin-top:19px;
+  color:#a8a39a;
+  font-family:var(--serif);
+  font-size:12px;
+  line-height:1.8;
+}
+
+.candle-message.empty{
+  color:#67635c;
+  font-style:italic;
+}
+
+.candle-memorial{
+  margin-top:18px;
+  padding-top:14px;
+  border-top:1px solid rgba(255,255,255,.06);
+  display:flex;
+  justify-content:space-between;
+  align-items:center;
+  gap:10px;
+}
+
+.memorial-label{
+  color:#625f59;
+  font-size:8px;
+  letter-spacing:1px;
+  text-transform:uppercase;
+}
+
+.memorial-name{
+  margin-top:4px;
+  color:var(--gold2);
+  font-family:var(--display);
+  font-size:10px;
+}
+
+.view-link{
+  flex-shrink:0;
+  color:#88837a;
+  font-size:8px;
+  font-weight:800;
+  letter-spacing:.8px;
+  text-transform:uppercase;
+}
+
+.view-link:hover{
+  color:var(--gold2);
+}
+
+/* SIDEBAR */
+
+.sidebar{
+  display:grid;
+  gap:14px;
+}
+
+.side-card{
+  padding:25px;
+}
+
+.side-title{
+  color:var(--gold);
+  font-family:var(--display);
+  font-size:10px;
+  letter-spacing:1.6px;
+  text-transform:uppercase;
+  margin-bottom:18px;
+}
+
+.feature-candle{
+  text-align:center;
+  padding:8px 0 4px;
+}
+
+.feature-candle .candle-orbit{
+  width:82px;
+  height:82px;
+  margin-bottom:19px;
+}
+
+.feature-candle .flame{
+  width:17px;
+  height:28px;
+}
+
+.feature-candle-name{
+  font-family:var(--display);
+  font-size:15px;
+}
+
+.feature-candle-author{
+  margin-top:7px;
+  color:#77736c;
+  font-size:9px;
+}
+
+.feature-candle-message{
+  margin-top:17px;
+  color:#aaa59b;
+  font-family:var(--serif);
+  font-size:11px;
+  line-height:1.75;
+}
+
+.rank-list{
+  display:grid;
+  gap:4px;
+}
+
+.rank-item{
+  display:grid;
+  grid-template-columns:28px minmax(0,1fr) auto;
+  align-items:center;
+  gap:8px;
+  padding:12px 0;
+  border-bottom:1px solid rgba(255,255,255,.06);
+}
+
+.rank-item:last-child{
+  border-bottom:0;
+}
+
+.rank-number{
+  color:#5d5953;
+  font-family:var(--display);
+  font-size:10px;
+}
+
+.rank-name{
+  overflow:hidden;
+  text-overflow:ellipsis;
+  white-space:nowrap;
+  color:#aaa59c;
+  font-size:10px;
+}
+
+.rank-count{
+  color:var(--gold2);
+  font-family:var(--display);
+  font-size:9px;
+}
+
+.remembrance-box{
+  padding:26px;
+  background:
+    radial-gradient(circle at 50% 0%,rgba(212,175,55,.09),transparent 45%),
+    #0d0d0d;
+  border:1px solid rgba(212,175,55,.12);
+  border-radius:17px;
+  text-align:center;
+}
+
+.remembrance-box h3{
+  margin:0;
+  font-family:var(--display);
+  font-size:14px;
+}
+
+.remembrance-box p{
+  margin:12px 0 19px;
+  color:#77736c;
+  font-family:var(--serif);
+  font-size:11px;
+  line-height:1.8;
+}
+
+/* EMPTY */
+
+.empty{
+  grid-column:1/-1;
+  padding:65px 25px;
+  text-align:center;
+  border:1px solid rgba(255,255,255,.07);
+  border-radius:18px;
+  background:#0c0c0c;
+}
+
+.empty-icon{
+  width:70px;
+  height:70px;
+  margin:0 auto 20px;
+  display:grid;
+  place-items:center;
+  border-radius:50%;
+  border:1px solid rgba(212,175,55,.2);
+  color:var(--gold2);
+  font-family:var(--display);
+}
+
+.empty h3{
+  margin:0;
+  font-family:var(--display);
+  font-size:17px;
+}
+
+.empty p{
+  max-width:540px;
+  margin:12px auto 0;
+  color:#77736c;
+  font-family:var(--serif);
+  font-size:12px;
+  line-height:1.8;
+}
+
+/* PAGINATION */
+
+.pagination{
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  gap:6px;
+  margin-top:25px;
+  flex-wrap:wrap;
+}
+
+.page-btn{
+  min-width:38px;
+  height:38px;
+  border:1px solid rgba(255,255,255,.08);
+  border-radius:9px;
+  background:#0c0c0c;
+  color:#77736c;
+  font-size:9px;
+}
+
+.page-btn:hover,
+.page-btn.active{
+  color:#090909;
+  background:var(--gold);
+  border-color:var(--gold);
+}
+
+.page-btn:disabled{
+  opacity:.35;
+  cursor:not-allowed;
+}
+
+/* MODAL */
+
+.modal{
+  position:fixed;
+  inset:0;
+  z-index:500;
+  display:none;
+  align-items:center;
+  justify-content:center;
+  padding:20px;
+  background:rgba(0,0,0,.84);
+  backdrop-filter:blur(10px);
+}
+
+.modal.open{
+  display:flex;
+}
+
+.modal-box{
+  width:min(560px,100%);
+  max-height:90vh;
+  overflow:auto;
+  border:1px solid rgba(212,175,55,.22);
+  border-radius:20px;
+  background:#111;
+  box-shadow:0 40px 100px rgba(0,0,0,.7);
+}
+
+.modal-head{
+  display:flex;
+  align-items:center;
+  justify-content:space-between;
+  gap:15px;
+  padding:22px 24px;
+  border-bottom:1px solid rgba(255,255,255,.07);
+}
+
+.modal-head h2{
+  margin:0;
+  font-family:var(--display);
+  font-size:15px;
+}
+
+.close{
+  width:36px;
+  height:36px;
+  border:1px solid rgba(255,255,255,.1);
+  border-radius:9px;
+  background:#0b0b0b;
+  color:#aaa;
+  font-size:18px;
+}
+
+.modal-body{
+  padding:24px;
+}
+
+.form-group{
+  margin-bottom:16px;
+}
+
+.form-group label{
+  display:block;
+  margin-bottom:8px;
+  color:#8c877e;
+  font-size:8px;
+  font-weight:800;
+  letter-spacing:1.1px;
+  text-transform:uppercase;
+}
+
+.form-control{
+  width:100%;
+  border:1px solid rgba(255,255,255,.1);
+  border-radius:10px;
+  outline:none;
+  background:#0a0a0a;
+  color:#eee;
+  padding:13px;
+}
+
+.form-control:focus{
+  border-color:rgba(212,175,55,.48);
+  box-shadow:0 0 0 3px rgba(212,175,55,.05);
+}
+
+textarea.form-control{
+  min-height:120px;
+  resize:vertical;
+}
+
+.modal-actions{
+  display:flex;
+  justify-content:flex-end;
+  gap:8px;
+  margin-top:20px;
+}
+
+.message{
+  display:none;
+  padding:12px 14px;
+  border-radius:9px;
+  margin-bottom:16px;
+  font-size:10px;
+  line-height:1.6;
+}
+
+.message.show{
+  display:block;
+}
+
+.message.error{
+  color:#e7b2b2;
+  background:rgba(170,70,70,.09);
+  border:1px solid rgba(170,70,70,.25);
+}
+
+.message.success{
+  color:#c7ddb1;
+  background:rgba(100,150,70,.09);
+  border:1px solid rgba(100,150,70,.23);
+}
+
+/* LOADING */
+
+.loading{
+  grid-column:1/-1;
+  min-height:350px;
+  display:grid;
+  place-items:center;
+  text-align:center;
+}
+
+.spinner{
+  width:43px;
+  height:43px;
+  margin:0 auto 18px;
+  border:2px solid rgba(212,175,55,.15);
+  border-top-color:var(--gold);
+  border-radius:50%;
+  animation:spin .9s linear infinite;
+}
+
+@keyframes spin{
+  to{
+    transform:rotate(360deg);
+  }
+}
+
+.loading h3{
+  margin:0;
+  font-family:var(--display);
+  font-size:14px;
+}
+
+.loading p{
+  color:#66625b;
+  font-size:10px;
+}
+
+/* FOOTER */
+
+.footer{
+  margin-top:45px;
+  padding:55px 0 28px;
+  background:#030303;
+  border-top:1px solid rgba(255,255,255,.06);
+}
+
+.footer-inner{
+  width:min(1400px,calc(100% - 40px));
+  margin:auto;
+  display:grid;
+  grid-template-columns:1.4fr 1fr 1fr 1fr;
+  gap:40px;
+}
+
+.footer-brand{
+  font-family:var(--display);
+  font-size:14px;
+  letter-spacing:1px;
+}
+
+.footer-description{
+  max-width:360px;
+  margin-top:12px;
+  color:#625e57;
+  font-size:10px;
+  line-height:1.8;
+}
+
+.footer h3{
+  margin:0 0 14px;
+  color:var(--gold);
+  font-family:var(--display);
+  font-size:9px;
+  letter-spacing:1.5px;
+  text-transform:uppercase;
+}
+
+.footer-links{
+  display:grid;
+  gap:8px;
+}
+
+.footer-links a{
+  color:#65615a;
+  font-size:9px;
+}
+
+.footer-links a:hover{
+  color:var(--gold2);
+}
+
+.footer-bottom{
+  width:min(1400px,calc(100% - 40px));
+  margin:38px auto 0;
+  padding-top:21px;
+  border-top:1px solid rgba(255,255,255,.05);
+  display:flex;
+  justify-content:space-between;
+  gap:20px;
+  color:#44413d;
+  font-size:8px;
+  letter-spacing:.6px;
+}
+
+/* RESPONSIVE */
+
+@media(max-width:1180px){
+
+  .nav-links{
+    display:none;
+  }
+
+  .menu-btn{
+    display:block;
+  }
+
+  .nav-links.mobile-open{
+    position:absolute;
+    top:69px;
+    left:12px;
+    right:12px;
+    display:flex;
+    flex-direction:column;
+    align-items:stretch;
+    padding:10px;
+    background:#0b0b0b;
+    border:1px solid rgba(255,255,255,.08);
+    border-radius:14px;
+  }
+
+  .nav-links.mobile-open a{
+    padding:12px;
+  }
+
+  .content{
+    grid-template-columns:1fr;
+  }
+
+  .sidebar{
+    grid-template-columns:repeat(2,1fr);
+  }
+}
+
+@media(max-width:850px){
+
+  .stats{
+    grid-template-columns:repeat(2,1fr);
+  }
+
+  .controls{
+    grid-template-columns:1fr 1fr;
+  }
+
+  .controls .search-field{
+    grid-column:1/-1;
+  }
+
+  .footer-inner{
+    grid-template-columns:1fr 1fr;
+  }
+}
+
+@media(max-width:650px){
+
+  .nav{
+    width:calc(100% - 24px);
+  }
+
+  .nav-actions .btn{
+    display:none;
+  }
+
+  .main,
+  .hero-inner,
+  .footer-inner,
+  .footer-bottom{
+    width:calc(100% - 24px);
+  }
+
+  .hero{
+    padding:75px 0 70px;
+  }
+
+  .hero h1{
+    font-size:39px;
+    letter-spacing:-1px;
+  }
+
+  .hero-subtitle{
+    font-size:13px;
+  }
+
+  .stats{
+    grid-template-columns:1fr 1fr;
+  }
+
+  .candle-wall{
+    grid-template-columns:1fr;
+  }
+
+  .sidebar{
+    grid-template-columns:1fr;
+  }
+
+  .controls{
+    grid-template-columns:1fr;
+  }
+
+  .controls .search-field{
+    grid-column:auto;
+  }
+
+  .results-bar{
+    align-items:flex-start;
+    flex-direction:column;
+  }
+
+  .footer-inner{
+    grid-template-columns:1fr;
+  }
+
+  .footer-bottom{
+    flex-direction:column;
+  }
+}
+</style>
+</head>
+
+<body>
+
+<header class="header">
+
+  <nav class="nav">
+
+    <a class="brand" href="index.html">
+
+      <div class="brand-mark">
+        CR
+      </div>
+
+      <div class="brand-copy">
+        <strong>CROWRULES</strong>
+        <span>Memorials</span>
+      </div>
+
+    </a>
+
+    <div class="nav-links" id="navLinks">
+
+      <a href="index.html">Home</a>
+      <a href="memorials.html">Memorials</a>
+      <a href="featured.html">Featured</a>
+      <a href="recent.html">Recent</a>
+      <a href="on-this-day.html">On This Day</a>
+      <a href="stories.html">Stories</a>
+      <a href="tributes.html">Tributes</a>
+      <a class="active" href="candles.html">Candles</a>
+      <a href="search.html">Search</a>
+
+    </div>
+
+    <div class="nav-actions">
+
+      <a
+        class="btn"
+        href="create-memorial.html"
+      >
+        Create Memorial
+      </a>
+
+      <button
+        class="menu-btn"
+        id="menuBtn"
+        aria-label="Open navigation"
+      >
+        ☰
+      </button>
+
+    </div>
+
+  </nav>
+
+</header>
+
+
+<section class="hero">
+
+  <div class="hero-inner">
+
+    <div class="candle-orbit">
+      <div class="flame"></div>
+    </div>
+
+    <div class="kicker">
+      CrowRules Memorials
+    </div>
+
+    <h1>
+      A WALL OF LIGHT.
+    </h1>
+
+    <p class="hero-subtitle">
+      Every candle is a small act of remembrance.
+      Together, these lights create a living record of
+      the people whose stories continue to matter.
+    </p>
+
+    <div class="hero-actions">
+
+      <button
+        class="btn primary"
+        id="heroCandleBtn"
+      >
+        ✦ Light A Candle
+      </button>
+
+      <a
+        class="btn"
+        href="memorials.html"
+      >
+        Explore Memorials
+      </a>
+
+    </div>
+
+  </div>
+
+</section>
+
+
+<main class="main">
+
+  <section class="section">
+
+    <div class="stats">
+
+      <div class="stat">
+
+        <div
+          class="stat-number"
+          id="statCandles"
+        >
+          —
+        </div>
+
+        <div class="stat-label">
+          Candles Lit
+        </div>
+
+      </div>
+
+      <div class="stat">
+
+        <div
+          class="stat-number"
+          id="statMemorials"
+        >
+          —
+        </div>
+
+        <div class="stat-label">
+          Lives Remembered
+        </div>
+
+      </div>
+
+      <div class="stat">
+
+        <div
+          class="stat-number"
+          id="statPeople"
+        >
+          —
+        </div>
+
+        <div class="stat-label">
+          Candle Contributors
+        </div>
+
+      </div>
+
+      <div class="stat">
+
+        <div
+          class="stat-number"
+          id="statRecent"
+        >
+          —
+        </div>
+
+        <div class="stat-label">
+          Last 30 Days
+        </div>
+
+      </div>
+
+    </div>
+
+  </section>
+
+
+  <section class="section">
+
+    <div class="controls">
+
+      <input
+        id="searchInput"
+        class="field search-field"
+        type="search"
+        placeholder="Search candles, names, messages, or memorials..."
+      >
+
+      <select
+        id="memorialFilter"
+        class="field"
+      >
+        <option value="">
+          All Memorials
+        </option>
+      </select>
+
+      <select
+        id="sortSelect"
+        class="field"
+      >
+        <option value="newest">
+          Newest First
+        </option>
+
+        <option value="oldest">
+          Oldest First
+        </option>
+      </select>
+
+    </div>
+
+
+    <div class="results-bar">
+
+      <span>
+        <strong id="resultCount">0</strong>
+        candles in this view
+      </span>
+
+      <span id="pageStatus">
+        Page 1
+      </span>
+
+    </div>
+
+
+    <div class="content">
+
+      <section>
+
+        <div
+          class="candle-wall"
+          id="candleWall"
+        >
+
+          <div class="loading">
+
+            <div>
+
+              <div class="spinner"></div>
+
+              <h3>
+                Gathering The Lights
+              </h3>
+
+              <p>
+                Loading candles from the memorial archive.
+              </p>
+
+            </div>
+
+          </div>
+
+        </div>
+
+
+        <div
+          class="pagination"
+          id="pagination"
+        ></div>
+
+      </section>
+
+
+      <aside class="sidebar">
+
+        <div class="panel side-card">
+
+          <div class="side-title">
+            Latest Light
+          </div>
+
+          <div
+            id="latestCandle"
+            class="feature-candle"
+          >
+
+            <div class="spinner"></div>
+
+          </div>
+
+        </div>
+
+
+        <div class="panel side-card">
+
+          <div class="side-title">
+            Most Remembered
+          </div>
+
+          <div
+            class="rank-list"
+            id="rankList"
+          >
+            <div style="color:#666;font-size:10px">
+              Loading…
+            </div>
+          </div>
+
+        </div>
+
+
+        <div class="remembrance-box">
+
+          <h3>
+            Keep A Light Burning
+          </h3>
+
+          <p>
+            Choose a memorial and leave a candle
+            for someone whose life should never be forgotten.
+          </p>
+
+          <button
+            class="btn primary"
+            id="sidebarCandleBtn"
+          >
+            Light A Candle
+          </button>
+
+        </div>
+
+      </aside>
+
+    </div>
+
+  </section>
+
+</main>
+
+
+<footer class="footer">
+
+  <div class="footer-inner">
+
+    <div>
+
+      <div class="footer-brand">
+        CROWRULES MEMORIALS
+      </div>
+
+      <div class="footer-description">
+        A quiet digital place to remember lives,
+        preserve stories, share photographs,
+        leave tributes, and keep memories close.
+      </div>
+
+    </div>
+
+    <div>
+
+      <h3>Explore</h3>
+
+      <div class="footer-links">
+        <a href="memorials.html">Memorial Archive</a>
+        <a href="featured.html">Featured</a>
+        <a href="recent.html">Recently Remembered</a>
+        <a href="on-this-day.html">On This Day</a>
+      </div>
+
+    </div>
+
+    <div>
+
+      <h3>Remember</h3>
+
+      <div class="footer-links">
+        <a href="stories.html">Stories</a>
+        <a href="tributes.html">Tributes</a>
+        <a href="guestbook.html">Guestbook</a>
+        <a href="candles.html">Candles</a>
+      </div>
+
+    </div>
+
+    <div>
+
+      <h3>Participate</h3>
+
+      <div class="footer-links">
+        <a href="create-memorial.html">Create A Memorial</a>
+        <a href="search.html">Search</a>
+        <a href="index.html">CrowRules Memorials</a>
+      </div>
+
+    </div>
+
+  </div>
+
+
+  <div class="footer-bottom">
+
+    <span>
+      © 2026 CrowRules Entertainment
+    </span>
+
+    <span>
+      EVERY LIFE LEAVES A STORY.
+    </span>
+
+  </div>
+
+</footer>
+
+
+<!-- CANDLE MODAL -->
+
+<div
+  class="modal"
+  id="candleModal"
+  aria-hidden="true"
+>
+
+  <div class="modal-box">
+
+    <div class="modal-head">
+
+      <h2>
+        Light A Candle
+      </h2>
+
+      <button
+        class="close"
+        id="closeModal"
+        aria-label="Close"
+      >
+        ×
+      </button>
+
+    </div>
+
+
+    <div class="modal-body">
+
+      <div
+        id="formMessage"
+        class="message"
+      ></div>
+
+
+      <form id="candleForm">
+
+        <div class="form-group">
+
+          <label for="candleMemorial">
+            In Memory Of
+          </label>
+
+          <select
+            id="candleMemorial"
+            class="form-control"
+            required
+          >
+
+            <option value="">
+              Choose a memorial…
+            </option>
+
+          </select>
+
+        </div>
+
+
+        <div class="form-group">
+
+          <label for="authorName">
+            Your Name
+          </label>
+
+          <input
+            id="authorName"
+            class="form-control"
+            maxlength="100"
+            placeholder="Your name"
+            required
+          >
+
+        </div>
+
+
+        <div class="form-group">
+
+          <label for="candleMessageInput">
+            Message — Optional
+          </label>
+
+          <textarea
+            id="candleMessageInput"
+            class="form-control"
+            maxlength="1000"
+            placeholder="Leave a message of remembrance..."
+          ></textarea>
+
+        </div>
+
+
+        <div class="modal-actions">
+
+          <button
+            type="button"
+            class="btn"
+            id="cancelBtn"
+          >
+            Cancel
+          </button>
+
+          <button
+            type="submit"
+            class="btn primary"
+            id="submitBtn"
+          >
+            Light Candle
+          </button>
+
+        </div>
+
+      </form>
+
+    </div>
+
+  </div>
+
+</div>
+
+
+<script>
+/* ============================================================
+   CROWRULES MEMORIALS
+   candles.html
+   ============================================================ */
+
+const SUPABASE_URL =
+  "https://cevylpnoexugwgygvtgu.supabase.co";
+
+const SUPABASE_KEY =
+  "sb_publishable_AdfM5y6RqvF3tbvEVzDZSg_JuGTQLD-";
+
+const db =
+  window.supabase.createClient(
+    SUPABASE_URL,
+    SUPABASE_KEY
+  );
+
+
+const PAGE_SIZE = 12;
+
+let allCandles = [];
+let allMemorials = [];
+let filteredCandles = [];
+
+let currentPage = 1;
+
+let memorialMap = new Map();
+
+
+/* ------------------------------------------------------------
+   HELPERS
+------------------------------------------------------------ */
+
+function escapeHtml(value){
+
+  if(value === null || value === undefined){
+    return "";
+  }
+
+  return String(value)
+    .replaceAll("&","&amp;")
+    .replaceAll("<","&lt;")
+    .replaceAll(">","&gt;")
+    .replaceAll('"',"&quot;")
+    .replaceAll("'","&#039;");
+}
+
+
+function formatDate(value){
+
+  if(!value){
+    return "";
+  }
+
+  const date = new Date(
+    value.includes("T")
+      ? value
+      : value + "T00:00:00"
+  );
+
+  if(Number.isNaN(date.getTime())){
+    return "";
+  }
+
+  return new Intl.DateTimeFormat(
+    "en-US",
+    {
+      month:"long",
+      day:"numeric",
+      year:"numeric"
+    }
+  ).format(date);
+}
+
+
+function formatRelativeDate(value){
+
+  if(!value){
+    return "";
+  }
+
+  const date = new Date(value);
+
+  if(Number.isNaN(date.getTime())){
+    return "";
+  }
+
+  const seconds =
+    Math.floor(
+      (Date.now() - date.getTime()) / 1000
+    );
+
+  if(seconds < 60){
+    return "Just now";
+  }
+
+  const minutes =
+    Math.floor(seconds / 60);
+
+  if(minutes < 60){
+    return `${minutes}m ago`;
+  }
+
+  const hours =
+    Math.floor(minutes / 60);
+
+  if(hours < 24){
+    return `${hours}h ago`;
+  }
+
+  const days =
+    Math.floor(hours / 24);
+
+  if(days < 30){
+    return `${days}d ago`;
+  }
+
+  return formatDate(value);
+}
+
+
+function initials(name){
+
+  if(!name){
+    return "CR";
+  }
+
+  return name
+    .trim()
+    .split(/\s+/)
+    .slice(0,2)
+    .map(x => x.charAt(0))
+    .join("")
+    .toUpperCase();
+}
+
+
+function memorialUrl(memorial){
+
+  return (
+    "memorial.html?slug=" +
+    encodeURIComponent(memorial.slug)
+  );
+}
+
+
+function getMemorialName(id){
+
+  const memorial =
+    memorialMap.get(id);
+
+  return memorial
+    ? memorial.full_name
+    : "Memorial";
+}
+
+
+/* ------------------------------------------------------------
+   LOAD MEMORIALS
+------------------------------------------------------------ */
+
+async function loadMemorials(){
+
+  const {data,error} = await db
+    .from("memorials")
+    .select(
+      "id,slug,full_name,birth_date,passing_date,location,portrait_url,featured"
+    )
+    .eq("published",true)
+    .order("full_name",{ascending:true});
+
+  if(error){
+
+    console.error(
+      "Memorial loading error:",
+      error
+    );
+
+    throw error;
+  }
+
+  allMemorials = data || [];
+
+  memorialMap =
+    new Map(
+      allMemorials.map(
+        memorial => [
+          memorial.id,
+          memorial
+        ]
+      )
+    );
+
+  populateMemorialSelectors();
+}
+
+
+/* ------------------------------------------------------------
+   POPULATE SELECTS
+------------------------------------------------------------ */
+
+function populateMemorialSelectors(){
+
+  const filter =
+    document.getElementById(
+      "memorialFilter"
+    );
+
+  const modalSelect =
+    document.getElementById(
+      "candleMemorial"
+    );
+
+  const options =
+    allMemorials
+      .map(memorial => `
+        <option value="${escapeHtml(memorial.id)}">
+          ${escapeHtml(memorial.full_name)}
+        </option>
+      `)
+      .join("");
+
+  filter.innerHTML =
+    `<option value="">All Memorials</option>` +
+    options;
+
+  modalSelect.innerHTML =
+    `<option value="">Choose a memorial…</option>` +
+    options;
+
+  const params =
+    new URLSearchParams(
+      window.location.search
+    );
+
+  const selected =
+    params.get("memorial");
+
+  if(
+    selected &&
+    memorialMap.has(selected)
+  ){
+
+    filter.value = selected;
+  }
+}
+
+
+/* ------------------------------------------------------------
+   LOAD CANDLES
+------------------------------------------------------------ */
+
+async function loadCandles(){
+
+  const {data,error} = await db
+    .from("memorial_candles")
+    .select(
+      "id,memorial_id,author_name,message,created_at"
+    )
+    .order("created_at",{ascending:false});
+
+  if(error){
+
+    console.error(
+      "Candle loading error:",
+      error
+    );
+
+    throw error;
+  }
+
+  allCandles = data || [];
+
+  updateStats();
+
+  buildRanking();
+
+  renderLatest();
+
+  applyFilters();
+}
+
+
+/* ------------------------------------------------------------
+   STATS
+------------------------------------------------------------ */
+
+function updateStats(){
+
+  const uniqueMemorials =
+    new Set(
+      allCandles
+        .map(c => c.memorial_id)
+        .filter(Boolean)
+    ).size;
+
+  const uniquePeople =
+    new Set(
+      allCandles
+        .map(c =>
+          (c.author_name || "")
+            .trim()
+            .toLowerCase()
+        )
+        .filter(Boolean)
+    ).size;
+
+  const cutoff =
+    Date.now() -
+    30 * 24 * 60 * 60 * 1000;
+
+  const recent =
+    allCandles.filter(c => {
+
+      const time =
+        new Date(c.created_at).getTime();
+
+      return time >= cutoff;
+
+    }).length;
+
+  document.getElementById(
+    "statCandles"
+  ).textContent =
+    allCandles.length.toLocaleString();
+
+  document.getElementById(
+    "statMemorials"
+  ).textContent =
+    uniqueMemorials.toLocaleString();
+
+  document.getElementById(
+    "statPeople"
+  ).textContent =
+    uniquePeople.toLocaleString();
+
+  document.getElementById(
+    "statRecent"
+  ).textContent =
+    recent.toLocaleString();
+}
+
+
+/* ------------------------------------------------------------
+   RANKING
+------------------------------------------------------------ */
+
+function buildRanking(){
+
+  const counts = new Map();
+
+  allCandles.forEach(c => {
+
+    if(!c.memorial_id){
+      return;
+    }
+
+    counts.set(
+      c.memorial_id,
+      (counts.get(c.memorial_id) || 0) + 1
+    );
+
+  });
+
+  const ranked =
+    [...counts.entries()]
+      .sort((a,b) => b[1] - a[1])
+      .slice(0,8);
+
+  const list =
+    document.getElementById(
+      "rankList"
+    );
+
+  if(!ranked.length){
+
+    list.innerHTML = `
+      <div style="color:#666;font-size:10px">
+        No candles have been lit yet.
+      </div>
+    `;
+
+    return;
+  }
+
+  list.innerHTML =
+    ranked.map(
+      ([id,count],index) => {
+
+        const memorial =
+          memorialMap.get(id);
+
+        if(!memorial){
+          return "";
+        }
+
+        return `
+
+          <a
+            class="rank-item"
+            href="${memorialUrl(memorial)}"
+          >
+
+            <span class="rank-number">
+              ${String(index + 1).padStart(2,"0")}
+            </span>
+
+            <span class="rank-name">
+              ${escapeHtml(
+                memorial.full_name
+              )}
+            </span>
+
+            <span class="rank-count">
+              ${count}
+            </span>
+
+          </a>
+
+        `;
+
+      }
+    ).join("");
+}
+
+
+/* ------------------------------------------------------------
+   LATEST
+------------------------------------------------------------ */
+
+function renderLatest(){
+
+  const container =
+    document.getElementById(
+      "latestCandle"
+    );
+
+  const candle =
+    allCandles[0];
+
+  if(!candle){
+
+    container.innerHTML = `
+      <div class="candle-orbit">
+        <div class="flame"></div>
+      </div>
+
+      <div class="feature-candle-name">
+        Be The First Light
+      </div>
+
+      <div class="feature-candle-author">
+        No candles have been lit yet.
+      </div>
+    `;
+
+    return;
+  }
+
+  const memorial =
+    memorialMap.get(
+      candle.memorial_id
+    );
+
+  container.innerHTML = `
+
+    <div class="candle-orbit">
+
+      <div class="flame"></div>
+
+    </div>
+
+    <div class="feature-candle-name">
+
+      ${
+        memorial
+          ? escapeHtml(
+              memorial.full_name
+            )
+          : "Memorial"
+      }
+
+    </div>
+
+    <div class="feature-candle-author">
+
+      Lit by
+      ${escapeHtml(
+        candle.author_name ||
+        "Community Member"
+      )}
+
+      ·
+      ${escapeHtml(
+        formatRelativeDate(
+          candle.created_at
+        )
+      )}
+
+    </div>
+
+    ${
+      candle.message
+        ? `
+          <div class="feature-candle-message">
+            “${escapeHtml(
+              candle.message
+            )}”
+          </div>
+        `
+        : ""
+    }
+
+  `;
+}
+
+
+/* ------------------------------------------------------------
+   FILTERING
+------------------------------------------------------------ */
+
+function applyFilters(){
+
+  const query =
+    document.getElementById(
+      "searchInput"
+    ).value
+      .trim()
+      .toLowerCase();
+
+  const memorialId =
+    document.getElementById(
+      "memorialFilter"
+    ).value;
+
+  const sort =
+    document.getElementById(
+      "sortSelect"
+    ).value;
+
+  filteredCandles =
+    allCandles.filter(candle => {
+
+      if(
+        memorialId &&
+        candle.memorial_id !== memorialId
+      ){
+        return false;
+      }
+
+      const memorial =
+        memorialMap.get(
+          candle.memorial_id
+        );
+
+      const searchable = [
+        candle.author_name,
+        candle.message,
+        memorial?.full_name,
+        memorial?.location
+      ]
+      .filter(Boolean)
+      .join(" ")
+      .toLowerCase();
+
+      if(
+        query &&
+        !searchable.includes(query)
+      ){
+        return false;
+      }
+
+      return true;
+
+    });
+
+  filteredCandles.sort(
+    (a,b) => {
+
+      if(sort === "oldest"){
+
+        return (
+          new Date(a.created_at) -
+          new Date(b.created_at)
+        );
+
+      }
+
+      return (
+        new Date(b.created_at) -
+        new Date(a.created_at)
+      );
+
+    }
+  );
+
+  currentPage = 1;
+
+  renderPage();
+}
+
+
+/* ------------------------------------------------------------
+   RENDER PAGE
+------------------------------------------------------------ */
+
+function renderPage(){
+
+  const wall =
+    document.getElementById(
+      "candleWall"
+    );
+
+  const total =
+    filteredCandles.length;
+
+  document.getElementById(
+    "resultCount"
+  ).textContent =
+    total.toLocaleString();
+
+  const totalPages =
+    Math.max(
+      1,
+      Math.ceil(
+        total / PAGE_SIZE
+      )
+    );
+
+  if(currentPage > totalPages){
+    currentPage = totalPages;
+  }
+
+  const start =
+    (currentPage - 1) *
+    PAGE_SIZE;
+
+  const pageItems =
+    filteredCandles.slice(
+      start,
+      start + PAGE_SIZE
+    );
+
+  document.getElementById(
+    "pageStatus"
+  ).textContent =
+    `Page ${currentPage} of ${totalPages}`;
+
+  if(!pageItems.length){
+
+    wall.innerHTML = `
+
+      <div class="empty">
+
+        <div class="empty-icon">
+          ✦
+        </div>
+
+        <h3>
+          No Candles Found
+        </h3>
+
+        <p>
+          No candles match the current search
+          or memorial filter. Try another search,
+          or light a new candle in remembrance.
+        </p>
+
+        <div style="margin-top:20px">
+
+          <button
+            class="btn primary"
+            onclick="openCandleModal()"
+          >
+            Light A Candle
+          </button>
+
+        </div>
+
+      </div>
+
+    `;
+
+    renderPagination(totalPages);
+
+    return;
+  }
+
+  wall.innerHTML =
+    pageItems
+      .map(renderCandleCard)
+      .join("");
+
+  renderPagination(totalPages);
+}
+
+
+/* ------------------------------------------------------------
+   CANDLE CARD
+------------------------------------------------------------ */
+
+function renderCandleCard(candle){
+
+  const memorial =
+    memorialMap.get(
+      candle.memorial_id
+    );
+
+  const memorialName =
+    memorial
+      ? memorial.full_name
+      : "Memorial";
+
+  const message =
+    candle.message
+      ? `
+        <div class="candle-message">
+          “${escapeHtml(
+            candle.message
+          )}”
+        </div>
+      `
+      : `
+        <div class="candle-message empty">
+          A candle was lit in quiet remembrance.
+        </div>
+      `;
+
+  return `
+
+    <article class="candle-card">
+
+      <div class="candle-top">
+
+        <div class="mini-flame-wrap">
+          <div class="mini-flame"></div>
+        </div>
+
+        <div>
+
+          <div class="candle-author">
+            ${escapeHtml(
+              candle.author_name ||
+              "Community Member"
+            )}
+          </div>
+
+          <div class="candle-date">
+            ${escapeHtml(
+              formatRelativeDate(
+                candle.created_at
+              )
+            )}
+          </div>
+
+        </div>
+
+      </div>
+
+      ${message}
+
+      <div class="candle-memorial">
+
+        <div>
+
+          <div class="memorial-label">
+            In Memory Of
+          </div>
+
+          <div class="memorial-name">
+            ${escapeHtml(
+              memorialName
+            )}
+          </div>
+
+        </div>
+
+        ${
+          memorial
+            ? `
+              <a
+                class="view-link"
+                href="${memorialUrl(memorial)}"
+              >
+                View →
+              </a>
+            `
+            : ""
+        }
+
+      </div>
+
+    </article>
+
+  `;
+}
+
+
+/* ------------------------------------------------------------
+   PAGINATION
+------------------------------------------------------------ */
+
+function renderPagination(totalPages){
+
+  const container =
+    document.getElementById(
+      "pagination"
+    );
+
+  if(totalPages <= 1){
+
+    container.innerHTML = "";
+
+    return;
+  }
+
+  let html = `
+
+    <button
+      class="page-btn"
+      onclick="changePage(${currentPage - 1})"
+      ${currentPage === 1 ? "disabled" : ""}
+    >
+      ‹
+    </button>
+
+  `;
+
+  const start =
+    Math.max(
+      1,
+      currentPage - 2
+    );
+
+  const end =
+    Math.min(
+      totalPages,
+      currentPage + 2
+    );
+
+  for(
+    let page = start;
+    page <= end;
+    page++
+  ){
+
+    html += `
+
+      <button
+        class="page-btn ${
+          page === currentPage
+            ? "active"
+            : ""
+        }"
+        onclick="changePage(${page})"
+      >
+        ${page}
+      </button>
+
+    `;
+
+  }
+
+  html += `
+
+    <button
+      class="page-btn"
+      onclick="changePage(${currentPage + 1})"
+      ${currentPage === totalPages ? "disabled" : ""}
+    >
+      ›
+    </button>
+
+  `;
+
+  container.innerHTML = html;
+}
+
+
+function changePage(page){
+
+  const totalPages =
+    Math.max(
+      1,
+      Math.ceil(
+        filteredCandles.length /
+        PAGE_SIZE
+      )
+    );
+
+  if(
+    page < 1 ||
+    page > totalPages
+  ){
+    return;
+  }
+
+  currentPage = page;
+
+  renderPage();
+
+  window.scrollTo({
+    top:
+      document.querySelector(
+        ".content"
+      ).offsetTop - 100,
+    behavior:"smooth"
+  });
+}
+
+
+/* ------------------------------------------------------------
+   URL STATE
+------------------------------------------------------------ */
+
+function updateUrl(){
+
+  const params =
+    new URLSearchParams();
+
+  const query =
+    document.getElementById(
+      "searchInput"
+    ).value.trim();
+
+  const memorial =
+    document.getElementById(
+      "memorialFilter"
+    ).value;
+
+  const sort =
+    document.getElementById(
+      "sortSelect"
+    ).value;
+
+  if(query){
+    params.set("q",query);
+  }
+
+  if(memorial){
+    params.set("memorial",memorial);
+  }
+
+  if(sort !== "newest"){
+    params.set("sort",sort);
+  }
+
+  const queryString =
+    params.toString();
+
+  const newUrl =
+    window.location.pathname +
+    (queryString
+      ? "?" + queryString
+      : "");
+
+  history.replaceState(
+    {},
+    "",
+    newUrl
+  );
+}
+
+
+function loadUrlState(){
+
+  const params =
+    new URLSearchParams(
+      window.location.search
+    );
+
+  const query =
+    params.get("q");
+
+  const memorial =
+    params.get("memorial");
+
+  const sort =
+    params.get("sort");
+
+  if(query){
+
+    document.getElementById(
+      "searchInput"
+    ).value = query;
+
+  }
+
+  if(
+    memorial &&
+    memorialMap.has(memorial)
+  ){
+
+    document.getElementById(
+      "memorialFilter"
+    ).value = memorial;
+
+  }
+
+  if(
+    sort === "oldest"
+  ){
+
+    document.getElementById(
+      "sortSelect"
+    ).value = "oldest";
+
+  }
+}
+
+
+/* ------------------------------------------------------------
+   SEARCH / FILTER EVENTS
+------------------------------------------------------------ */
+
+let searchTimer;
+
+document
+  .getElementById("searchInput")
+  .addEventListener(
+    "input",
+    () => {
+
+      clearTimeout(
+        searchTimer
+      );
+
+      searchTimer =
+        setTimeout(() => {
+
+          updateUrl();
+          applyFilters();
+
+        },180);
+
+    }
+  );
+
+
+document
+  .getElementById("memorialFilter")
+  .addEventListener(
+    "change",
+    () => {
+
+      updateUrl();
+      applyFilters();
+
+    }
+  );
+
+
+document
+  .getElementById("sortSelect")
+  .addEventListener(
+    "change",
+    () => {
+
+      updateUrl();
+      applyFilters();
+
+    }
+  );
+
+
+/* ------------------------------------------------------------
+   CANDLE MODAL
+------------------------------------------------------------ */
+
+const candleModal =
+  document.getElementById(
+    "candleModal"
+  );
+
+const candleForm =
+  document.getElementById(
+    "candleForm"
+  );
+
+const candleMemorial =
+  document.getElementById(
+    "candleMemorial"
+  );
+
+const authorName =
+  document.getElementById(
+    "authorName"
+  );
+
+const candleMessageInput =
+  document.getElementById(
+    "candleMessageInput"
+  );
+
+const formMessage =
+  document.getElementById(
+    "formMessage"
+  );
+
+const submitBtn =
+  document.getElementById(
+    "submitBtn"
+  );
+
+
+function openCandleModal(){
+
+  formMessage.className =
+    "message";
+
+  formMessage.textContent = "";
+
+  candleForm.reset();
+
+  const filterValue =
+    document.getElementById(
+      "memorialFilter"
+    ).value;
+
+  if(
+    filterValue &&
+    memorialMap.has(filterValue)
+  ){
+
+    candleMemorial.value =
+      filterValue;
+
+  }
+
+  candleModal.classList.add(
+    "open"
+  );
+
+  candleModal.setAttribute(
+    "aria-hidden",
+    "false"
+  );
+
+  document.body.classList.add(
+    "modal-open"
+  );
+
+  setTimeout(
+    () => candleMemorial.focus(),
+    100
+  );
+}
+
+
+function closeCandleModal(){
+
+  candleModal.classList.remove(
+    "open"
+  );
+
+  candleModal.setAttribute(
+    "aria-hidden",
+    "true"
+  );
+
+  document.body.classList.remove(
+    "modal-open"
+  );
+}
+
+
+document
+  .getElementById("heroCandleBtn")
+  .addEventListener(
+    "click",
+    openCandleModal
+  );
+
+
+document
+  .getElementById("sidebarCandleBtn")
+  .addEventListener(
+    "click",
+    openCandleModal
+  );
+
+
+document
+  .getElementById("closeModal")
+  .addEventListener(
+    "click",
+    closeCandleModal
+  );
+
+
+document
+  .getElementById("cancelBtn")
+  .addEventListener(
+    "click",
+    closeCandleModal
+  );
+
+
+candleModal.addEventListener(
+  "click",
+  event => {
+
+    if(
+      event.target === candleModal
+    ){
+
+      closeCandleModal();
+
+    }
+
+  }
+);
+
+
+document.addEventListener(
+  "keydown",
+  event => {
+
+    if(event.key === "Escape"){
+      closeCandleModal();
+    }
+
+  }
+);
+
+
+/* ------------------------------------------------------------
+   SUBMIT CANDLE
+------------------------------------------------------------ */
+
+candleForm.addEventListener(
+  "submit",
+  async event => {
+
+    event.preventDefault();
+
+    const memorialId =
+      candleMemorial.value;
+
+    const name =
+      authorName.value.trim();
+
+    const message =
+      candleMessageInput.value.trim();
+
+    if(!memorialId){
+
+      showFormMessage(
+        "Please choose the memorial you would like to honor.",
+        "error"
+      );
+
+      return;
+    }
+
+    if(!name){
+
+      showFormMessage(
+        "Please enter your name.",
+        "error"
+      );
+
+      return;
+    }
+
+    submitBtn.disabled = true;
+    submitBtn.textContent =
+      "Lighting…";
+
+    const {error} =
+      await db
+        .from("memorial_candles")
+        .insert({
+          memorial_id:memorialId,
+          author_name:name,
+          message:message || null
+        });
+
+    if(error){
+
+      console.error(error);
+
+      showFormMessage(
+        error.message ||
+        "Unable to light the candle right now.",
+        "error"
+      );
+
+      submitBtn.disabled = false;
+      submitBtn.textContent =
+        "Light Candle";
+
+      return;
+    }
+
+    const memorial =
+      memorialMap.get(
+        memorialId
+      );
+
+    showFormMessage(
+      `Your candle has been added in memory of ${
+        memorial
+          ? memorial.full_name
+          : "this memorial"
+      }.`,
+      "success"
+    );
+
+    submitBtn.disabled = false;
+    submitBtn.textContent =
+      "Light Candle";
+
+    setTimeout(
+      async () => {
+
+        closeCandleModal();
+
+        await loadCandles();
+
+      },
+      1000
+    );
+
+  }
+);
+
+
+function showFormMessage(
+  text,
+  type
+){
+
+  formMessage.textContent =
+    text;
+
+  formMessage.className =
+    `message show ${type}`;
+
+}
+
+
+/* ------------------------------------------------------------
+   MOBILE MENU
+------------------------------------------------------------ */
+
+const menuBtn =
+  document.getElementById(
+    "menuBtn"
+  );
+
+const navLinks =
+  document.getElementById(
+    "navLinks"
+  );
+
+
+menuBtn.addEventListener(
+  "click",
+  () => {
+
+    navLinks.classList.toggle(
+      "mobile-open"
+    );
+
+  }
+);
+
+
+navLinks.addEventListener(
+  "click",
+  event => {
+
+    if(
+      event.target.matches("a")
+    ){
+
+      navLinks.classList.remove(
+        "mobile-open"
+      );
+
+    }
+
+  }
+);
+
+
+/* ------------------------------------------------------------
+   INITIALIZE
+------------------------------------------------------------ */
+
+async function initialize(){
+
+  try{
+
+    await loadMemorials();
+
+    loadUrlState();
+
+    await loadCandles();
+
+  }catch(error){
+
+    console.error(error);
+
+    document.getElementById(
+      "candleWall"
+    ).innerHTML = `
+
+      <div class="empty">
+
+        <div class="empty-icon">
+          !
+        </div>
+
+        <h3>
+          Unable To Load The Candle Wall
+        </h3>
+
+        <p>
+          The memorial database could not be reached.
+          Please refresh the page and try again.
+        </p>
+
+        <div style="margin-top:20px">
+
+          <button
+            class="btn primary"
+            onclick="location.reload()"
+          >
+            Try Again
+          </button>
+
+        </div>
+
+      </div>
+
+    `;
+
+  }
+
+}
+
+initialize();
+
+</script>
+
+</body>
+</html>

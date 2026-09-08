@@ -1,0 +1,2461 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+
+<title>Tributes — CrowRules Memorials</title>
+<meta name="theme-color" content="#070707">
+<meta name="description" content="A community remembrance wall for sharing words, memories, and tributes through CrowRules Memorials.">
+
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Libre+Baskerville:wght@400;700&family=Montserrat:wght@400;500;600;700;800&family=Orbitron:wght@500;600;700;800&display=swap" rel="stylesheet">
+
+<style>
+:root{
+  --bg:#070707;
+  --bg2:#0d0d0e;
+  --panel:#111112;
+  --panel2:#151516;
+  --line:rgba(255,255,255,.09);
+  --line2:rgba(255,255,255,.14);
+  --text:#f4f1ea;
+  --muted:#a6a29a;
+  --gold:#c7a76a;
+  --gold2:#e0c88d;
+  --white:#fff;
+  --danger:#e47b7b;
+  --shadow:0 25px 70px rgba(0,0,0,.45);
+  --radius:22px;
+  --max:1380px;
+}
+
+*{box-sizing:border-box}
+
+html{
+  scroll-behavior:smooth;
+}
+
+body{
+  margin:0;
+  background:
+    radial-gradient(circle at 15% 0%,rgba(199,167,106,.08),transparent 28%),
+    radial-gradient(circle at 90% 25%,rgba(255,255,255,.035),transparent 25%),
+    linear-gradient(180deg,#070707 0%,#090909 45%,#050505 100%);
+  color:var(--text);
+  font-family:Montserrat,Arial,sans-serif;
+  min-height:100vh;
+}
+
+body:before{
+  content:"";
+  position:fixed;
+  inset:0;
+  pointer-events:none;
+  opacity:.035;
+  background-image:
+    linear-gradient(rgba(255,255,255,.5) 1px,transparent 1px),
+    linear-gradient(90deg,rgba(255,255,255,.5) 1px,transparent 1px);
+  background-size:80px 80px;
+  mask-image:linear-gradient(to bottom,black,transparent 70%);
+}
+
+a{
+  color:inherit;
+  text-decoration:none;
+}
+
+button,
+input,
+select,
+textarea{
+  font:inherit;
+}
+
+button{
+  cursor:pointer;
+}
+
+.container{
+  width:min(var(--max),calc(100% - 40px));
+  margin:auto;
+}
+
+/* HEADER */
+
+.site-header{
+  position:sticky;
+  top:0;
+  z-index:100;
+  backdrop-filter:blur(18px);
+  background:rgba(7,7,7,.82);
+  border-bottom:1px solid var(--line);
+}
+
+.nav{
+  min-height:76px;
+  display:flex;
+  align-items:center;
+  gap:24px;
+}
+
+.brand{
+  display:flex;
+  align-items:center;
+  gap:12px;
+  min-width:max-content;
+}
+
+.brand-mark{
+  width:40px;
+  height:40px;
+  border:1px solid rgba(199,167,106,.5);
+  border-radius:50%;
+  display:grid;
+  place-items:center;
+  color:var(--gold2);
+  font-family:Orbitron,sans-serif;
+  font-size:17px;
+  box-shadow:0 0 30px rgba(199,167,106,.08);
+}
+
+.brand-copy strong{
+  display:block;
+  font-family:Orbitron,sans-serif;
+  font-size:13px;
+  letter-spacing:2px;
+}
+
+.brand-copy span{
+  display:block;
+  margin-top:3px;
+  color:var(--muted);
+  font-size:9px;
+  letter-spacing:2.5px;
+  text-transform:uppercase;
+}
+
+.nav-links{
+  display:flex;
+  align-items:center;
+  gap:4px;
+  margin-left:auto;
+}
+
+.nav-links a{
+  padding:10px 11px;
+  color:#bdb9b0;
+  font-size:11px;
+  font-weight:700;
+  letter-spacing:.6px;
+  text-transform:uppercase;
+  border-radius:10px;
+  transition:.2s;
+}
+
+.nav-links a:hover,
+.nav-links a.active{
+  color:var(--gold2);
+  background:rgba(199,167,106,.07);
+}
+
+.nav-actions{
+  display:flex;
+  gap:8px;
+}
+
+.btn{
+  border:1px solid var(--line2);
+  background:#111;
+  color:var(--text);
+  border-radius:12px;
+  padding:11px 15px;
+  font-size:11px;
+  font-weight:800;
+  letter-spacing:.6px;
+  text-transform:uppercase;
+  transition:.2s;
+}
+
+.btn:hover{
+  transform:translateY(-1px);
+  border-color:rgba(199,167,106,.45);
+}
+
+.btn.gold{
+  background:linear-gradient(135deg,#c7a76a,#a8894f);
+  color:#080706;
+  border-color:transparent;
+}
+
+.btn.ghost{
+  background:transparent;
+}
+
+.mobile-toggle{
+  display:none;
+  margin-left:auto;
+  width:42px;
+  height:42px;
+  border:1px solid var(--line);
+  border-radius:11px;
+  background:#101010;
+  color:white;
+}
+
+/* HERO */
+
+.hero{
+  padding:92px 0 54px;
+  position:relative;
+  overflow:hidden;
+}
+
+.hero-grid{
+  display:grid;
+  grid-template-columns:1.15fr .85fr;
+  gap:60px;
+  align-items:end;
+}
+
+.eyebrow{
+  color:var(--gold2);
+  font-family:Orbitron,sans-serif;
+  font-size:11px;
+  letter-spacing:4px;
+  text-transform:uppercase;
+}
+
+.hero h1{
+  margin:18px 0 18px;
+  max-width:900px;
+  font-family:Orbitron,sans-serif;
+  font-size:clamp(38px,6vw,78px);
+  line-height:1.02;
+  letter-spacing:-2px;
+  text-transform:uppercase;
+}
+
+.hero h1 span{
+  color:var(--gold2);
+}
+
+.hero p{
+  max-width:720px;
+  margin:0;
+  color:var(--muted);
+  line-height:1.8;
+  font-size:15px;
+}
+
+.hero-note{
+  border-left:1px solid rgba(199,167,106,.45);
+  padding:16px 0 16px 24px;
+}
+
+.hero-note strong{
+  display:block;
+  font-family:Orbitron,sans-serif;
+  color:#e8dfcf;
+  font-size:12px;
+  letter-spacing:1.8px;
+  text-transform:uppercase;
+}
+
+.hero-note p{
+  margin-top:10px;
+  font-family:"Libre Baskerville",serif;
+  font-size:13px;
+  line-height:1.8;
+}
+
+/* STATS */
+
+.stats{
+  display:grid;
+  grid-template-columns:repeat(4,1fr);
+  border-top:1px solid var(--line);
+  border-bottom:1px solid var(--line);
+}
+
+.stat{
+  padding:25px 22px;
+  border-right:1px solid var(--line);
+}
+
+.stat:last-child{
+  border-right:0;
+}
+
+.stat-number{
+  font-family:Orbitron,sans-serif;
+  font-size:28px;
+  color:var(--gold2);
+}
+
+.stat-label{
+  margin-top:7px;
+  color:var(--muted);
+  font-size:10px;
+  letter-spacing:1.5px;
+  text-transform:uppercase;
+}
+
+/* CONTROLS */
+
+.controls-section{
+  padding:48px 0 25px;
+}
+
+.controls{
+  display:grid;
+  grid-template-columns:1.5fr 1fr 170px auto;
+  gap:10px;
+}
+
+.field{
+  position:relative;
+}
+
+.field input,
+.field select,
+.composer input,
+.composer select,
+.composer textarea{
+  width:100%;
+  border:1px solid var(--line2);
+  outline:none;
+  border-radius:13px;
+  background:#0f0f10;
+  color:var(--text);
+  padding:14px 15px;
+}
+
+.field input::placeholder,
+.composer input::placeholder,
+.composer textarea::placeholder{
+  color:#77746e;
+}
+
+.field input:focus,
+.field select:focus,
+.composer input:focus,
+.composer select:focus,
+.composer textarea:focus{
+  border-color:rgba(199,167,106,.55);
+  box-shadow:0 0 0 3px rgba(199,167,106,.06);
+}
+
+.filter-note{
+  margin-top:11px;
+  color:#79766f;
+  font-size:10px;
+  letter-spacing:.7px;
+}
+
+/* CONTENT */
+
+.main-layout{
+  display:grid;
+  grid-template-columns:minmax(0,1fr) 330px;
+  gap:25px;
+  padding:25px 0 80px;
+}
+
+.section-head{
+  display:flex;
+  align-items:end;
+  justify-content:space-between;
+  gap:20px;
+  margin-bottom:18px;
+}
+
+.section-head h2{
+  margin:0;
+  font-family:Orbitron,sans-serif;
+  font-size:20px;
+  letter-spacing:1px;
+  text-transform:uppercase;
+}
+
+.section-head p{
+  margin:6px 0 0;
+  color:var(--muted);
+  font-size:12px;
+}
+
+/* TRIBUTE STREAM */
+
+.tribute-stream{
+  display:grid;
+  gap:13px;
+}
+
+.tribute-card{
+  position:relative;
+  overflow:hidden;
+  padding:24px;
+  background:
+    linear-gradient(135deg,rgba(255,255,255,.025),transparent 50%),
+    #101011;
+  border:1px solid var(--line);
+  border-radius:18px;
+  transition:.25s;
+}
+
+.tribute-card:hover{
+  transform:translateY(-2px);
+  border-color:rgba(199,167,106,.28);
+  box-shadow:0 20px 50px rgba(0,0,0,.2);
+}
+
+.tribute-card:before{
+  content:"";
+  position:absolute;
+  left:0;
+  top:20px;
+  bottom:20px;
+  width:2px;
+  background:linear-gradient(180deg,var(--gold),transparent);
+  opacity:.7;
+}
+
+.tribute-top{
+  display:flex;
+  justify-content:space-between;
+  gap:15px;
+  align-items:flex-start;
+}
+
+.tribute-author{
+  display:flex;
+  align-items:center;
+  gap:11px;
+}
+
+.avatar{
+  width:36px;
+  height:36px;
+  border-radius:50%;
+  border:1px solid rgba(199,167,106,.35);
+  display:grid;
+  place-items:center;
+  color:var(--gold2);
+  font-family:Orbitron,sans-serif;
+  font-size:11px;
+  background:#161515;
+}
+
+.author-name{
+  font-size:12px;
+  font-weight:800;
+}
+
+.tribute-date{
+  margin-top:4px;
+  color:#74716a;
+  font-size:10px;
+}
+
+.tribute-memory{
+  margin-top:20px;
+}
+
+.tribute-memory-label{
+  color:var(--gold2);
+  font-family:Orbitron,sans-serif;
+  font-size:9px;
+  letter-spacing:2px;
+  text-transform:uppercase;
+}
+
+.tribute-memory-name{
+  margin-top:6px;
+  font-family:Orbitron,sans-serif;
+  font-size:16px;
+}
+
+.tribute-message{
+  margin:17px 0 20px;
+  color:#d7d3ca;
+  font-family:"Libre Baskerville",serif;
+  font-size:14px;
+  line-height:1.95;
+  white-space:pre-wrap;
+}
+
+.tribute-bottom{
+  display:flex;
+  justify-content:space-between;
+  align-items:center;
+  gap:12px;
+  padding-top:15px;
+  border-top:1px solid var(--line);
+}
+
+.tribute-actions{
+  display:flex;
+  gap:7px;
+  flex-wrap:wrap;
+}
+
+.small-btn{
+  border:1px solid var(--line);
+  background:#0c0c0d;
+  color:#aaa69e;
+  border-radius:9px;
+  padding:8px 10px;
+  font-size:9px;
+  font-weight:800;
+  letter-spacing:.7px;
+  text-transform:uppercase;
+}
+
+.small-btn:hover{
+  color:var(--gold2);
+  border-color:rgba(199,167,106,.35);
+}
+
+.word-mark{
+  color:#595650;
+  font-family:Orbitron,sans-serif;
+  font-size:9px;
+  letter-spacing:1px;
+}
+
+/* SIDEBAR */
+
+.side-stack{
+  display:grid;
+  gap:15px;
+  align-content:start;
+}
+
+.side-card{
+  background:#101011;
+  border:1px solid var(--line);
+  border-radius:18px;
+  overflow:hidden;
+}
+
+.side-card-head{
+  padding:18px 19px;
+  border-bottom:1px solid var(--line);
+}
+
+.side-card-head h3{
+  margin:0;
+  font-family:Orbitron,sans-serif;
+  font-size:12px;
+  letter-spacing:1.3px;
+  text-transform:uppercase;
+}
+
+.side-card-body{
+  padding:18px;
+}
+
+.memory-list{
+  display:grid;
+  gap:5px;
+}
+
+.memory-option{
+  display:flex;
+  justify-content:space-between;
+  align-items:center;
+  gap:10px;
+  width:100%;
+  padding:12px;
+  border:1px solid transparent;
+  background:transparent;
+  color:#aaa69e;
+  border-radius:10px;
+  text-align:left;
+}
+
+.memory-option:hover,
+.memory-option.selected{
+  background:rgba(199,167,106,.07);
+  border-color:rgba(199,167,106,.16);
+  color:var(--gold2);
+}
+
+.memory-option span:first-child{
+  font-size:11px;
+  font-weight:700;
+}
+
+.memory-count{
+  color:#6d6961;
+  font-family:Orbitron,sans-serif;
+  font-size:9px;
+}
+
+.spotlight{
+  position:relative;
+  min-height:260px;
+  display:flex;
+  flex-direction:column;
+  justify-content:flex-end;
+  padding:22px;
+  background:
+    linear-gradient(180deg,transparent 20%,rgba(0,0,0,.95) 100%),
+    radial-gradient(circle at 50% 25%,rgba(199,167,106,.18),transparent 45%),
+    #121212;
+}
+
+.spotlight-label{
+  color:var(--gold2);
+  font-family:Orbitron,sans-serif;
+  font-size:9px;
+  letter-spacing:2px;
+  text-transform:uppercase;
+}
+
+.spotlight h3{
+  margin:9px 0 5px;
+  font-family:Orbitron,sans-serif;
+  font-size:18px;
+}
+
+.spotlight p{
+  margin:0;
+  color:#aaa69e;
+  font-family:"Libre Baskerville",serif;
+  font-size:11px;
+  line-height:1.7;
+}
+
+.spotlight-link{
+  margin-top:16px;
+  color:var(--gold2);
+  font-size:9px;
+  font-weight:800;
+  letter-spacing:1px;
+  text-transform:uppercase;
+}
+
+/* COMPOSER */
+
+.composer{
+  margin-top:25px;
+  padding:22px;
+  border:1px solid rgba(199,167,106,.18);
+  background:
+    radial-gradient(circle at 100% 0%,rgba(199,167,106,.07),transparent 35%),
+    #0f0f10;
+  border-radius:18px;
+}
+
+.composer h3{
+  margin:0;
+  font-family:Orbitron,sans-serif;
+  font-size:14px;
+  letter-spacing:1px;
+  text-transform:uppercase;
+}
+
+.composer-intro{
+  margin:7px 0 17px;
+  color:var(--muted);
+  font-size:11px;
+  line-height:1.7;
+}
+
+.composer-grid{
+  display:grid;
+  grid-template-columns:1fr 1fr;
+  gap:10px;
+}
+
+.composer textarea{
+  min-height:135px;
+  resize:vertical;
+  margin-top:10px;
+  line-height:1.6;
+}
+
+.composer-footer{
+  margin-top:10px;
+  display:flex;
+  justify-content:space-between;
+  align-items:center;
+  gap:10px;
+}
+
+.form-message{
+  color:#8e8a82;
+  font-size:10px;
+}
+
+.form-message.success{
+  color:#b8c69e;
+}
+
+.form-message.error{
+  color:var(--danger);
+}
+
+/* PAGINATION */
+
+.pagination{
+  display:flex;
+  justify-content:center;
+  align-items:center;
+  gap:6px;
+  margin-top:25px;
+}
+
+.page-btn{
+  min-width:38px;
+  height:38px;
+  padding:0 11px;
+  border:1px solid var(--line);
+  border-radius:9px;
+  background:#101010;
+  color:#9d9991;
+  font-size:10px;
+  font-weight:800;
+}
+
+.page-btn:hover,
+.page-btn.active{
+  color:#080706;
+  background:var(--gold2);
+  border-color:var(--gold2);
+}
+
+.page-btn:disabled{
+  opacity:.35;
+  cursor:not-allowed;
+}
+
+/* EMPTY / LOADING */
+
+.state{
+  padding:70px 25px;
+  text-align:center;
+  border:1px dashed var(--line2);
+  border-radius:18px;
+  background:#0d0d0e;
+}
+
+.state-icon{
+  font-family:Orbitron,sans-serif;
+  color:var(--gold2);
+  font-size:25px;
+}
+
+.state h3{
+  margin:15px 0 7px;
+  font-family:Orbitron,sans-serif;
+  font-size:14px;
+  text-transform:uppercase;
+}
+
+.state p{
+  margin:0 auto;
+  max-width:500px;
+  color:var(--muted);
+  font-size:12px;
+  line-height:1.7;
+}
+
+/* PHILOSOPHY */
+
+.philosophy{
+  padding:75px 0;
+  border-top:1px solid var(--line);
+}
+
+.philosophy-inner{
+  max-width:900px;
+  margin:auto;
+  text-align:center;
+}
+
+.philosophy h2{
+  margin:15px 0;
+  font-family:Orbitron,sans-serif;
+  font-size:clamp(25px,4vw,45px);
+  line-height:1.1;
+}
+
+.philosophy p{
+  color:#a9a49a;
+  font-family:"Libre Baskerville",serif;
+  font-size:14px;
+  line-height:2;
+}
+
+/* FOOTER */
+
+footer{
+  border-top:1px solid var(--line);
+  padding:35px 0;
+}
+
+.footer-inner{
+  display:flex;
+  justify-content:space-between;
+  gap:20px;
+  align-items:center;
+}
+
+.footer-copy{
+  color:#67645e;
+  font-size:10px;
+  line-height:1.7;
+}
+
+.footer-links{
+  display:flex;
+  flex-wrap:wrap;
+  gap:15px;
+}
+
+.footer-links a{
+  color:#807c74;
+  font-size:9px;
+  font-weight:700;
+  letter-spacing:1px;
+  text-transform:uppercase;
+}
+
+.footer-links a:hover{
+  color:var(--gold2);
+}
+
+/* MODAL */
+
+.modal{
+  position:fixed;
+  inset:0;
+  z-index:300;
+  display:none;
+  align-items:center;
+  justify-content:center;
+  padding:20px;
+  background:rgba(0,0,0,.78);
+  backdrop-filter:blur(10px);
+}
+
+.modal.open{
+  display:flex;
+}
+
+.modal-box{
+  width:min(520px,100%);
+  max-height:90vh;
+  overflow:auto;
+  background:#101011;
+  border:1px solid var(--line2);
+  border-radius:20px;
+  box-shadow:var(--shadow);
+}
+
+.modal-head{
+  display:flex;
+  justify-content:space-between;
+  align-items:center;
+  padding:20px;
+  border-bottom:1px solid var(--line);
+}
+
+.modal-head h3{
+  margin:0;
+  font-family:Orbitron,sans-serif;
+  font-size:14px;
+  letter-spacing:1px;
+  text-transform:uppercase;
+}
+
+.close{
+  width:35px;
+  height:35px;
+  border:1px solid var(--line);
+  border-radius:9px;
+  background:#0b0b0b;
+  color:#aaa;
+}
+
+.modal-body{
+  padding:20px;
+}
+
+.modal-body label{
+  display:block;
+  margin-bottom:7px;
+  color:#8d8981;
+  font-size:9px;
+  font-weight:800;
+  letter-spacing:1.4px;
+  text-transform:uppercase;
+}
+
+.modal-body input,
+.modal-body textarea,
+.modal-body select{
+  width:100%;
+  margin-bottom:15px;
+  border:1px solid var(--line2);
+  background:#0c0c0d;
+  color:white;
+  border-radius:11px;
+  padding:13px;
+  outline:none;
+}
+
+.modal-body textarea{
+  min-height:110px;
+  resize:vertical;
+}
+
+.modal-actions{
+  display:flex;
+  justify-content:flex-end;
+  gap:8px;
+}
+
+.modal-message{
+  min-height:18px;
+  margin-bottom:10px;
+  color:#88847d;
+  font-size:10px;
+}
+
+.modal-message.error{
+  color:var(--danger);
+}
+
+.modal-message.success{
+  color:#b8c69e;
+}
+
+/* TOAST */
+
+.toast{
+  position:fixed;
+  z-index:500;
+  right:20px;
+  bottom:20px;
+  transform:translateY(25px);
+  opacity:0;
+  pointer-events:none;
+  padding:13px 16px;
+  background:#151515;
+  border:1px solid var(--line2);
+  border-radius:11px;
+  color:#ddd8ce;
+  font-size:11px;
+  box-shadow:var(--shadow);
+  transition:.25s;
+}
+
+.toast.show{
+  transform:translateY(0);
+  opacity:1;
+}
+
+/* RESPONSIVE */
+
+@media(max-width:1100px){
+  .nav-links{
+    display:none;
+  }
+
+  .mobile-toggle{
+    display:block;
+  }
+
+  .nav-links.open{
+    display:flex;
+    position:absolute;
+    top:76px;
+    left:20px;
+    right:20px;
+    padding:12px;
+    flex-direction:column;
+    align-items:stretch;
+    background:#0d0d0e;
+    border:1px solid var(--line);
+    border-radius:15px;
+  }
+
+  .nav-links.open a{
+    padding:13px;
+  }
+
+  .nav-actions{
+    display:none;
+  }
+
+  .hero-grid{
+    grid-template-columns:1fr;
+    gap:30px;
+  }
+
+  .controls{
+    grid-template-columns:1fr 1fr;
+  }
+
+  .main-layout{
+    grid-template-columns:1fr;
+  }
+
+  .side-stack{
+    grid-template-columns:1fr 1fr;
+  }
+}
+
+@media(max-width:700px){
+  .container{
+    width:min(100% - 26px,var(--max));
+  }
+
+  .brand-copy span{
+    display:none;
+  }
+
+  .brand-copy strong{
+    font-size:11px;
+  }
+
+  .hero{
+    padding:65px 0 40px;
+  }
+
+  .hero h1{
+    letter-spacing:-1px;
+  }
+
+  .hero p{
+    font-size:13px;
+  }
+
+  .stats{
+    grid-template-columns:1fr 1fr;
+  }
+
+  .stat:nth-child(2){
+    border-right:0;
+  }
+
+  .stat:nth-child(-n+2){
+    border-bottom:1px solid var(--line);
+  }
+
+  .controls{
+    grid-template-columns:1fr;
+  }
+
+  .side-stack{
+    grid-template-columns:1fr;
+  }
+
+  .composer-grid{
+    grid-template-columns:1fr;
+  }
+
+  .composer-footer{
+    align-items:stretch;
+    flex-direction:column;
+  }
+
+  .footer-inner{
+    flex-direction:column;
+    align-items:flex-start;
+  }
+
+  .tribute-card{
+    padding:20px;
+  }
+
+  .tribute-bottom{
+    align-items:flex-start;
+    flex-direction:column;
+  }
+}
+</style>
+</head>
+
+<body>
+
+<header class="site-header">
+  <div class="container nav">
+
+    <a href="index.html" class="brand">
+      <div class="brand-mark">CR</div>
+      <div class="brand-copy">
+        <strong>CROWRULES</strong>
+        <span>Memorials</span>
+      </div>
+    </a>
+
+    <nav class="nav-links" id="navLinks">
+      <a href="index.html">Home</a>
+      <a href="memorials.html">Memorials</a>
+      <a href="featured.html">Featured</a>
+      <a href="recent.html">Recent</a>
+      <a href="on-this-day.html">On This Day</a>
+      <a href="stories.html">Stories</a>
+      <a href="tributes.html" class="active">Tributes</a>
+      <a href="search.html">Search</a>
+    </nav>
+
+    <div class="nav-actions">
+      <button class="btn ghost" onclick="openCandleModal()">Light a Candle</button>
+      <a href="create-memorial.html" class="btn gold">Create Memorial</a>
+    </div>
+
+    <button class="mobile-toggle" id="mobileToggle" aria-label="Open navigation">☰</button>
+
+  </div>
+</header>
+
+<main>
+
+<section class="hero">
+  <div class="container hero-grid">
+
+    <div>
+      <div class="eyebrow">CrowRules Memorials / Community Wall</div>
+
+      <h1>
+        Words<br>
+        <span>Left Behind.</span>
+      </h1>
+
+      <p>
+        A tribute is more than a message. It is a small piece of someone’s
+        story carried forward by the people who remember them.
+        This is the CrowRules Memorials community wall for those words.
+      </p>
+    </div>
+
+    <div class="hero-note">
+      <strong>Every voice matters.</strong>
+      <p>
+        Share a memory, a thank-you, a story, or simply a few words.
+        Together, these messages become part of a living archive of remembrance.
+      </p>
+    </div>
+
+  </div>
+</section>
+
+<section class="container">
+
+  <div class="stats">
+
+    <div class="stat">
+      <div class="stat-number" id="statMemorials">—</div>
+      <div class="stat-label">Published Memorials</div>
+    </div>
+
+    <div class="stat">
+      <div class="stat-number" id="statTributes">—</div>
+      <div class="stat-label">Public Tributes</div>
+    </div>
+
+    <div class="stat">
+      <div class="stat-number" id="statRecent">—</div>
+      <div class="stat-label">Recent Tributes</div>
+    </div>
+
+    <div class="stat">
+      <div class="stat-number" id="statRemembered">—</div>
+      <div class="stat-label">Remembered Lives</div>
+    </div>
+
+  </div>
+
+</section>
+
+<section class="controls-section">
+  <div class="container">
+
+    <div class="controls">
+
+      <div class="field">
+        <input
+          id="searchInput"
+          type="search"
+          placeholder="Search tributes, names, or memories..."
+          autocomplete="off">
+      </div>
+
+      <div class="field">
+        <select id="memorialFilter">
+          <option value="">All Memorials</option>
+        </select>
+      </div>
+
+      <div class="field">
+        <select id="sortFilter">
+          <option value="newest">Newest First</option>
+          <option value="oldest">Oldest First</option>
+        </select>
+      </div>
+
+      <button class="btn gold" id="clearFilters">Reset</button>
+
+    </div>
+
+    <div class="filter-note" id="filterNote">
+      Showing community tributes.
+    </div>
+
+  </div>
+</section>
+
+<section class="container main-layout">
+
+  <div>
+
+    <div class="section-head">
+      <div>
+        <h2>Remembrance Wall</h2>
+        <p id="resultSummary">Loading tributes...</p>
+      </div>
+    </div>
+
+    <div id="tributeStream" class="tribute-stream">
+      <div class="state">
+        <div class="state-icon">✦</div>
+        <h3>Loading memories</h3>
+        <p>Please wait while the remembrance wall is being prepared.</p>
+      </div>
+    </div>
+
+    <div id="pagination" class="pagination"></div>
+
+    <section class="composer">
+
+      <h3>Leave a Tribute</h3>
+
+      <p class="composer-intro">
+        Add your own words to a published memorial. Please keep messages
+        respectful and centered on remembrance.
+      </p>
+
+      <div class="composer-grid">
+
+        <input
+          id="tributeAuthor"
+          type="text"
+          maxlength="100"
+          placeholder="Your name">
+
+        <select id="tributeMemorial">
+          <option value="">Choose a memorial...</option>
+        </select>
+
+      </div>
+
+      <textarea
+        id="tributeMessage"
+        maxlength="4000"
+        placeholder="Write your tribute, memory, or message..."></textarea>
+
+      <div class="composer-footer">
+        <div id="tributeFormMessage" class="form-message">
+          Your tribute may appear publicly after submission.
+        </div>
+
+        <button class="btn gold" id="submitTribute">
+          Publish Tribute
+        </button>
+      </div>
+
+    </section>
+
+  </div>
+
+  <aside class="side-stack">
+
+    <div class="side-card">
+
+      <div class="side-card-head">
+        <h3>Remembered Lives</h3>
+      </div>
+
+      <div class="side-card-body">
+        <div id="memoryList" class="memory-list">
+          <div style="color:#777;font-size:11px">Loading...</div>
+        </div>
+      </div>
+
+    </div>
+
+    <div class="side-card">
+
+      <div class="spotlight" id="spotlight">
+
+        <div class="spotlight-label">Latest remembrance</div>
+
+        <h3 id="spotlightName">—</h3>
+
+        <p id="spotlightText">
+          The newest community tribute will appear here.
+        </p>
+
+        <a id="spotlightLink" class="spotlight-link" href="#">
+          View Memorial →
+        </a>
+
+      </div>
+
+    </div>
+
+    <div class="side-card">
+
+      <div class="side-card-head">
+        <h3>About Tributes</h3>
+      </div>
+
+      <div class="side-card-body">
+        <p style="
+          margin:0;
+          color:#99958d;
+          font-family:'Libre Baskerville',serif;
+          font-size:11px;
+          line-height:1.9;
+        ">
+          A tribute does not need to be long to matter.
+          Sometimes a name, a memory, or a simple
+          “I remember you” is enough.
+        </p>
+      </div>
+
+    </div>
+
+  </aside>
+
+</section>
+
+<section class="philosophy">
+  <div class="container philosophy-inner">
+
+    <div class="eyebrow">The remembrance principle</div>
+
+    <h2>Memory keeps moving.</h2>
+
+    <p>
+      A life may end, but the stories people carry are not required to end with it.
+      Every tribute adds another voice to the record — another perspective,
+      another memory, another reason a name continues to be spoken.
+    </p>
+
+  </div>
+</section>
+
+</main>
+
+<footer>
+  <div class="container footer-inner">
+
+    <div class="footer-copy">
+      © <span id="year"></span> CrowRules Entertainment.<br>
+      CrowRules Memorials — Every Life Leaves A Story.
+    </div>
+
+    <div class="footer-links">
+      <a href="index.html">Memorials Home</a>
+      <a href="memorials.html">Archive</a>
+      <a href="stories.html">Stories</a>
+      <a href="tributes.html">Tributes</a>
+      <a href="search.html">Search</a>
+      <a href="create-memorial.html">Create Memorial</a>
+    </div>
+
+  </div>
+</footer>
+
+<!-- CANDLE MODAL -->
+
+<div class="modal" id="candleModal">
+
+  <div class="modal-box">
+
+    <div class="modal-head">
+      <h3>Light a Candle</h3>
+      <button class="close" onclick="closeCandleModal()">×</button>
+    </div>
+
+    <div class="modal-body">
+
+      <label>Your Name</label>
+      <input id="candleAuthor" type="text" maxlength="100" placeholder="Your name">
+
+      <label>Memorial</label>
+      <select id="candleMemorial">
+        <option value="">Choose a memorial...</option>
+      </select>
+
+      <label>Message <span style="color:#666">(optional)</span></label>
+      <textarea id="candleMessage" maxlength="1000" placeholder="Leave a short message..."></textarea>
+
+      <div id="candleMessageStatus" class="modal-message"></div>
+
+      <div class="modal-actions">
+        <button class="btn ghost" onclick="closeCandleModal()">Cancel</button>
+        <button class="btn gold" id="submitCandle">Light Candle</button>
+      </div>
+
+    </div>
+
+  </div>
+
+</div>
+
+<div class="toast" id="toast"></div>
+
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+
+<script>
+const SUPABASE_URL = "https://cevylpnoexugwgygvtgu.supabase.co";
+const SUPABASE_KEY = "sb_publishable_AdfM5y6RqvF3tbvEVzDZSg_JuGTQLD-";
+
+const db = window.supabase.createClient(
+  SUPABASE_URL,
+  SUPABASE_KEY
+);
+
+const PAGE_SIZE = 12;
+
+let allTributes = [];
+let allMemorials = [];
+let filteredTributes = [];
+let currentPage = 1;
+
+const $ = id => document.getElementById(id);
+
+function escapeHtml(value){
+  return String(value ?? "")
+    .replace(/&/g,"&amp;")
+    .replace(/</g,"&lt;")
+    .replace(/>/g,"&gt;")
+    .replace(/"/g,"&quot;")
+    .replace(/'/g,"&#039;");
+}
+
+function initials(name){
+  const clean = String(name || "Community Member").trim();
+
+  if(!clean) return "CM";
+
+  const parts = clean.split(/\s+/).filter(Boolean);
+
+  if(parts.length === 1){
+    return parts[0].slice(0,2).toUpperCase();
+  }
+
+  return (
+    parts[0][0] +
+    parts[parts.length - 1][0]
+  ).toUpperCase();
+}
+
+function formatDate(value){
+  if(!value) return "Date unknown";
+
+  const d = new Date(value);
+
+  if(Number.isNaN(d.getTime())){
+    return "Date unknown";
+  }
+
+  return d.toLocaleDateString(undefined,{
+    month:"long",
+    day:"numeric",
+    year:"numeric"
+  });
+}
+
+function formatShortDate(value){
+  if(!value) return "";
+
+  const d = new Date(value);
+
+  if(Number.isNaN(d.getTime())){
+    return "";
+  }
+
+  return d.toLocaleDateString(undefined,{
+    month:"short",
+    day:"numeric",
+    year:"numeric"
+  });
+}
+
+function getMemorial(id){
+  return allMemorials.find(m => m.id === id);
+}
+
+function memorialUrl(memorial){
+  if(!memorial) return "memorials.html";
+
+  return "memorial.html?slug=" +
+    encodeURIComponent(memorial.slug);
+}
+
+function setUrlState(){
+  const params = new URLSearchParams();
+
+  const q = $("searchInput").value.trim();
+  const memorial = $("memorialFilter").value;
+  const sort = $("sortFilter").value;
+
+  if(q) params.set("q",q);
+  if(memorial) params.set("memorial",memorial);
+  if(sort !== "newest") params.set("sort",sort);
+  if(currentPage > 1) params.set("page",currentPage);
+
+  const query = params.toString();
+
+  history.replaceState(
+    null,
+    "",
+    "tributes.html" + (query ? "?" + query : "")
+  );
+}
+
+function readUrlState(){
+  const params = new URLSearchParams(location.search);
+
+  $("searchInput").value = params.get("q") || "";
+  $("memorialFilter").value = params.get("memorial") || "";
+  $("sortFilter").value =
+    params.get("sort") === "oldest"
+      ? "oldest"
+      : "newest";
+
+  currentPage = Math.max(
+    1,
+    parseInt(params.get("page") || "1",10) || 1
+  );
+}
+
+/* LOAD MEMORIALS */
+
+async function loadMemorials(){
+
+  const {data,error} = await db
+    .from("memorials")
+    .select(`
+      id,
+      slug,
+      full_name,
+      birth_date,
+      passing_date,
+      location,
+      short_bio,
+      portrait_url,
+      featured
+    `)
+    .eq("published",true)
+    .order("full_name",{ascending:true});
+
+  if(error){
+    console.error(error);
+    throw error;
+  }
+
+  allMemorials = data || [];
+
+  populateMemorialSelects();
+  renderMemoryList();
+}
+
+/* LOAD TRIBUTES */
+
+async function loadTributes(){
+
+  const {data,error} = await db
+    .from("memorial_tributes")
+    .select(`
+      id,
+      memorial_id,
+      author_name,
+      message,
+      created_at
+    `)
+    .order("created_at",{ascending:false});
+
+  if(error){
+    console.error(error);
+    throw error;
+  }
+
+  allTributes = data || [];
+
+  updateStats();
+  updateSpotlight();
+  applyFilters();
+}
+
+/* SELECTS */
+
+function populateMemorialSelects(){
+
+  const filters = [
+    $("memorialFilter"),
+    $("tributeMemorial"),
+    $("candleMemorial")
+  ];
+
+  filters.forEach(select => {
+
+    const current = select.value;
+
+    if(select.id === "memorialFilter"){
+      select.innerHTML =
+        `<option value="">All Memorials</option>`;
+    }else{
+      select.innerHTML =
+        `<option value="">Choose a memorial...</option>`;
+    }
+
+    allMemorials.forEach(memorial => {
+
+      const option = document.createElement("option");
+
+      option.value = memorial.id;
+      option.textContent = memorial.full_name;
+
+      select.appendChild(option);
+
+    });
+
+    if(
+      current &&
+      [...select.options].some(
+        option => option.value === current
+      )
+    ){
+      select.value = current;
+    }
+
+  });
+}
+
+/* STATS */
+
+function updateStats(){
+
+  $("statMemorials").textContent =
+    allMemorials.length.toLocaleString();
+
+  $("statTributes").textContent =
+    allTributes.length.toLocaleString();
+
+  const recentCutoff =
+    Date.now() -
+    (30 * 24 * 60 * 60 * 1000);
+
+  const recent =
+    allTributes.filter(t =>
+      new Date(t.created_at).getTime() >= recentCutoff
+    );
+
+  $("statRecent").textContent =
+    recent.length.toLocaleString();
+
+  const unique =
+    new Set(
+      allTributes
+        .map(t => t.memorial_id)
+        .filter(Boolean)
+    );
+
+  $("statRemembered").textContent =
+    unique.size.toLocaleString();
+}
+
+/* SPOTLIGHT */
+
+function updateSpotlight(){
+
+  const latest = allTributes[0];
+
+  if(!latest){
+    $("spotlightName").textContent = "No tribute yet";
+    $("spotlightText").textContent =
+      "The newest community tribute will appear here.";
+    $("spotlightLink").href = "memorials.html";
+    return;
+  }
+
+  const memorial = getMemorial(latest.memorial_id);
+
+  $("spotlightName").textContent =
+    memorial
+      ? memorial.full_name
+      : "Community Remembrance";
+
+  const cleanMessage =
+    String(latest.message || "").trim();
+
+  $("spotlightText").textContent =
+    cleanMessage.length > 145
+      ? cleanMessage.slice(0,145) + "…"
+      : cleanMessage;
+
+  $("spotlightLink").href =
+    memorialUrl(memorial);
+}
+
+/* MEMORY LIST */
+
+function renderMemoryList(){
+
+  const list = $("memoryList");
+
+  if(!allMemorials.length){
+    list.innerHTML =
+      `<div style="color:#777;font-size:11px">
+        No published memorials found.
+      </div>`;
+    return;
+  }
+
+  const counts = {};
+
+  allTributes.forEach(t => {
+    counts[t.memorial_id] =
+      (counts[t.memorial_id] || 0) + 1;
+  });
+
+  const ranked = [...allMemorials]
+    .sort((a,b) =>
+      (counts[b.id] || 0) -
+      (counts[a.id] || 0)
+    )
+    .slice(0,8);
+
+  list.innerHTML = ranked.map(memorial => {
+
+    const count = counts[memorial.id] || 0;
+
+    const selected =
+      $("memorialFilter").value === memorial.id
+        ? " selected"
+        : "";
+
+    return `
+      <button
+        class="memory-option${selected}"
+        onclick="selectMemorial('${memorial.id}')">
+
+        <span>${escapeHtml(memorial.full_name)}</span>
+        <span class="memory-count">${count}</span>
+
+      </button>
+    `;
+
+  }).join("");
+}
+
+function selectMemorial(id){
+
+  $("memorialFilter").value = id;
+  currentPage = 1;
+
+  applyFilters();
+
+  window.scrollTo({
+    top:document.querySelector(".main-layout").offsetTop - 90,
+    behavior:"smooth"
+  });
+}
+
+/* FILTER */
+
+function applyFilters(){
+
+  const query =
+    $("searchInput").value
+      .trim()
+      .toLowerCase();
+
+  const memorialId =
+    $("memorialFilter").value;
+
+  const sort =
+    $("sortFilter").value;
+
+  filteredTributes =
+    allTributes.filter(tribute => {
+
+      if(
+        memorialId &&
+        tribute.memorial_id !== memorialId
+      ){
+        return false;
+      }
+
+      if(!query){
+        return true;
+      }
+
+      const memorial =
+        getMemorial(tribute.memorial_id);
+
+      const haystack = [
+        tribute.author_name,
+        tribute.message,
+        memorial?.full_name,
+        memorial?.location
+      ]
+      .filter(Boolean)
+      .join(" ")
+      .toLowerCase();
+
+      return haystack.includes(query);
+
+    });
+
+  filteredTributes.sort((a,b) => {
+
+    const da =
+      new Date(a.created_at).getTime();
+
+    const dbb =
+      new Date(b.created_at).getTime();
+
+    return sort === "oldest"
+      ? da - dbb
+      : dbb - da;
+
+  });
+
+  const totalPages =
+    Math.max(
+      1,
+      Math.ceil(filteredTributes.length / PAGE_SIZE)
+    );
+
+  if(currentPage > totalPages){
+    currentPage = totalPages;
+  }
+
+  setUrlState();
+
+  renderTributes();
+  renderPagination();
+  renderMemoryList();
+
+  updateFilterNote();
+}
+
+/* FILTER NOTE */
+
+function updateFilterNote(){
+
+  const q =
+    $("searchInput").value.trim();
+
+  const memorialId =
+    $("memorialFilter").value;
+
+  const memorial =
+    getMemorial(memorialId);
+
+  let text =
+    `${filteredTributes.length.toLocaleString()} tribute` +
+    `${filteredTributes.length === 1 ? "" : "s"}`;
+
+  if(memorial){
+    text +=
+      ` remembering ${memorial.full_name}`;
+  }
+
+  if(q){
+    text +=
+      ` matching “${q}”`;
+  }
+
+  $("filterNote").textContent = text + ".";
+
+  $("resultSummary").textContent =
+    filteredTributes.length
+      ? `Showing ${filteredTributes.length.toLocaleString()} community tribute${filteredTributes.length === 1 ? "" : "s"}.`
+      : "No tributes match the current filters.";
+}
+
+/* RENDER */
+
+function renderTributes(){
+
+  const container =
+    $("tributeStream");
+
+  if(!filteredTributes.length){
+
+    container.innerHTML = `
+      <div class="state">
+
+        <div class="state-icon">✦</div>
+
+        <h3>No Tributes Found</h3>
+
+        <p>
+          There are no tributes matching these filters yet.
+          You can be the first to leave a message of remembrance.
+        </p>
+
+      </div>
+    `;
+
+    return;
+  }
+
+  const start =
+    (currentPage - 1) * PAGE_SIZE;
+
+  const pageItems =
+    filteredTributes.slice(
+      start,
+      start + PAGE_SIZE
+    );
+
+  container.innerHTML =
+    pageItems.map(renderTribute).join("");
+}
+
+function renderTribute(tribute){
+
+  const memorial =
+    getMemorial(tribute.memorial_id);
+
+  const author =
+    tribute.author_name ||
+    "Community Member";
+
+  const message =
+    tribute.message ||
+    "";
+
+  return `
+    <article class="tribute-card">
+
+      <div class="tribute-top">
+
+        <div class="tribute-author">
+
+          <div class="avatar">
+            ${escapeHtml(initials(author))}
+          </div>
+
+          <div>
+            <div class="author-name">
+              ${escapeHtml(author)}
+            </div>
+
+            <div class="tribute-date">
+              ${escapeHtml(formatDate(tribute.created_at))}
+            </div>
+          </div>
+
+        </div>
+
+        <div class="word-mark">
+          REMEMBRANCE
+        </div>
+
+      </div>
+
+      <div class="tribute-memory">
+
+        <div class="tribute-memory-label">
+          In memory of
+        </div>
+
+        <div class="tribute-memory-name">
+          ${escapeHtml(
+            memorial
+              ? memorial.full_name
+              : "Community Memorial"
+          )}
+        </div>
+
+      </div>
+
+      <div class="tribute-message">
+        ${escapeHtml(message)}
+      </div>
+
+      <div class="tribute-bottom">
+
+        <div class="tribute-actions">
+
+          ${
+            memorial
+              ? `
+                <a
+                  class="small-btn"
+                  href="${memorialUrl(memorial)}">
+                  View Memorial
+                </a>
+              `
+              : ""
+          }
+
+          ${
+            memorial
+              ? `
+                <button
+                  class="small-btn"
+                  onclick="openCandleModal('${memorial.id}')">
+                  Light Candle
+                </button>
+              `
+              : ""
+          }
+
+        </div>
+
+        <div class="word-mark">
+          #CROWRULES
+        </div>
+
+      </div>
+
+    </article>
+  `;
+}
+
+/* PAGINATION */
+
+function renderPagination(){
+
+  const container =
+    $("pagination");
+
+  const totalPages =
+    Math.max(
+      1,
+      Math.ceil(filteredTributes.length / PAGE_SIZE)
+    );
+
+  if(totalPages <= 1){
+    container.innerHTML = "";
+    return;
+  }
+
+  let html = "";
+
+  html += `
+    <button
+      class="page-btn"
+      ${currentPage === 1 ? "disabled" : ""}
+      onclick="goPage(${currentPage - 1})">
+      ‹
+    </button>
+  `;
+
+  const pages = [];
+
+  for(let i=1;i<=totalPages;i++){
+
+    if(
+      i === 1 ||
+      i === totalPages ||
+      Math.abs(i-currentPage) <= 2
+    ){
+      pages.push(i);
+    }else if(
+      pages[pages.length-1] !== "..."
+    ){
+      pages.push("...");
+    }
+
+  }
+
+  pages.forEach(page => {
+
+    if(page === "..."){
+      html += `
+        <span style="
+          color:#555;
+          padding:0 5px;
+          font-size:11px;
+        ">…</span>
+      `;
+      return;
+    }
+
+    html += `
+      <button
+        class="page-btn ${page === currentPage ? "active" : ""}"
+        onclick="goPage(${page})">
+        ${page}
+      </button>
+    `;
+
+  });
+
+  html += `
+    <button
+      class="page-btn"
+      ${currentPage === totalPages ? "disabled" : ""}
+      onclick="goPage(${currentPage + 1})">
+      ›
+    </button>
+  `;
+
+  container.innerHTML = html;
+}
+
+function goPage(page){
+
+  const totalPages =
+    Math.max(
+      1,
+      Math.ceil(filteredTributes.length / PAGE_SIZE)
+    );
+
+  currentPage =
+    Math.min(
+      Math.max(1,page),
+      totalPages
+    );
+
+  setUrlState();
+  renderTributes();
+  renderPagination();
+
+  window.scrollTo({
+    top:document.querySelector(".main-layout").offsetTop - 90,
+    behavior:"smooth"
+  });
+}
+
+/* TRIBUTE SUBMISSION */
+
+async function submitTribute(){
+
+  const author =
+    $("tributeAuthor").value.trim();
+
+  const memorialId =
+    $("tributeMemorial").value;
+
+  const message =
+    $("tributeMessage").value.trim();
+
+  const status =
+    $("tributeFormMessage");
+
+  if(!memorialId){
+    status.textContent =
+      "Please choose a memorial.";
+    status.className =
+      "form-message error";
+    return;
+  }
+
+  if(!message){
+    status.textContent =
+      "Please write a tribute message.";
+    status.className =
+      "form-message error";
+    return;
+  }
+
+  const finalAuthor =
+    author || "Community Member";
+
+  const button =
+    $("submitTribute");
+
+  button.disabled = true;
+  button.textContent = "Publishing...";
+
+  status.textContent =
+    "Publishing your tribute...";
+  status.className =
+    "form-message";
+
+  const {error} =
+    await db
+      .from("memorial_tributes")
+      .insert({
+        memorial_id:memorialId,
+        author_name:finalAuthor,
+        message:message
+      });
+
+  button.disabled = false;
+  button.textContent = "Publish Tribute";
+
+  if(error){
+
+    console.error(error);
+
+    status.textContent =
+      "Unable to publish the tribute. Please try again.";
+    status.className =
+      "form-message error";
+
+    return;
+  }
+
+  $("tributeAuthor").value = "";
+  $("tributeMessage").value = "";
+  $("tributeMemorial").value = "";
+
+  status.textContent =
+    "Your tribute has been published.";
+  status.className =
+    "form-message success";
+
+  showToast("Tribute published.");
+
+  await loadTributes();
+}
+
+/* CANDLE MODAL */
+
+function openCandleModal(memorialId=""){
+
+  populateMemorialSelects();
+
+  if(memorialId){
+    $("candleMemorial").value =
+      memorialId;
+  }
+
+  $("candleMessageStatus").textContent = "";
+  $("candleAuthor").value = "";
+  $("candleMessage").value = "";
+
+  $("candleModal").classList.add("open");
+
+  setTimeout(() =>
+    $("candleAuthor").focus(),
+    100
+  );
+}
+
+function closeCandleModal(){
+  $("candleModal").classList.remove("open");
+}
+
+async function submitCandle(){
+
+  const author =
+    $("candleAuthor").value.trim();
+
+  const memorialId =
+    $("candleMemorial").value;
+
+  const message =
+    $("candleMessage").value.trim();
+
+  const status =
+    $("candleMessageStatus");
+
+  if(!memorialId){
+
+    status.textContent =
+      "Please choose a memorial.";
+    status.className =
+      "modal-message error";
+
+    return;
+  }
+
+  const button =
+    $("submitCandle");
+
+  button.disabled = true;
+  button.textContent = "Lighting...";
+
+  const {error} =
+    await db
+      .from("memorial_candles")
+      .insert({
+        memorial_id:memorialId,
+        author_name:
+          author || "Community Member",
+        message:message || null
+      });
+
+  button.disabled = false;
+  button.textContent = "Light Candle";
+
+  if(error){
+
+    console.error(error);
+
+    status.textContent =
+      "Unable to light the candle. Please try again.";
+    status.className =
+      "modal-message error";
+
+    return;
+  }
+
+  status.textContent =
+    "A candle has been lit in remembrance.";
+  status.className =
+    "modal-message success";
+
+  showToast("Candle lit in remembrance.");
+
+  setTimeout(
+    closeCandleModal,
+    850
+  );
+}
+
+/* TOAST */
+
+let toastTimer;
+
+function showToast(message){
+
+  const toast =
+    $("toast");
+
+  toast.textContent = message;
+
+  toast.classList.add("show");
+
+  clearTimeout(toastTimer);
+
+  toastTimer =
+    setTimeout(
+      () => toast.classList.remove("show"),
+      3000
+    );
+}
+
+/* EVENTS */
+
+$("searchInput").addEventListener(
+  "input",
+  () => {
+    currentPage = 1;
+    applyFilters();
+  }
+);
+
+$("memorialFilter").addEventListener(
+  "change",
+  () => {
+    currentPage = 1;
+    applyFilters();
+  }
+);
+
+$("sortFilter").addEventListener(
+  "change",
+  () => {
+    currentPage = 1;
+    applyFilters();
+  }
+);
+
+$("clearFilters").addEventListener(
+  "click",
+  () => {
+
+    $("searchInput").value = "";
+    $("memorialFilter").value = "";
+    $("sortFilter").value = "newest";
+
+    currentPage = 1;
+
+    applyFilters();
+
+  }
+);
+
+$("submitTribute").addEventListener(
+  "click",
+  submitTribute
+);
+
+$("submitCandle").addEventListener(
+  "click",
+  submitCandle
+);
+
+$("mobileToggle").addEventListener(
+  "click",
+  () => {
+    $("navLinks").classList.toggle("open");
+  }
+);
+
+$("candleModal").addEventListener(
+  "click",
+  event => {
+    if(event.target === $("candleModal")){
+      closeCandleModal();
+    }
+  }
+);
+
+document.addEventListener(
+  "keydown",
+  event => {
+
+    if(event.key === "Escape"){
+      closeCandleModal();
+    }
+
+  }
+);
+
+/* INIT */
+
+async function init(){
+
+  $("year").textContent =
+    new Date().getFullYear();
+
+  try{
+
+    await loadMemorials();
+
+    readUrlState();
+
+    await loadTributes();
+
+  }catch(error){
+
+    console.error(error);
+
+    $("tributeStream").innerHTML = `
+      <div class="state">
+
+        <div class="state-icon">!</div>
+
+        <h3>Memorial Wall Unavailable</h3>
+
+        <p>
+          We could not load the remembrance wall right now.
+          Please refresh the page and try again.
+        </p>
+
+      </div>
+    `;
+
+    $("resultSummary").textContent =
+      "Unable to load tributes.";
+
+  }
+
+}
+
+init();
+</script>
+
+</body>
+</html>

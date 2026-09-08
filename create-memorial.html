@@ -1,0 +1,2136 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+
+<title>Create a Memorial — CrowRules Memorials</title>
+<meta name="theme-color" content="#070707">
+<meta name="description" content="Create a lasting memorial on CrowRules Memorials and preserve a life, a story, and a legacy.">
+
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Libre+Baskerville:wght@400;700&family=Montserrat:wght@400;500;600;700;800&family=Orbitron:wght@500;600;700;800&display=swap" rel="stylesheet">
+
+<style>
+:root{
+  --bg:#070707;
+  --panel:#101011;
+  --panel2:#141415;
+  --line:rgba(255,255,255,.09);
+  --line2:rgba(255,255,255,.15);
+  --text:#f3efe7;
+  --muted:#9d9991;
+  --dim:#6e6a63;
+  --gold:#c6a768;
+  --gold2:#e0c98e;
+  --danger:#df7c7c;
+  --success:#b8c99c;
+  --radius:18px;
+  --max:1240px;
+}
+
+*{
+  box-sizing:border-box;
+}
+
+html{
+  scroll-behavior:smooth;
+}
+
+body{
+  margin:0;
+  min-height:100vh;
+  background:
+    radial-gradient(circle at 12% 0%,rgba(198,167,104,.09),transparent 30%),
+    radial-gradient(circle at 90% 25%,rgba(255,255,255,.025),transparent 25%),
+    linear-gradient(180deg,#070707 0%,#090909 55%,#050505 100%);
+  color:var(--text);
+  font-family:Montserrat,Arial,sans-serif;
+}
+
+body:before{
+  content:"";
+  position:fixed;
+  inset:0;
+  pointer-events:none;
+  opacity:.025;
+  background-image:
+    linear-gradient(rgba(255,255,255,.5) 1px,transparent 1px),
+    linear-gradient(90deg,rgba(255,255,255,.5) 1px,transparent 1px);
+  background-size:80px 80px;
+  mask-image:linear-gradient(to bottom,black,transparent 80%);
+}
+
+a{
+  color:inherit;
+  text-decoration:none;
+}
+
+button,
+input,
+textarea,
+select{
+  font:inherit;
+}
+
+button{
+  cursor:pointer;
+}
+
+.container{
+  width:min(var(--max),calc(100% - 40px));
+  margin:auto;
+}
+
+/* =========================================================
+   HEADER
+========================================================= */
+
+.site-header{
+  position:sticky;
+  top:0;
+  z-index:100;
+  background:rgba(7,7,7,.86);
+  backdrop-filter:blur(18px);
+  border-bottom:1px solid var(--line);
+}
+
+.nav{
+  min-height:76px;
+  display:flex;
+  align-items:center;
+  gap:20px;
+}
+
+.brand{
+  display:flex;
+  align-items:center;
+  gap:12px;
+  min-width:max-content;
+}
+
+.brand-mark{
+  width:41px;
+  height:41px;
+  display:grid;
+  place-items:center;
+  border:1px solid rgba(198,167,104,.48);
+  border-radius:50%;
+  color:var(--gold2);
+  font:700 15px Orbitron,sans-serif;
+}
+
+.brand-copy strong{
+  display:block;
+  font:700 13px Orbitron,sans-serif;
+  letter-spacing:2px;
+}
+
+.brand-copy span{
+  display:block;
+  margin-top:3px;
+  color:var(--dim);
+  font-size:9px;
+  letter-spacing:2.5px;
+  text-transform:uppercase;
+}
+
+.nav-links{
+  display:flex;
+  align-items:center;
+  gap:3px;
+  margin-left:auto;
+}
+
+.nav-links a{
+  padding:10px;
+  border-radius:9px;
+  color:#aaa69f;
+  font-size:9px;
+  font-weight:800;
+  letter-spacing:.65px;
+  text-transform:uppercase;
+}
+
+.nav-links a:hover,
+.nav-links a.active{
+  color:var(--gold2);
+  background:rgba(198,167,104,.07);
+}
+
+.nav-actions{
+  display:flex;
+  gap:8px;
+}
+
+.btn{
+  border:1px solid var(--line2);
+  border-radius:10px;
+  padding:11px 15px;
+  background:#111112;
+  color:var(--text);
+  font-size:9px;
+  font-weight:800;
+  letter-spacing:.8px;
+  text-transform:uppercase;
+  transition:.2s;
+}
+
+.btn:hover{
+  transform:translateY(-1px);
+  border-color:rgba(198,167,104,.4);
+}
+
+.btn.gold{
+  border-color:transparent;
+  background:linear-gradient(135deg,#dfc98e,#b89350);
+  color:#080706;
+}
+
+.btn.ghost{
+  background:transparent;
+}
+
+.mobile-toggle{
+  display:none;
+  margin-left:auto;
+  width:42px;
+  height:42px;
+  border:1px solid var(--line);
+  border-radius:10px;
+  background:#101011;
+  color:#fff;
+}
+
+/* =========================================================
+   HERO
+========================================================= */
+
+.hero{
+  padding:86px 0 60px;
+}
+
+.hero-grid{
+  display:grid;
+  grid-template-columns:minmax(0,1fr) 350px;
+  gap:70px;
+  align-items:end;
+}
+
+.eyebrow{
+  color:var(--gold2);
+  font:700 10px Orbitron,sans-serif;
+  letter-spacing:4px;
+  text-transform:uppercase;
+}
+
+.hero h1{
+  margin:18px 0;
+  max-width:850px;
+  font:700 clamp(39px,6vw,72px)/1.04 Orbitron,sans-serif;
+  letter-spacing:-2px;
+  text-transform:uppercase;
+}
+
+.hero h1 span{
+  color:var(--gold2);
+}
+
+.hero-copy{
+  max-width:700px;
+  color:var(--muted);
+  font-size:13px;
+  line-height:1.95;
+}
+
+.hero-note{
+  padding:20px 0 20px 25px;
+  border-left:1px solid rgba(198,167,104,.45);
+}
+
+.hero-note strong{
+  display:block;
+  color:#e8e1d4;
+  font:700 10px Orbitron,sans-serif;
+  letter-spacing:1.8px;
+  text-transform:uppercase;
+}
+
+.hero-note p{
+  margin:11px 0 0;
+  color:#8f8a82;
+  font:11px/1.9 "Libre Baskerville",serif;
+}
+
+/* =========================================================
+   MAIN LAYOUT
+========================================================= */
+
+.form-section{
+  padding:0 0 90px;
+}
+
+.form-layout{
+  display:grid;
+  grid-template-columns:minmax(0,1fr) 340px;
+  gap:20px;
+  align-items:start;
+}
+
+.form-panel,
+.info-panel{
+  border:1px solid var(--line);
+  border-radius:20px;
+  background:
+    linear-gradient(
+      145deg,
+      rgba(255,255,255,.025),
+      transparent 30%
+    ),
+    #0e0e0f;
+}
+
+.form-panel{
+  padding:30px;
+}
+
+.info-panel{
+  padding:24px;
+  position:sticky;
+  top:100px;
+}
+
+/* =========================================================
+   SECTION HEADERS
+========================================================= */
+
+.section-header{
+  display:flex;
+  align-items:center;
+  gap:14px;
+  margin:0 0 24px;
+}
+
+.section-number{
+  width:32px;
+  height:32px;
+  display:grid;
+  place-items:center;
+  flex:0 0 32px;
+  border:1px solid rgba(198,167,104,.32);
+  border-radius:50%;
+  color:var(--gold2);
+  font:600 9px Orbitron,sans-serif;
+}
+
+.section-header h2{
+  margin:0;
+  font:600 15px Orbitron,sans-serif;
+  letter-spacing:1px;
+  text-transform:uppercase;
+}
+
+.section-header p{
+  margin:5px 0 0;
+  color:#6e6a63;
+  font-size:9px;
+}
+
+/* =========================================================
+   FORM
+========================================================= */
+
+.form-grid{
+  display:grid;
+  grid-template-columns:1fr 1fr;
+  gap:18px;
+}
+
+.field{
+  display:flex;
+  flex-direction:column;
+  gap:8px;
+}
+
+.field.full{
+  grid-column:1/-1;
+}
+
+label{
+  color:#aaa59d;
+  font-size:9px;
+  font-weight:800;
+  letter-spacing:1px;
+  text-transform:uppercase;
+}
+
+.required{
+  color:var(--gold2);
+}
+
+input,
+textarea,
+select{
+  width:100%;
+  border:1px solid var(--line);
+  outline:none;
+  border-radius:11px;
+  background:#09090a;
+  color:#eee9e0;
+  padding:13px 14px;
+  transition:.2s;
+}
+
+input:focus,
+textarea:focus,
+select:focus{
+  border-color:rgba(198,167,104,.55);
+  box-shadow:0 0 0 3px rgba(198,167,104,.05);
+}
+
+input::placeholder,
+textarea::placeholder{
+  color:#55524d;
+}
+
+textarea{
+  min-height:150px;
+  resize:vertical;
+  line-height:1.7;
+}
+
+.field-note{
+  color:#66625b;
+  font-size:9px;
+  line-height:1.6;
+}
+
+/* SLUG */
+
+.slug-wrap{
+  display:grid;
+  grid-template-columns:1fr;
+}
+
+.slug-preview{
+  padding:9px 12px;
+  border:1px solid var(--line);
+  border-top:0;
+  border-radius:0 0 9px 9px;
+  background:#0c0c0d;
+  color:#65615a;
+  font-size:9px;
+  overflow:hidden;
+  text-overflow:ellipsis;
+  white-space:nowrap;
+}
+
+/* PHOTO */
+
+.photo-preview{
+  display:none;
+  margin-top:5px;
+  border:1px solid var(--line);
+  border-radius:12px;
+  overflow:hidden;
+  background:#0a0a0a;
+}
+
+.photo-preview img{
+  display:block;
+  width:100%;
+  max-height:280px;
+  object-fit:cover;
+}
+
+/* CONSENT */
+
+.consent{
+  margin-top:25px;
+  padding:17px;
+  border:1px solid var(--line);
+  border-radius:12px;
+  background:#0b0b0c;
+}
+
+.checkbox-row{
+  display:flex;
+  gap:11px;
+  align-items:flex-start;
+}
+
+.checkbox-row input{
+  width:16px;
+  height:16px;
+  margin:2px 0 0;
+  accent-color:#c6a768;
+}
+
+.checkbox-row label{
+  color:#8f8a82;
+  font-size:9px;
+  font-weight:500;
+  line-height:1.7;
+  letter-spacing:0;
+  text-transform:none;
+}
+
+.checkbox-row label strong{
+  color:#c7c1b7;
+}
+
+/* SUBMIT */
+
+.submit-area{
+  display:flex;
+  align-items:center;
+  justify-content:space-between;
+  gap:15px;
+  margin-top:25px;
+  padding-top:25px;
+  border-top:1px solid var(--line);
+}
+
+.submit-copy{
+  color:#6c6861;
+  font-size:9px;
+  line-height:1.7;
+}
+
+.submit-btn{
+  min-width:190px;
+  min-height:50px;
+  border:0;
+  border-radius:11px;
+  background:linear-gradient(135deg,#dfc98e,#b89350);
+  color:#080706;
+  font-size:9px;
+  font-weight:800;
+  letter-spacing:1px;
+  text-transform:uppercase;
+}
+
+.submit-btn:disabled{
+  opacity:.5;
+  cursor:not-allowed;
+}
+
+.submit-btn.loading{
+  opacity:.7;
+}
+
+/* =========================================================
+   INFO PANEL
+========================================================= */
+
+.info-title{
+  color:var(--gold2);
+  font:700 10px Orbitron,sans-serif;
+  letter-spacing:2px;
+  text-transform:uppercase;
+}
+
+.info-panel h3{
+  margin:13px 0 8px;
+  font:600 18px Orbitron,sans-serif;
+}
+
+.info-panel > p{
+  margin:0;
+  color:#88837b;
+  font:10px/1.9 "Libre Baskerville",serif;
+}
+
+.info-list{
+  display:grid;
+  gap:10px;
+  margin-top:24px;
+}
+
+.info-item{
+  display:flex;
+  gap:12px;
+  padding:13px;
+  border:1px solid var(--line);
+  border-radius:11px;
+  background:#0b0b0c;
+}
+
+.info-icon{
+  color:var(--gold2);
+  font:12px Orbitron,sans-serif;
+}
+
+.info-item strong{
+  display:block;
+  color:#b9b3a9;
+  font-size:9px;
+  font-weight:800;
+  letter-spacing:.7px;
+  text-transform:uppercase;
+}
+
+.info-item span{
+  display:block;
+  margin-top:4px;
+  color:#6e6a63;
+  font:9px/1.6 "Libre Baskerville",serif;
+}
+
+.privacy-note{
+  margin-top:18px;
+  padding:15px;
+  border-left:1px solid rgba(198,167,104,.35);
+  color:#77726a;
+  font:9px/1.7 "Libre Baskerville",serif;
+}
+
+/* =========================================================
+   SUCCESS
+========================================================= */
+
+.success{
+  display:none;
+  padding:90px 20px;
+  text-align:center;
+}
+
+.success.show{
+  display:block;
+}
+
+.success-mark{
+  width:70px;
+  height:70px;
+  display:grid;
+  place-items:center;
+  margin:0 auto 22px;
+  border:1px solid rgba(198,167,104,.45);
+  border-radius:50%;
+  color:var(--gold2);
+  font:22px Orbitron,sans-serif;
+}
+
+.success h2{
+  margin:0 0 13px;
+  font:600 clamp(25px,4vw,43px) Orbitron,sans-serif;
+  text-transform:uppercase;
+}
+
+.success p{
+  max-width:620px;
+  margin:0 auto;
+  color:#89847c;
+  font:11px/1.9 "Libre Baskerville",serif;
+}
+
+.success-actions{
+  display:flex;
+  justify-content:center;
+  flex-wrap:wrap;
+  gap:9px;
+  margin-top:25px;
+}
+
+.success-slug{
+  margin-top:22px;
+  color:#5f5b54;
+  font:9px Orbitron,sans-serif;
+  letter-spacing:1px;
+}
+
+/* =========================================================
+   ERROR
+========================================================= */
+
+.error-message{
+  display:none;
+  margin-bottom:20px;
+  padding:14px 16px;
+  border:1px solid rgba(223,124,124,.25);
+  border-radius:11px;
+  background:rgba(223,124,124,.05);
+  color:#d99a9a;
+  font-size:10px;
+  line-height:1.7;
+}
+
+.error-message.show{
+  display:block;
+}
+
+/* =========================================================
+   FOOTER
+========================================================= */
+
+footer{
+  padding:35px 0;
+  border-top:1px solid var(--line);
+}
+
+.footer-inner{
+  display:flex;
+  justify-content:space-between;
+  align-items:center;
+  gap:20px;
+}
+
+.footer-copy{
+  color:#66625c;
+  font-size:9px;
+  line-height:1.8;
+}
+
+.footer-links{
+  display:flex;
+  flex-wrap:wrap;
+  justify-content:flex-end;
+  gap:15px;
+}
+
+.footer-links a{
+  color:#77726a;
+  font-size:8px;
+  font-weight:800;
+  letter-spacing:1px;
+  text-transform:uppercase;
+}
+
+.footer-links a:hover{
+  color:var(--gold2);
+}
+
+/* =========================================================
+   RESPONSIVE
+========================================================= */
+
+@media(max-width:1150px){
+
+  .nav-links{
+    display:none;
+  }
+
+  .mobile-toggle{
+    display:block;
+  }
+
+  .nav-links.open{
+    position:absolute;
+    top:76px;
+    left:20px;
+    right:20px;
+    display:flex;
+    flex-direction:column;
+    align-items:stretch;
+    padding:12px;
+    border:1px solid var(--line);
+    border-radius:15px;
+    background:#0d0d0e;
+  }
+
+  .nav-links.open a{
+    padding:13px;
+  }
+
+  .nav-actions{
+    display:none;
+  }
+
+  .hero-grid{
+    grid-template-columns:1fr;
+    gap:30px;
+  }
+
+  .form-layout{
+    grid-template-columns:1fr;
+  }
+
+  .info-panel{
+    position:static;
+  }
+
+}
+
+@media(max-width:700px){
+
+  .container{
+    width:min(100% - 26px,var(--max));
+  }
+
+  .hero{
+    padding:62px 0 45px;
+  }
+
+  .hero h1{
+    letter-spacing:-1px;
+  }
+
+  .brand-copy span{
+    display:none;
+  }
+
+  .brand-copy strong{
+    font-size:11px;
+  }
+
+  .form-panel{
+    padding:20px;
+  }
+
+  .form-grid{
+    grid-template-columns:1fr;
+  }
+
+  .field.full{
+    grid-column:auto;
+  }
+
+  .submit-area{
+    align-items:stretch;
+    flex-direction:column;
+  }
+
+  .submit-btn{
+    width:100%;
+  }
+
+  .footer-inner{
+    align-items:flex-start;
+    flex-direction:column;
+  }
+
+  .footer-links{
+    justify-content:flex-start;
+  }
+
+}
+</style>
+</head>
+
+<body>
+
+<header class="site-header">
+
+  <div class="container nav">
+
+    <a href="index.html" class="brand">
+
+      <div class="brand-mark">
+        CR
+      </div>
+
+      <div class="brand-copy">
+        <strong>CROWRULES</strong>
+        <span>Memorials</span>
+      </div>
+
+    </a>
+
+    <nav class="nav-links" id="navLinks">
+
+      <a href="index.html">
+        Home
+      </a>
+
+      <a href="memorials.html">
+        Memorials
+      </a>
+
+      <a href="featured.html">
+        Featured
+      </a>
+
+      <a href="recent.html">
+        Recent
+      </a>
+
+      <a href="on-this-day.html">
+        On This Day
+      </a>
+
+      <a href="stories.html">
+        Stories
+      </a>
+
+      <a href="tributes.html">
+        Tributes
+      </a>
+
+      <a href="guestbook.html">
+        Guestbook
+      </a>
+
+      <a href="search.html">
+        Search
+      </a>
+
+    </nav>
+
+    <div class="nav-actions">
+
+      <a
+        href="memorials.html"
+        class="btn ghost">
+        Browse Memorials
+      </a>
+
+    </div>
+
+    <button
+      class="mobile-toggle"
+      id="mobileToggle"
+      aria-label="Open navigation">
+      ☰
+    </button>
+
+  </div>
+
+</header>
+
+<main>
+
+<!-- =====================================================
+     HERO
+====================================================== -->
+
+<section class="hero">
+
+  <div class="container hero-grid">
+
+    <div>
+
+      <div class="eyebrow">
+        CrowRules Memorials / Create
+      </div>
+
+      <h1>
+        Give A<br>
+        <span>Life A Place.</span>
+      </h1>
+
+      <p class="hero-copy">
+        Create a lasting memorial for someone who mattered.
+        Preserve their name, their story, the places they knew,
+        and the memories shared by the people who loved them.
+      </p>
+
+    </div>
+
+    <div class="hero-note">
+
+      <strong>A living remembrance.</strong>
+
+      <p>
+        A memorial can become a place where family,
+        friends, and community members return to remember,
+        share stories, leave tributes, and light candles.
+      </p>
+
+    </div>
+
+  </div>
+
+</section>
+
+<!-- =====================================================
+     FORM
+====================================================== -->
+
+<section class="form-section">
+
+  <div class="container">
+
+    <div id="errorMessage" class="error-message"></div>
+
+    <div id="formLayout" class="form-layout">
+
+      <form
+        id="memorialForm"
+        class="form-panel"
+        novalidate>
+
+        <!-- BASIC INFORMATION -->
+
+        <div class="section-header">
+
+          <div class="section-number">
+            01
+          </div>
+
+          <div>
+            <h2>Who are we remembering?</h2>
+            <p>
+              Begin with the person's name and essential details.
+            </p>
+          </div>
+
+        </div>
+
+        <div class="form-grid">
+
+          <div class="field full">
+
+            <label for="fullName">
+              Full Name <span class="required">*</span>
+            </label>
+
+            <input
+              id="fullName"
+              name="full_name"
+              type="text"
+              maxlength="160"
+              required
+              placeholder="Enter their full name">
+
+            <div class="field-note">
+              Use the name by which this person was known and remembered.
+            </div>
+
+          </div>
+
+          <div class="field">
+
+            <label for="birthDate">
+              Date of Birth
+            </label>
+
+            <input
+              id="birthDate"
+              name="birth_date"
+              type="date">
+
+          </div>
+
+          <div class="field">
+
+            <label for="passingDate">
+              Date of Passing
+            </label>
+
+            <input
+              id="passingDate"
+              name="passing_date"
+              type="date">
+
+          </div>
+
+          <div class="field full">
+
+            <label for="location">
+              Location / Community
+            </label>
+
+            <input
+              id="location"
+              name="location"
+              type="text"
+              maxlength="180"
+              placeholder="Example: Tacoma, Washington">
+
+            <div class="field-note">
+              This can be a hometown, place of residence, or community associated with their life.
+            </div>
+
+          </div>
+
+        </div>
+
+        <!-- MEMORIAL IDENTITY -->
+
+        <div
+          class="section-header"
+          style="margin-top:42px">
+
+          <div class="section-number">
+            02
+          </div>
+
+          <div>
+            <h2>Create the memorial identity</h2>
+            <p>
+              Choose the address people will use to find this memorial.
+            </p>
+          </div>
+
+        </div>
+
+        <div class="form-grid">
+
+          <div class="field full">
+
+            <label for="slug">
+              Memorial Web Address <span class="required">*</span>
+            </label>
+
+            <div class="slug-wrap">
+
+              <input
+                id="slug"
+                name="slug"
+                type="text"
+                maxlength="160"
+                required
+                placeholder="example: jane-doe">
+
+              <div
+                id="slugPreview"
+                class="slug-preview">
+                memorial.html?slug=your-memorial
+              </div>
+
+            </div>
+
+            <div class="field-note">
+              Lowercase letters, numbers, and hyphens are recommended.
+              The address must be unique.
+            </div>
+
+          </div>
+
+          <div class="field full">
+
+            <label for="portraitUrl">
+              Portrait Image URL
+            </label>
+
+            <input
+              id="portraitUrl"
+              name="portrait_url"
+              type="url"
+              maxlength="1000"
+              placeholder="https://example.com/image.jpg">
+
+            <div class="field-note">
+              Optional. Use an image URL you have permission to publish.
+              CrowRules Memorials does not upload or copy the image.
+            </div>
+
+            <div
+              id="photoPreview"
+              class="photo-preview">
+
+              <img
+                id="previewImage"
+                alt="Memorial portrait preview">
+
+            </div>
+
+          </div>
+
+        </div>
+
+        <!-- BIO -->
+
+        <div
+          class="section-header"
+          style="margin-top:42px">
+
+          <div class="section-number">
+            03
+          </div>
+
+          <div>
+            <h2>Tell their story</h2>
+            <p>
+              Share a short introduction to the life being remembered.
+            </p>
+          </div>
+
+        </div>
+
+        <div class="form-grid">
+
+          <div class="field full">
+
+            <label for="shortBio">
+              Memorial Biography <span class="required">*</span>
+            </label>
+
+            <textarea
+              id="shortBio"
+              name="short_bio"
+              maxlength="5000"
+              required
+              placeholder="Tell us about who they were, what they meant to others, and what you hope people remember about them."></textarea>
+
+            <div
+              class="field-note"
+              id="bioCounter">
+              0 / 5000
+            </div>
+
+          </div>
+
+        </div>
+
+        <!-- SUBMITTER -->
+
+        <div
+          class="section-header"
+          style="margin-top:42px">
+
+          <div class="section-number">
+            04
+          </div>
+
+          <div>
+            <h2>About this submission</h2>
+            <p>
+              Confirm that this memorial is being submitted respectfully.
+            </p>
+          </div>
+
+        </div>
+
+        <div class="consent">
+
+          <div class="checkbox-row">
+
+            <input
+              id="permission"
+              type="checkbox"
+              required>
+
+            <label for="permission">
+
+              <strong>I understand and agree</strong>
+              that I am submitting this memorial in good faith
+              and have the right or permission to share the information
+              and image included in this submission. I understand that
+              published memorial information may be publicly viewable.
+
+            </label>
+
+          </div>
+
+        </div>
+
+        <div class="consent">
+
+          <div class="checkbox-row">
+
+            <input
+              id="respect"
+              type="checkbox"
+              required>
+
+            <label for="respect">
+
+              <strong>I agree to keep this memorial respectful.</strong>
+              I will not intentionally submit abusive, hateful,
+              threatening, fraudulent, or inappropriate material.
+
+            </label>
+
+          </div>
+
+        </div>
+
+        <div class="submit-area">
+
+          <div class="submit-copy">
+            Your submission will create a published memorial
+            in the CrowRules Memorials archive.
+          </div>
+
+          <button
+            id="submitBtn"
+            class="submit-btn"
+            type="submit">
+            Create Memorial
+          </button>
+
+        </div>
+
+      </form>
+
+      <!-- INFO -->
+
+      <aside class="info-panel">
+
+        <div class="info-title">
+          Before You Begin
+        </div>
+
+        <h3>
+          Preserve what matters.
+        </h3>
+
+        <p>
+          The strongest memorials don't need to be complicated.
+          A name, a few dates, a place, and a meaningful story
+          can create something people return to for years.
+        </p>
+
+        <div class="info-list">
+
+          <div class="info-item">
+
+            <div class="info-icon">
+              01
+            </div>
+
+            <div>
+              <strong>Use their real name</strong>
+              <span>
+                Give visitors a clear way to find the person.
+              </span>
+            </div>
+
+          </div>
+
+          <div class="info-item">
+
+            <div class="info-icon">
+              02
+            </div>
+
+            <div>
+              <strong>Tell a human story</strong>
+              <span>
+                Share what made this person's life meaningful.
+              </span>
+            </div>
+
+          </div>
+
+          <div class="info-item">
+
+            <div class="info-icon">
+              03
+            </div>
+
+            <div>
+              <strong>Add context</strong>
+              <span>
+                Hometowns and communities help connect memories.
+              </span>
+            </div>
+
+          </div>
+
+          <div class="info-item">
+
+            <div class="info-icon">
+              04
+            </div>
+
+            <div>
+              <strong>Return and build</strong>
+              <span>
+                Stories, tributes, candles, and guestbook messages
+                can continue adding to the memorial.
+              </span>
+            </div>
+
+          </div>
+
+        </div>
+
+        <div class="privacy-note">
+          Please avoid publishing private information that the family
+          or community would not want publicly available.
+        </div>
+
+      </aside>
+
+    </div>
+
+    <!-- SUCCESS -->
+
+    <section
+      id="success"
+      class="success">
+
+      <div class="success-mark">
+        ✓
+      </div>
+
+      <h2>
+        Memorial Created.
+      </h2>
+
+      <p>
+        The memorial has been added to the CrowRules Memorials archive.
+        It can now become a place where people return to remember,
+        share stories, leave tributes, and light a candle.
+      </p>
+
+      <div
+        id="successSlug"
+        class="success-slug">
+      </div>
+
+      <div class="success-actions">
+
+        <a
+          id="viewMemorial"
+          href="#"
+          class="btn gold">
+          View Memorial
+        </a>
+
+        <a
+          href="memorials.html"
+          class="btn">
+          Browse Memorials
+        </a>
+
+        <button
+          id="createAnother"
+          class="btn ghost"
+          type="button">
+          Create Another
+        </button>
+
+      </div>
+
+    </section>
+
+  </div>
+
+</section>
+
+</main>
+
+<footer>
+
+  <div class="container footer-inner">
+
+    <div class="footer-copy">
+      © <span id="year"></span> CrowRules Entertainment.<br>
+      CrowRules Memorials — Every Life Leaves A Story.
+    </div>
+
+    <div class="footer-links">
+
+      <a href="index.html">
+        Memorials Home
+      </a>
+
+      <a href="memorials.html">
+        Archive
+      </a>
+
+      <a href="featured.html">
+        Featured
+      </a>
+
+      <a href="stories.html">
+        Stories
+      </a>
+
+      <a href="tributes.html">
+        Tributes
+      </a>
+
+      <a href="guestbook.html">
+        Guestbook
+      </a>
+
+      <a href="search.html">
+        Search
+      </a>
+
+    </div>
+
+  </div>
+
+</footer>
+
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+
+<script>
+
+/* =========================================================
+   SUPABASE
+========================================================= */
+
+const SUPABASE_URL =
+  "https://cevylpnoexugwgygvtgu.supabase.co";
+
+const SUPABASE_KEY =
+  "sb_publishable_AdfM5y6RqvF3tbvEVzDZSg_JuGTQLD-";
+
+const db =
+  window.supabase.createClient(
+    SUPABASE_URL,
+    SUPABASE_KEY
+  );
+
+/* =========================================================
+   ELEMENTS
+========================================================= */
+
+const form =
+  document.getElementById(
+    "memorialForm"
+  );
+
+const fullName =
+  document.getElementById(
+    "fullName"
+  );
+
+const birthDate =
+  document.getElementById(
+    "birthDate"
+  );
+
+const passingDate =
+  document.getElementById(
+    "passingDate"
+  );
+
+const locationInput =
+  document.getElementById(
+    "location"
+  );
+
+const slugInput =
+  document.getElementById(
+    "slug"
+  );
+
+const slugPreview =
+  document.getElementById(
+    "slugPreview"
+  );
+
+const portraitUrl =
+  document.getElementById(
+    "portraitUrl"
+  );
+
+const previewImage =
+  document.getElementById(
+    "previewImage"
+  );
+
+const photoPreview =
+  document.getElementById(
+    "photoPreview"
+  );
+
+const shortBio =
+  document.getElementById(
+    "shortBio"
+  );
+
+const bioCounter =
+  document.getElementById(
+    "bioCounter"
+  );
+
+const permission =
+  document.getElementById(
+    "permission"
+  );
+
+const respect =
+  document.getElementById(
+    "respect"
+  );
+
+const submitBtn =
+  document.getElementById(
+    "submitBtn"
+  );
+
+const errorMessage =
+  document.getElementById(
+    "errorMessage"
+  );
+
+const formLayout =
+  document.getElementById(
+    "formLayout"
+  );
+
+const success =
+  document.getElementById(
+    "success"
+  );
+
+const successSlug =
+  document.getElementById(
+    "successSlug"
+  );
+
+const viewMemorial =
+  document.getElementById(
+    "viewMemorial"
+  );
+
+const createAnother =
+  document.getElementById(
+    "createAnother"
+  );
+
+/* =========================================================
+   HELPERS
+========================================================= */
+
+function escapeHtml(value){
+
+  return String(value ?? "")
+    .replace(/&/g,"&amp;")
+    .replace(/</g,"&lt;")
+    .replace(/>/g,"&gt;")
+    .replace(/"/g,"&quot;")
+    .replace(/'/g,"&#039;");
+
+}
+
+function showError(message){
+
+  errorMessage.textContent =
+    message;
+
+  errorMessage.classList.add(
+    "show"
+  );
+
+  errorMessage.scrollIntoView({
+    behavior:"smooth",
+    block:"center"
+  });
+
+}
+
+function clearError(){
+
+  errorMessage.textContent =
+    "";
+
+  errorMessage.classList.remove(
+    "show"
+  );
+
+}
+
+function slugify(value){
+
+  return String(value || "")
+    .normalize("NFKD")
+    .replace(
+      /[\u0300-\u036f]/g,
+      ""
+    )
+    .toLowerCase()
+    .trim()
+    .replace(
+      /[^a-z0-9]+/g,
+      "-"
+    )
+    .replace(
+      /^-+|-+$/g,
+      ""
+    )
+    .slice(0,140);
+
+}
+
+/* =========================================================
+   AUTO SLUG
+========================================================= */
+
+let slugManuallyEdited = false;
+
+slugInput.addEventListener(
+  "input",
+  () => {
+
+    slugManuallyEdited =
+      slugInput.value.trim().length > 0;
+
+    updateSlugPreview();
+
+  }
+);
+
+fullName.addEventListener(
+  "input",
+  () => {
+
+    if(!slugManuallyEdited){
+
+      slugInput.value =
+        slugify(
+          fullName.value
+        );
+
+    }
+
+    updateSlugPreview();
+
+  }
+);
+
+function updateSlugPreview(){
+
+  const slug =
+    slugInput.value.trim() ||
+    "your-memorial";
+
+  slugPreview.textContent =
+    "memorial.html?slug=" +
+    slug;
+
+}
+
+/* =========================================================
+   BIO COUNTER
+========================================================= */
+
+function updateBioCounter(){
+
+  const count =
+    shortBio.value.length;
+
+  bioCounter.textContent =
+    `${count.toLocaleString()} / 5000`;
+
+}
+
+shortBio.addEventListener(
+  "input",
+  updateBioCounter
+);
+
+/* =========================================================
+   PORTRAIT PREVIEW
+========================================================= */
+
+portraitUrl.addEventListener(
+  "input",
+  () => {
+
+    const url =
+      portraitUrl.value.trim();
+
+    if(!url){
+
+      photoPreview.style.display =
+        "none";
+
+      previewImage.removeAttribute(
+        "src"
+      );
+
+      return;
+
+    }
+
+    previewImage.src =
+      url;
+
+    photoPreview.style.display =
+      "block";
+
+  }
+);
+
+previewImage.addEventListener(
+  "error",
+  () => {
+
+    photoPreview.style.display =
+      "none";
+
+  }
+);
+
+/* =========================================================
+   DATE VALIDATION
+========================================================= */
+
+function validateDates(){
+
+  if(
+    birthDate.value &&
+    passingDate.value
+  ){
+
+    const birth =
+      new Date(
+        birthDate.value +
+        "T00:00:00"
+      );
+
+    const passing =
+      new Date(
+        passingDate.value +
+        "T00:00:00"
+      );
+
+    if(passing < birth){
+
+      showError(
+        "The date of passing cannot be earlier than the date of birth."
+      );
+
+      return false;
+
+    }
+
+  }
+
+  return true;
+
+}
+
+birthDate.addEventListener(
+  "change",
+  validateDates
+);
+
+passingDate.addEventListener(
+  "change",
+  validateDates
+);
+
+/* =========================================================
+   CHECK SLUG
+========================================================= */
+
+async function slugExists(slug){
+
+  const {data,error} =
+    await db
+      .from("memorials")
+      .select("id")
+      .eq("slug",slug)
+      .limit(1);
+
+  if(error){
+    throw error;
+  }
+
+  return Array.isArray(data) &&
+    data.length > 0;
+
+}
+
+/* =========================================================
+   CREATE MEMORIAL
+========================================================= */
+
+form.addEventListener(
+  "submit",
+  async event => {
+
+    event.preventDefault();
+
+    clearError();
+
+    const name =
+      fullName.value.trim();
+
+    const slug =
+      slugify(
+        slugInput.value
+      );
+
+    const bio =
+      shortBio.value.trim();
+
+    if(!name){
+
+      showError(
+        "Please enter the person's full name."
+      );
+
+      fullName.focus();
+
+      return;
+
+    }
+
+    if(!slug){
+
+      showError(
+        "Please provide a valid memorial web address."
+      );
+
+      slugInput.focus();
+
+      return;
+
+    }
+
+    if(!bio){
+
+      showError(
+        "Please write a short biography or remembrance."
+      );
+
+      shortBio.focus();
+
+      return;
+
+    }
+
+    if(!permission.checked){
+
+      showError(
+        "Please confirm that you have the right or permission to submit this memorial."
+      );
+
+      return;
+
+    }
+
+    if(!respect.checked){
+
+      showError(
+        "Please confirm that you agree to keep the memorial respectful."
+      );
+
+      return;
+
+    }
+
+    if(!validateDates()){
+
+      return;
+
+    }
+
+    submitBtn.disabled =
+      true;
+
+    submitBtn.classList.add(
+      "loading"
+    );
+
+    submitBtn.textContent =
+      "Checking Memorial...";
+
+    try{
+
+      const exists =
+        await slugExists(
+          slug
+        );
+
+      if(exists){
+
+        throw new Error(
+          "That memorial web address is already in use. Please choose another one."
+        );
+
+      }
+
+      submitBtn.textContent =
+        "Creating Memorial...";
+
+      const payload = {
+        slug:slug,
+        full_name:name,
+        birth_date:
+          birthDate.value ||
+          null,
+        passing_date:
+          passingDate.value ||
+          null,
+        location:
+          locationInput.value.trim() ||
+          null,
+        short_bio:bio,
+        portrait_url:
+          portraitUrl.value.trim() ||
+          null,
+        featured:false,
+        published:true
+      };
+
+      const {
+        data,
+        error
+      } =
+        await db
+          .from("memorials")
+          .insert(
+            payload
+          )
+          .select(`
+            id,
+            slug,
+            full_name
+          `)
+          .single();
+
+      if(error){
+
+        if(
+          error.code ===
+          "23505"
+        ){
+
+          throw new Error(
+            "That memorial web address is already in use. Please choose another one."
+          );
+
+        }
+
+        throw error;
+
+      }
+
+      showSuccess(
+        data
+      );
+
+    }catch(error){
+
+      console.error(
+        "Create memorial failed:",
+        error
+      );
+
+      showError(
+        error.message ||
+        "The memorial could not be created. Please try again."
+      );
+
+      submitBtn.disabled =
+        false;
+
+      submitBtn.classList.remove(
+        "loading"
+      );
+
+      submitBtn.textContent =
+        "Create Memorial";
+
+    }
+
+  }
+);
+
+/* =========================================================
+   SUCCESS
+========================================================= */
+
+function showSuccess(data){
+
+  formLayout.style.display =
+    "none";
+
+  success.classList.add(
+    "show"
+  );
+
+  const memorialPath =
+    "memorial.html?slug=" +
+    encodeURIComponent(
+      data.slug
+    );
+
+  viewMemorial.href =
+    memorialPath;
+
+  successSlug.textContent =
+    data.full_name +
+    " · " +
+    memorialPath;
+
+  window.scrollTo({
+    top:0,
+    behavior:"smooth"
+  });
+
+}
+
+/* =========================================================
+   CREATE ANOTHER
+========================================================= */
+
+createAnother.addEventListener(
+  "click",
+  () => {
+
+    form.reset();
+
+    slugManuallyEdited =
+      false;
+
+    slugPreview.textContent =
+      "memorial.html?slug=your-memorial";
+
+    photoPreview.style.display =
+      "none";
+
+    previewImage.removeAttribute(
+      "src"
+    );
+
+    updateBioCounter();
+
+    clearError();
+
+    success.classList.remove(
+      "show"
+    );
+
+    formLayout.style.display =
+      "grid";
+
+    submitBtn.disabled =
+      false;
+
+    submitBtn.classList.remove(
+      "loading"
+    );
+
+    submitBtn.textContent =
+      "Create Memorial";
+
+    window.scrollTo({
+      top:0,
+      behavior:"smooth"
+    });
+
+  }
+);
+
+/* =========================================================
+   MOBILE NAV
+========================================================= */
+
+document
+  .getElementById(
+    "mobileToggle"
+  )
+  .addEventListener(
+    "click",
+    () => {
+
+      document
+        .getElementById(
+          "navLinks"
+        )
+        .classList
+        .toggle("open");
+
+    }
+  );
+
+/* =========================================================
+   INIT
+========================================================= */
+
+document.getElementById(
+  "year"
+).textContent =
+  new Date().getFullYear();
+
+updateSlugPreview();
+updateBioCounter();
+
+</script>
+
+</body>
+</html>

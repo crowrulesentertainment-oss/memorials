@@ -1,0 +1,2834 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+
+<title>Photos — CrowRules Memorials</title>
+<meta name="theme-color" content="#050505">
+<meta name="description" content="A visual archive of photographs shared in remembrance through CrowRules Memorials.">
+
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Libre+Baskerville:wght@400;700&family=Montserrat:wght@400;500;600;700;800&family=Orbitron:wght@500;600;700;800&display=swap" rel="stylesheet">
+
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+
+<style>
+:root{
+  --bg:#050505;
+  --bg2:#090909;
+  --panel:#101010;
+  --panel2:#151515;
+  --gold:#d4af37;
+  --gold2:#f1d77a;
+  --gold3:#fff0a8;
+  --text:#f3f0e8;
+  --muted:#9a958c;
+  --dim:#68645d;
+  --line:rgba(212,175,55,.17);
+  --serif:"Libre Baskerville",Georgia,serif;
+  --sans:"Montserrat",Arial,sans-serif;
+  --display:"Orbitron",Arial,sans-serif;
+  --radius:20px;
+  --shadow:0 25px 70px rgba(0,0,0,.45);
+}
+
+*{
+  box-sizing:border-box;
+}
+
+html{
+  scroll-behavior:smooth;
+}
+
+body{
+  margin:0;
+  min-height:100vh;
+  color:var(--text);
+  font-family:var(--sans);
+  background:
+    radial-gradient(circle at 50% -10%,rgba(212,175,55,.09),transparent 35%),
+    #050505;
+}
+
+body.modal-open{
+  overflow:hidden;
+}
+
+a{
+  color:inherit;
+  text-decoration:none;
+}
+
+button,
+input,
+select{
+  font:inherit;
+}
+
+button{
+  cursor:pointer;
+}
+
+img{
+  max-width:100%;
+}
+
+/* HEADER */
+
+.header{
+  position:sticky;
+  top:0;
+  z-index:100;
+  background:rgba(5,5,5,.93);
+  backdrop-filter:blur(18px);
+  border-bottom:1px solid rgba(255,255,255,.06);
+}
+
+.nav{
+  width:min(1400px,calc(100% - 40px));
+  min-height:76px;
+  margin:auto;
+  display:flex;
+  align-items:center;
+  justify-content:space-between;
+  gap:22px;
+}
+
+.brand{
+  display:flex;
+  align-items:center;
+  gap:12px;
+  flex-shrink:0;
+}
+
+.brand-mark{
+  width:42px;
+  height:42px;
+  display:grid;
+  place-items:center;
+  border:1px solid rgba(212,175,55,.48);
+  border-radius:11px;
+  color:var(--gold2);
+  font-family:var(--display);
+  font-size:12px;
+}
+
+.brand-copy strong{
+  display:block;
+  font-family:var(--display);
+  font-size:13px;
+  letter-spacing:1.8px;
+}
+
+.brand-copy span{
+  display:block;
+  margin-top:3px;
+  color:#67635c;
+  font-size:8px;
+  letter-spacing:2.5px;
+  text-transform:uppercase;
+}
+
+.nav-links{
+  display:flex;
+  align-items:center;
+  gap:2px;
+}
+
+.nav-links a{
+  padding:10px 10px;
+  border-radius:9px;
+  color:#aaa59d;
+  font-size:9px;
+  font-weight:700;
+  transition:.2s;
+}
+
+.nav-links a:hover,
+.nav-links a.active{
+  color:var(--gold2);
+  background:rgba(212,175,55,.07);
+}
+
+.nav-actions{
+  display:flex;
+  align-items:center;
+  gap:8px;
+}
+
+.btn{
+  min-height:42px;
+  padding:10px 15px;
+  display:inline-flex;
+  align-items:center;
+  justify-content:center;
+  gap:7px;
+  border:1px solid rgba(212,175,55,.35);
+  border-radius:10px;
+  background:transparent;
+  color:var(--gold2);
+  font-size:9px;
+  font-weight:800;
+  letter-spacing:1px;
+  text-transform:uppercase;
+  transition:.2s;
+}
+
+.btn:hover{
+  transform:translateY(-1px);
+  background:rgba(212,175,55,.07);
+  border-color:rgba(212,175,55,.65);
+}
+
+.btn.primary{
+  color:#080808;
+  background:var(--gold);
+  border-color:var(--gold);
+}
+
+.btn.primary:hover{
+  background:var(--gold2);
+}
+
+.menu-btn{
+  display:none;
+  width:42px;
+  height:42px;
+  border:1px solid var(--line);
+  border-radius:10px;
+  color:var(--gold2);
+  background:#0a0a0a;
+}
+
+/* HERO */
+
+.hero{
+  position:relative;
+  overflow:hidden;
+  padding:90px 0 80px;
+  border-bottom:1px solid rgba(255,255,255,.06);
+}
+
+.hero::after{
+  content:"";
+  position:absolute;
+  width:600px;
+  height:600px;
+  left:50%;
+  top:-420px;
+  transform:translateX(-50%);
+  border-radius:50%;
+  background:radial-gradient(circle,rgba(212,175,55,.13),transparent 67%);
+}
+
+.hero-inner{
+  position:relative;
+  z-index:2;
+  width:min(1000px,calc(100% - 40px));
+  margin:auto;
+  text-align:center;
+}
+
+.kicker{
+  color:var(--gold);
+  font-family:var(--display);
+  font-size:10px;
+  letter-spacing:3px;
+  text-transform:uppercase;
+}
+
+.hero h1{
+  margin:17px 0 0;
+  font-family:var(--display);
+  font-size:clamp(38px,6vw,72px);
+  line-height:1;
+  letter-spacing:-2px;
+}
+
+.hero p{
+  max-width:700px;
+  margin:24px auto 0;
+  color:#aaa59b;
+  font-family:var(--serif);
+  font-size:14px;
+  line-height:1.9;
+}
+
+.hero-actions{
+  display:flex;
+  justify-content:center;
+  gap:10px;
+  flex-wrap:wrap;
+  margin-top:28px;
+}
+
+/* MAIN */
+
+.main{
+  width:min(1400px,calc(100% - 40px));
+  margin:auto;
+}
+
+.section{
+  padding:60px 0;
+}
+
+.stats{
+  display:grid;
+  grid-template-columns:repeat(4,1fr);
+  gap:12px;
+}
+
+.stat{
+  padding:25px;
+  min-height:120px;
+  border:1px solid rgba(255,255,255,.07);
+  border-radius:17px;
+  background:linear-gradient(145deg,#111,#0b0b0b);
+}
+
+.stat-number{
+  color:var(--gold2);
+  font-family:var(--display);
+  font-size:27px;
+}
+
+.stat-label{
+  margin-top:8px;
+  color:#77736b;
+  font-size:8px;
+  letter-spacing:1.5px;
+  text-transform:uppercase;
+}
+
+/* CONTROLS */
+
+.controls{
+  display:grid;
+  grid-template-columns:minmax(250px,1.5fr) minmax(190px,.8fr) minmax(170px,.6fr);
+  gap:10px;
+  margin-bottom:24px;
+}
+
+.field{
+  width:100%;
+  min-height:45px;
+  padding:11px 13px;
+  outline:none;
+  border:1px solid rgba(255,255,255,.09);
+  border-radius:10px;
+  background:#0c0c0c;
+  color:#eee;
+}
+
+.field:focus{
+  border-color:rgba(212,175,55,.48);
+  box-shadow:0 0 0 3px rgba(212,175,55,.05);
+}
+
+.field::placeholder{
+  color:#5f5b55;
+}
+
+.results-bar{
+  display:flex;
+  justify-content:space-between;
+  align-items:center;
+  gap:15px;
+  margin-bottom:17px;
+  color:#77736b;
+  font-size:9px;
+  letter-spacing:.7px;
+  text-transform:uppercase;
+}
+
+.results-bar strong{
+  color:var(--gold2);
+}
+
+/* FEATURE */
+
+.feature{
+  position:relative;
+  overflow:hidden;
+  min-height:380px;
+  margin-bottom:25px;
+  border:1px solid rgba(255,255,255,.08);
+  border-radius:22px;
+  background:#0b0b0b;
+  box-shadow:var(--shadow);
+}
+
+.feature-image{
+  position:absolute;
+  inset:0;
+  background-position:center;
+  background-size:cover;
+  filter:saturate(.75);
+}
+
+.feature-image::after{
+  content:"";
+  position:absolute;
+  inset:0;
+  background:
+    linear-gradient(90deg,
+      rgba(5,5,5,.96) 0%,
+      rgba(5,5,5,.82) 40%,
+      rgba(5,5,5,.25) 100%),
+    linear-gradient(0deg,
+      rgba(5,5,5,.8),
+      transparent 55%);
+}
+
+.feature-content{
+  position:relative;
+  z-index:2;
+  min-height:380px;
+  max-width:700px;
+  padding:55px;
+  display:flex;
+  flex-direction:column;
+  justify-content:center;
+}
+
+.feature-label{
+  color:var(--gold);
+  font-family:var(--display);
+  font-size:9px;
+  letter-spacing:2px;
+  text-transform:uppercase;
+}
+
+.feature-title{
+  margin-top:14px;
+  font-family:var(--display);
+  font-size:clamp(25px,4vw,45px);
+  line-height:1.1;
+}
+
+.feature-meta{
+  margin-top:10px;
+  color:#8d887f;
+  font-size:9px;
+  letter-spacing:.5px;
+}
+
+.feature-excerpt{
+  max-width:620px;
+  margin-top:20px;
+  color:#b0aba2;
+  font-family:var(--serif);
+  font-size:12px;
+  line-height:1.9;
+}
+
+.feature-actions{
+  margin-top:25px;
+}
+
+/* PHOTO GRID */
+
+.photo-grid{
+  display:grid;
+  grid-template-columns:repeat(3,1fr);
+  gap:14px;
+}
+
+.photo-card{
+  position:relative;
+  overflow:hidden;
+  min-height:330px;
+  border:1px solid rgba(255,255,255,.07);
+  border-radius:17px;
+  background:#0b0b0b;
+  cursor:pointer;
+  transition:.25s;
+}
+
+.photo-card:hover{
+  transform:translateY(-3px);
+  border-color:rgba(212,175,55,.3);
+}
+
+.photo-image{
+  position:absolute;
+  inset:0;
+  background-position:center;
+  background-size:cover;
+  transition:.4s;
+}
+
+.photo-card:hover .photo-image{
+  transform:scale(1.04);
+}
+
+.photo-overlay{
+  position:absolute;
+  inset:0;
+  display:flex;
+  flex-direction:column;
+  justify-content:flex-end;
+  padding:22px;
+  background:
+    linear-gradient(
+      0deg,
+      rgba(0,0,0,.94),
+      rgba(0,0,0,.04) 70%
+    );
+}
+
+.photo-memorial{
+  color:var(--gold2);
+  font-family:var(--display);
+  font-size:10px;
+}
+
+.photo-caption{
+  margin-top:7px;
+  color:#d0cbc2;
+  font-family:var(--serif);
+  font-size:10px;
+  line-height:1.6;
+}
+
+.photo-date{
+  margin-top:9px;
+  color:#706c65;
+  font-size:8px;
+}
+
+.photo-open{
+  position:absolute;
+  top:15px;
+  right:15px;
+  width:34px;
+  height:34px;
+  display:grid;
+  place-items:center;
+  border:1px solid rgba(255,255,255,.15);
+  border-radius:50%;
+  background:rgba(0,0,0,.5);
+  color:#ddd;
+  font-size:13px;
+  opacity:0;
+  transition:.2s;
+}
+
+.photo-card:hover .photo-open{
+  opacity:1;
+}
+
+/* SIDEBAR */
+
+.content{
+  display:grid;
+  grid-template-columns:minmax(0,1.7fr) minmax(280px,.65fr);
+  gap:22px;
+  align-items:start;
+}
+
+.sidebar{
+  display:grid;
+  gap:14px;
+}
+
+.side-card{
+  padding:25px;
+  border:1px solid rgba(255,255,255,.07);
+  border-radius:20px;
+  background:linear-gradient(145deg,#111,#0b0b0b);
+  box-shadow:var(--shadow);
+}
+
+.side-title{
+  margin-bottom:17px;
+  color:var(--gold);
+  font-family:var(--display);
+  font-size:10px;
+  letter-spacing:1.5px;
+  text-transform:uppercase;
+}
+
+.rank-list{
+  display:grid;
+}
+
+.rank-item{
+  display:grid;
+  grid-template-columns:28px minmax(0,1fr) auto;
+  align-items:center;
+  gap:8px;
+  padding:12px 0;
+  border-bottom:1px solid rgba(255,255,255,.06);
+}
+
+.rank-item:last-child{
+  border-bottom:0;
+}
+
+.rank-number{
+  color:#55514b;
+  font-family:var(--display);
+  font-size:9px;
+}
+
+.rank-name{
+  overflow:hidden;
+  text-overflow:ellipsis;
+  white-space:nowrap;
+  color:#aaa59c;
+  font-size:10px;
+}
+
+.rank-count{
+  color:var(--gold2);
+  font-family:var(--display);
+  font-size:9px;
+}
+
+.memory-box{
+  padding:25px;
+  border:1px solid rgba(212,175,55,.12);
+  border-radius:17px;
+  background:
+    radial-gradient(circle at 50% 0,rgba(212,175,55,.08),transparent 50%),
+    #0d0d0d;
+  text-align:center;
+}
+
+.memory-box h3{
+  margin:0;
+  font-family:var(--display);
+  font-size:14px;
+}
+
+.memory-box p{
+  margin:12px 0 20px;
+  color:#77736b;
+  font-family:var(--serif);
+  font-size:10px;
+  line-height:1.8;
+}
+
+/* EMPTY / LOADING */
+
+.empty{
+  grid-column:1/-1;
+  padding:65px 25px;
+  text-align:center;
+  border:1px solid rgba(255,255,255,.07);
+  border-radius:18px;
+  background:#0c0c0c;
+}
+
+.empty-icon{
+  width:70px;
+  height:70px;
+  margin:0 auto 20px;
+  display:grid;
+  place-items:center;
+  border:1px solid rgba(212,175,55,.2);
+  border-radius:50%;
+  color:var(--gold2);
+  font-family:var(--display);
+  font-size:20px;
+}
+
+.empty h3{
+  margin:0;
+  font-family:var(--display);
+  font-size:17px;
+}
+
+.empty p{
+  max-width:520px;
+  margin:12px auto 0;
+  color:#77736b;
+  font-family:var(--serif);
+  font-size:11px;
+  line-height:1.8;
+}
+
+.loading{
+  min-height:350px;
+  display:grid;
+  place-items:center;
+  text-align:center;
+}
+
+.spinner{
+  width:42px;
+  height:42px;
+  margin:0 auto 17px;
+  border:2px solid rgba(212,175,55,.14);
+  border-top-color:var(--gold);
+  border-radius:50%;
+  animation:spin .9s linear infinite;
+}
+
+@keyframes spin{
+  to{transform:rotate(360deg)}
+}
+
+/* PAGINATION */
+
+.pagination{
+  display:flex;
+  justify-content:center;
+  align-items:center;
+  gap:6px;
+  margin-top:25px;
+  flex-wrap:wrap;
+}
+
+.page-btn{
+  min-width:38px;
+  height:38px;
+  border:1px solid rgba(255,255,255,.08);
+  border-radius:9px;
+  background:#0c0c0c;
+  color:#77736b;
+  font-size:9px;
+}
+
+.page-btn:hover,
+.page-btn.active{
+  color:#080808;
+  background:var(--gold);
+  border-color:var(--gold);
+}
+
+.page-btn:disabled{
+  opacity:.3;
+  cursor:not-allowed;
+}
+
+/* VIEWER */
+
+.viewer{
+  position:fixed;
+  inset:0;
+  z-index:600;
+  display:none;
+  align-items:center;
+  justify-content:center;
+  padding:25px;
+  background:rgba(0,0,0,.94);
+  backdrop-filter:blur(10px);
+}
+
+.viewer.open{
+  display:flex;
+}
+
+.viewer-image{
+  max-width:min(1200px,94vw);
+  max-height:82vh;
+  object-fit:contain;
+  border:1px solid rgba(255,255,255,.08);
+  box-shadow:0 30px 100px rgba(0,0,0,.8);
+}
+
+.viewer-close{
+  position:fixed;
+  top:22px;
+  right:25px;
+  width:42px;
+  height:42px;
+  border:1px solid rgba(255,255,255,.15);
+  border-radius:10px;
+  background:#111;
+  color:#eee;
+  font-size:22px;
+}
+
+.viewer-info{
+  position:fixed;
+  left:25px;
+  bottom:22px;
+  max-width:600px;
+}
+
+.viewer-title{
+  color:var(--gold2);
+  font-family:var(--display);
+  font-size:12px;
+}
+
+.viewer-caption{
+  margin-top:6px;
+  color:#aaa59b;
+  font-family:var(--serif);
+  font-size:10px;
+}
+
+/* FOOTER */
+
+.footer{
+  margin-top:45px;
+  padding:55px 0 28px;
+  border-top:1px solid rgba(255,255,255,.06);
+  background:#030303;
+}
+
+.footer-inner{
+  width:min(1400px,calc(100% - 40px));
+  margin:auto;
+  display:grid;
+  grid-template-columns:1.4fr 1fr 1fr 1fr;
+  gap:40px;
+}
+
+.footer-brand{
+  font-family:var(--display);
+  font-size:14px;
+  letter-spacing:1px;
+}
+
+.footer-description{
+  max-width:360px;
+  margin-top:12px;
+  color:#625e57;
+  font-size:10px;
+  line-height:1.8;
+}
+
+.footer h3{
+  margin:0 0 14px;
+  color:var(--gold);
+  font-family:var(--display);
+  font-size:9px;
+  letter-spacing:1.5px;
+  text-transform:uppercase;
+}
+
+.footer-links{
+  display:grid;
+  gap:8px;
+}
+
+.footer-links a{
+  color:#65615a;
+  font-size:9px;
+}
+
+.footer-links a:hover{
+  color:var(--gold2);
+}
+
+.footer-bottom{
+  width:min(1400px,calc(100% - 40px));
+  margin:38px auto 0;
+  padding-top:21px;
+  border-top:1px solid rgba(255,255,255,.05);
+  display:flex;
+  justify-content:space-between;
+  gap:20px;
+  color:#44413d;
+  font-size:8px;
+  letter-spacing:.6px;
+}
+
+/* RESPONSIVE */
+
+@media(max-width:1180px){
+
+  .nav-links{
+    display:none;
+  }
+
+  .menu-btn{
+    display:block;
+  }
+
+  .nav-links.mobile-open{
+    position:absolute;
+    top:69px;
+    left:12px;
+    right:12px;
+    display:flex;
+    flex-direction:column;
+    align-items:stretch;
+    padding:10px;
+    background:#0b0b0b;
+    border:1px solid rgba(255,255,255,.08);
+    border-radius:14px;
+  }
+
+  .nav-links.mobile-open a{
+    padding:12px;
+  }
+
+  .content{
+    grid-template-columns:1fr;
+  }
+}
+
+@media(max-width:900px){
+
+  .photo-grid{
+    grid-template-columns:repeat(2,1fr);
+  }
+
+  .stats{
+    grid-template-columns:repeat(2,1fr);
+  }
+
+  .controls{
+    grid-template-columns:1fr 1fr;
+  }
+
+  .controls .search{
+    grid-column:1/-1;
+  }
+
+  .footer-inner{
+    grid-template-columns:1fr 1fr;
+  }
+}
+
+@media(max-width:650px){
+
+  .nav{
+    width:calc(100% - 24px);
+  }
+
+  .nav-actions .btn{
+    display:none;
+  }
+
+  .main,
+  .hero-inner,
+  .footer-inner,
+  .footer-bottom{
+    width:calc(100% - 24px);
+  }
+
+  .hero{
+    padding:72px 0 65px;
+  }
+
+  .hero h1{
+    font-size:40px;
+    letter-spacing:-1px;
+  }
+
+  .stats{
+    grid-template-columns:1fr 1fr;
+  }
+
+  .controls{
+    grid-template-columns:1fr;
+  }
+
+  .controls .search{
+    grid-column:auto;
+  }
+
+  .photo-grid{
+    grid-template-columns:1fr;
+  }
+
+  .photo-card{
+    min-height:390px;
+  }
+
+  .feature-content{
+    min-height:420px;
+    padding:30px;
+  }
+
+  .results-bar{
+    flex-direction:column;
+    align-items:flex-start;
+  }
+
+  .footer-inner{
+    grid-template-columns:1fr;
+  }
+
+  .footer-bottom{
+    flex-direction:column;
+  }
+
+  .viewer{
+    padding:12px;
+  }
+
+  .viewer-image{
+    max-width:96vw;
+    max-height:78vh;
+  }
+
+  .viewer-info{
+    left:15px;
+    bottom:15px;
+  }
+}
+</style>
+</head>
+
+<body>
+
+<header class="header">
+
+<nav class="nav">
+
+  <a class="brand" href="index.html">
+
+    <div class="brand-mark">
+      CR
+    </div>
+
+    <div class="brand-copy">
+      <strong>CROWRULES</strong>
+      <span>Memorials</span>
+    </div>
+
+  </a>
+
+  <div class="nav-links" id="navLinks">
+
+    <a href="index.html">Home</a>
+    <a href="memorials.html">Memorials</a>
+    <a href="featured.html">Featured</a>
+    <a href="recent.html">Recent</a>
+    <a href="on-this-day.html">On This Day</a>
+    <a href="stories.html">Stories</a>
+    <a href="tributes.html">Tributes</a>
+    <a href="candles.html">Candles</a>
+    <a class="active" href="photos.html">Photos</a>
+    <a href="search.html">Search</a>
+
+  </div>
+
+  <div class="nav-actions">
+
+    <a class="btn" href="create-memorial.html">
+      Create Memorial
+    </a>
+
+    <button
+      class="menu-btn"
+      id="menuBtn"
+      aria-label="Open navigation"
+    >
+      ☰
+    </button>
+
+  </div>
+
+</nav>
+
+</header>
+
+
+<section class="hero">
+
+  <div class="hero-inner">
+
+    <div class="kicker">
+      CrowRules Memorials
+    </div>
+
+    <h1>
+      MEMORIES IN FRAME.
+    </h1>
+
+    <p>
+      Photographs preserve the details words sometimes
+      cannot. Explore the visual archive of lives,
+      moments, places, and memories shared through
+      CrowRules Memorials.
+    </p>
+
+    <div class="hero-actions">
+
+      <a
+        class="btn primary"
+        href="memorials.html"
+      >
+        Explore Memorials
+      </a>
+
+      <a
+        class="btn"
+        href="stories.html"
+      >
+        Read Stories
+      </a>
+
+    </div>
+
+  </div>
+
+</section>
+
+
+<main class="main">
+
+<section class="section">
+
+  <div class="stats">
+
+    <div class="stat">
+
+      <div
+        class="stat-number"
+        id="statPhotos"
+      >
+        —
+      </div>
+
+      <div class="stat-label">
+        Photographs
+      </div>
+
+    </div>
+
+    <div class="stat">
+
+      <div
+        class="stat-number"
+        id="statMemorials"
+      >
+        —
+      </div>
+
+      <div class="stat-label">
+        Lives Represented
+      </div>
+
+    </div>
+
+    <div class="stat">
+
+      <div
+        class="stat-number"
+        id="statCaptions"
+      >
+        —
+      </div>
+
+      <div class="stat-label">
+        Captioned Photos
+      </div>
+
+    </div>
+
+    <div class="stat">
+
+      <div
+        class="stat-number"
+        id="statRecent"
+      >
+        —
+      </div>
+
+      <div class="stat-label">
+        Added Last 30 Days
+      </div>
+
+    </div>
+
+  </div>
+
+</section>
+
+
+<section class="section">
+
+  <div class="controls">
+
+    <input
+      id="searchInput"
+      class="field search"
+      type="search"
+      placeholder="Search photographs, captions, memorials..."
+    >
+
+    <select
+      id="memorialFilter"
+      class="field"
+    >
+      <option value="">
+        All Memorials
+      </option>
+    </select>
+
+    <select
+      id="sortSelect"
+      class="field"
+    >
+      <option value="newest">
+        Newest First
+      </option>
+
+      <option value="oldest">
+        Oldest First
+      </option>
+
+      <option value="caption">
+        Caption A–Z
+      </option>
+    </select>
+
+  </div>
+
+
+  <div class="results-bar">
+
+    <span>
+      <strong id="resultCount">
+        0
+      </strong>
+      photographs
+    </span>
+
+    <span id="pageStatus">
+      Page 1
+    </span>
+
+  </div>
+
+
+  <div
+    id="feature"
+    class="feature"
+    style="display:none"
+  ></div>
+
+
+  <div class="content">
+
+    <section>
+
+      <div
+        class="photo-grid"
+        id="photoGrid"
+      >
+
+        <div class="loading">
+
+          <div>
+
+            <div class="spinner"></div>
+
+            <div
+              style="
+                font-family:var(--display);
+                font-size:13px;
+              "
+            >
+              Opening The Archive
+            </div>
+
+            <div
+              style="
+                margin-top:8px;
+                color:#666;
+                font-size:10px;
+              "
+            >
+              Loading photographs…
+            </div>
+
+          </div>
+
+        </div>
+
+      </div>
+
+
+      <div
+        class="pagination"
+        id="pagination"
+      ></div>
+
+    </section>
+
+
+    <aside class="sidebar">
+
+      <div class="side-card">
+
+        <div class="side-title">
+          Most Photographed
+        </div>
+
+        <div
+          class="rank-list"
+          id="rankList"
+        >
+          <div
+            style="
+              color:#666;
+              font-size:10px;
+            "
+          >
+            Loading…
+          </div>
+        </div>
+
+      </div>
+
+
+      <div class="side-card">
+
+        <div class="side-title">
+          Archive Note
+        </div>
+
+        <p
+          style="
+            margin:0;
+            color:#858078;
+            font-family:var(--serif);
+            font-size:11px;
+            line-height:1.9;
+          "
+        >
+          A photograph can hold an entire
+          moment still — a face, a place,
+          a smile, a season, a life.
+          This archive exists to help those
+          moments remain visible.
+        </p>
+
+      </div>
+
+
+      <div class="memory-box">
+
+        <h3>
+          Remember Through Images
+        </h3>
+
+        <p>
+          Visit a memorial to explore the
+          photographs, stories, tributes,
+          and memories connected to a life.
+        </p>
+
+        <a
+          class="btn primary"
+          href="memorials.html"
+        >
+          Browse Memorials
+        </a>
+
+      </div>
+
+    </aside>
+
+  </div>
+
+</section>
+
+</main>
+
+
+<footer class="footer">
+
+  <div class="footer-inner">
+
+    <div>
+
+      <div class="footer-brand">
+        CROWRULES MEMORIALS
+      </div>
+
+      <div class="footer-description">
+        A quiet digital place to remember lives,
+        preserve stories, share photographs,
+        leave tributes, and keep memories close.
+      </div>
+
+    </div>
+
+    <div>
+
+      <h3>Explore</h3>
+
+      <div class="footer-links">
+        <a href="memorials.html">Memorial Archive</a>
+        <a href="featured.html">Featured</a>
+        <a href="recent.html">Recently Remembered</a>
+        <a href="on-this-day.html">On This Day</a>
+      </div>
+
+    </div>
+
+    <div>
+
+      <h3>Remember</h3>
+
+      <div class="footer-links">
+        <a href="stories.html">Stories</a>
+        <a href="tributes.html">Tributes</a>
+        <a href="guestbook.html">Guestbook</a>
+        <a href="candles.html">Candles</a>
+        <a href="photos.html">Photos</a>
+      </div>
+
+    </div>
+
+    <div>
+
+      <h3>Participate</h3>
+
+      <div class="footer-links">
+        <a href="create-memorial.html">Create A Memorial</a>
+        <a href="search.html">Search</a>
+        <a href="index.html">CrowRules Memorials</a>
+      </div>
+
+    </div>
+
+  </div>
+
+
+  <div class="footer-bottom">
+
+    <span>
+      © 2026 CrowRules Entertainment
+    </span>
+
+    <span>
+      EVERY LIFE LEAVES A STORY.
+    </span>
+
+  </div>
+
+</footer>
+
+
+<!-- PHOTO VIEWER -->
+
+<div
+  class="viewer"
+  id="viewer"
+  aria-hidden="true"
+>
+
+  <button
+    class="viewer-close"
+    id="viewerClose"
+    aria-label="Close photograph"
+  >
+    ×
+  </button>
+
+  <img
+    id="viewerImage"
+    class="viewer-image"
+    src=""
+    alt=""
+  >
+
+  <div class="viewer-info">
+
+    <div
+      id="viewerTitle"
+      class="viewer-title"
+    ></div>
+
+    <div
+      id="viewerCaption"
+      class="viewer-caption"
+    ></div>
+
+  </div>
+
+</div>
+
+
+<script>
+/* ============================================================
+   CROWRULES MEMORIALS
+   photos.html
+   ============================================================ */
+
+const SUPABASE_URL =
+  "https://cevylpnoexugwgygvtgu.supabase.co";
+
+const SUPABASE_KEY =
+  "sb_publishable_AdfM5y6RqvF3tbvEVzDZSg_JuGTQLD-";
+
+const db =
+  window.supabase.createClient(
+    SUPABASE_URL,
+    SUPABASE_KEY
+  );
+
+
+const PAGE_SIZE = 9;
+
+let allPhotos = [];
+let allMemorials = [];
+let filteredPhotos = [];
+
+let memorialMap = new Map();
+
+let currentPage = 1;
+
+
+/* ------------------------------------------------------------
+   HELPERS
+------------------------------------------------------------ */
+
+function escapeHtml(value){
+
+  if(
+    value === null ||
+    value === undefined
+  ){
+    return "";
+  }
+
+  return String(value)
+    .replaceAll("&","&amp;")
+    .replaceAll("<","&lt;")
+    .replaceAll(">","&gt;")
+    .replaceAll('"',"&quot;")
+    .replaceAll("'","&#039;");
+}
+
+
+function formatDate(value){
+
+  if(!value){
+    return "";
+  }
+
+  const date =
+    new Date(
+      value.includes("T")
+        ? value
+        : value + "T00:00:00"
+    );
+
+  if(
+    Number.isNaN(
+      date.getTime()
+    )
+  ){
+    return "";
+  }
+
+  return new Intl.DateTimeFormat(
+    "en-US",
+    {
+      month:"long",
+      day:"numeric",
+      year:"numeric"
+    }
+  ).format(date);
+}
+
+
+function memorialUrl(memorial){
+
+  return (
+    "memorial.html?slug=" +
+    encodeURIComponent(
+      memorial.slug
+    )
+  );
+}
+
+
+/* ------------------------------------------------------------
+   LOAD MEMORIALS
+------------------------------------------------------------ */
+
+async function loadMemorials(){
+
+  const {
+    data,
+    error
+  } = await db
+    .from("memorials")
+    .select(
+      "id,slug,full_name,location,portrait_url,featured"
+    )
+    .eq("published",true)
+    .order(
+      "full_name",
+      {ascending:true}
+    );
+
+  if(error){
+    throw error;
+  }
+
+  allMemorials =
+    data || [];
+
+  memorialMap =
+    new Map(
+      allMemorials.map(
+        memorial => [
+          memorial.id,
+          memorial
+        ]
+      )
+    );
+
+  populateMemorialFilter();
+}
+
+
+function populateMemorialFilter(){
+
+  const select =
+    document.getElementById(
+      "memorialFilter"
+    );
+
+  select.innerHTML =
+    `<option value="">
+      All Memorials
+    </option>` +
+    allMemorials
+      .map(
+        memorial => `
+          <option value="${escapeHtml(
+            memorial.id
+          )}">
+            ${escapeHtml(
+              memorial.full_name
+            )}
+          </option>
+        `
+      )
+      .join("");
+
+  const params =
+    new URLSearchParams(
+      window.location.search
+    );
+
+  const selected =
+    params.get("memorial");
+
+  if(
+    selected &&
+    memorialMap.has(selected)
+  ){
+    select.value =
+      selected;
+  }
+}
+
+
+/* ------------------------------------------------------------
+   LOAD PHOTOS
+------------------------------------------------------------ */
+
+async function loadPhotos(){
+
+  const {
+    data,
+    error
+  } = await db
+    .from("memorial_photos")
+    .select(
+      "id,memorial_id,image_url,caption,alt_text,sort_order,created_at"
+    )
+    .eq("published",true)
+    .order(
+      "sort_order",
+      {ascending:true}
+    )
+    .order(
+      "created_at",
+      {ascending:false}
+    );
+
+  if(error){
+    throw error;
+  }
+
+  allPhotos =
+    (data || [])
+      .filter(
+        photo =>
+          memorialMap.has(
+            photo.memorial_id
+          )
+      );
+
+  updateStats();
+  buildRanking();
+  renderFeature();
+  applyFilters();
+}
+
+
+/* ------------------------------------------------------------
+   STATS
+------------------------------------------------------------ */
+
+function updateStats(){
+
+  const uniqueMemorials =
+    new Set(
+      allPhotos.map(
+        photo =>
+          photo.memorial_id
+      )
+    ).size;
+
+  const captioned =
+    allPhotos.filter(
+      photo =>
+        photo.caption &&
+        photo.caption.trim()
+    ).length;
+
+  const cutoff =
+    Date.now() -
+    30 * 24 * 60 * 60 * 1000;
+
+  const recent =
+    allPhotos.filter(
+      photo =>
+        new Date(
+          photo.created_at
+        ).getTime() >= cutoff
+    ).length;
+
+  document.getElementById(
+    "statPhotos"
+  ).textContent =
+    allPhotos.length.toLocaleString();
+
+  document.getElementById(
+    "statMemorials"
+  ).textContent =
+    uniqueMemorials.toLocaleString();
+
+  document.getElementById(
+    "statCaptions"
+  ).textContent =
+    captioned.toLocaleString();
+
+  document.getElementById(
+    "statRecent"
+  ).textContent =
+    recent.toLocaleString();
+}
+
+
+/* ------------------------------------------------------------
+   FEATURED PHOTO
+------------------------------------------------------------ */
+
+function renderFeature(){
+
+  const feature =
+    document.getElementById(
+      "feature"
+    );
+
+  if(!allPhotos.length){
+
+    feature.style.display =
+      "none";
+
+    return;
+  }
+
+  const photo =
+    allPhotos[0];
+
+  const memorial =
+    memorialMap.get(
+      photo.memorial_id
+    );
+
+  if(!memorial){
+
+    feature.style.display =
+      "none";
+
+    return;
+  }
+
+  feature.style.display =
+    "block";
+
+  const safeUrl =
+    escapeHtml(
+      photo.image_url
+    );
+
+  feature.innerHTML = `
+
+    <div
+      class="feature-image"
+      style="
+        background-image:url('${safeUrl}');
+      "
+    ></div>
+
+    <div class="feature-content">
+
+      <div class="feature-label">
+        Featured From The Archive
+      </div>
+
+      <div class="feature-title">
+        ${escapeHtml(
+          memorial.full_name
+        )}
+      </div>
+
+      <div class="feature-meta">
+
+        Added
+        ${escapeHtml(
+          formatDate(
+            photo.created_at
+          )
+        )}
+
+      </div>
+
+      ${
+        photo.caption
+          ? `
+            <div class="feature-excerpt">
+              ${escapeHtml(
+                photo.caption
+              )}
+            </div>
+          `
+          : `
+            <div class="feature-excerpt">
+              A photograph preserved in
+              remembrance.
+            </div>
+          `
+      }
+
+      <div class="feature-actions">
+
+        <a
+          class="btn primary"
+          href="${memorialUrl(memorial)}"
+        >
+          View Memorial
+        </a>
+
+        <button
+          class="btn"
+          onclick="openViewerById('${escapeHtml(photo.id)}')"
+        >
+          View Photograph
+        </button>
+
+      </div>
+
+    </div>
+
+  `;
+}
+
+
+/* ------------------------------------------------------------
+   RANKING
+------------------------------------------------------------ */
+
+function buildRanking(){
+
+  const counts =
+    new Map();
+
+  allPhotos.forEach(
+    photo => {
+
+      counts.set(
+        photo.memorial_id,
+        (counts.get(
+          photo.memorial_id
+        ) || 0) + 1
+      );
+
+    }
+  );
+
+  const ranked =
+    [...counts.entries()]
+      .sort(
+        (a,b) =>
+          b[1] - a[1]
+      )
+      .slice(0,8);
+
+  const list =
+    document.getElementById(
+      "rankList"
+    );
+
+  if(!ranked.length){
+
+    list.innerHTML = `
+      <div
+        style="
+          color:#666;
+          font-size:10px;
+        "
+      >
+        No photographs yet.
+      </div>
+    `;
+
+    return;
+  }
+
+  list.innerHTML =
+    ranked
+      .map(
+        ([id,count],index) => {
+
+          const memorial =
+            memorialMap.get(id);
+
+          if(!memorial){
+            return "";
+          }
+
+          return `
+
+            <a
+              class="rank-item"
+              href="${memorialUrl(
+                memorial
+              )}"
+            >
+
+              <span class="rank-number">
+                ${String(
+                  index + 1
+                ).padStart(2,"0")}
+              </span>
+
+              <span class="rank-name">
+                ${escapeHtml(
+                  memorial.full_name
+                )}
+              </span>
+
+              <span class="rank-count">
+                ${count}
+              </span>
+
+            </a>
+
+          `;
+
+        }
+      )
+      .join("");
+}
+
+
+/* ------------------------------------------------------------
+   FILTERS
+------------------------------------------------------------ */
+
+function applyFilters(){
+
+  const query =
+    document.getElementById(
+      "searchInput"
+    )
+    .value
+    .trim()
+    .toLowerCase();
+
+  const memorialId =
+    document.getElementById(
+      "memorialFilter"
+    ).value;
+
+  const sort =
+    document.getElementById(
+      "sortSelect"
+    ).value;
+
+  filteredPhotos =
+    allPhotos.filter(
+      photo => {
+
+        if(
+          memorialId &&
+          photo.memorial_id !==
+            memorialId
+        ){
+          return false;
+        }
+
+        const memorial =
+          memorialMap.get(
+            photo.memorial_id
+          );
+
+        const searchable = [
+          photo.caption,
+          photo.alt_text,
+          memorial?.full_name,
+          memorial?.location
+        ]
+        .filter(Boolean)
+        .join(" ")
+        .toLowerCase();
+
+        if(
+          query &&
+          !searchable.includes(
+            query
+          )
+        ){
+          return false;
+        }
+
+        return true;
+
+      }
+    );
+
+  filteredPhotos.sort(
+    (a,b) => {
+
+      if(sort === "oldest"){
+
+        return (
+          new Date(
+            a.created_at
+          ) -
+          new Date(
+            b.created_at
+          )
+        );
+
+      }
+
+      if(sort === "caption"){
+
+        return (
+          (a.caption || "")
+            .localeCompare(
+              b.caption || ""
+            )
+        );
+
+      }
+
+      return (
+        new Date(
+          b.created_at
+        ) -
+        new Date(
+          a.created_at
+        )
+      );
+
+    }
+  );
+
+  currentPage = 1;
+
+  updateUrl();
+
+  renderPage();
+}
+
+
+/* ------------------------------------------------------------
+   RENDER PAGE
+------------------------------------------------------------ */
+
+function renderPage(){
+
+  const grid =
+    document.getElementById(
+      "photoGrid"
+    );
+
+  const total =
+    filteredPhotos.length;
+
+  document.getElementById(
+    "resultCount"
+  ).textContent =
+    total.toLocaleString();
+
+  const totalPages =
+    Math.max(
+      1,
+      Math.ceil(
+        total /
+        PAGE_SIZE
+      )
+    );
+
+  if(
+    currentPage >
+    totalPages
+  ){
+    currentPage =
+      totalPages;
+  }
+
+  const start =
+    (currentPage - 1) *
+    PAGE_SIZE;
+
+  const pageItems =
+    filteredPhotos.slice(
+      start,
+      start + PAGE_SIZE
+    );
+
+  document.getElementById(
+    "pageStatus"
+  ).textContent =
+    `Page ${currentPage} of ${totalPages}`;
+
+  if(!pageItems.length){
+
+    grid.innerHTML = `
+
+      <div class="empty">
+
+        <div class="empty-icon">
+          ◇
+        </div>
+
+        <h3>
+          No Photographs Found
+        </h3>
+
+        <p>
+          Nothing in the visual archive matches
+          your current search or memorial filter.
+          Try another search or browse the memorial archive.
+        </p>
+
+        <div style="margin-top:20px">
+
+          <a
+            class="btn primary"
+            href="memorials.html"
+          >
+            Browse Memorials
+          </a>
+
+        </div>
+
+      </div>
+
+    `;
+
+    renderPagination(
+      totalPages
+    );
+
+    return;
+  }
+
+  grid.innerHTML =
+    pageItems
+      .map(
+        renderPhotoCard
+      )
+      .join("");
+
+  renderPagination(
+    totalPages
+  );
+}
+
+
+/* ------------------------------------------------------------
+   PHOTO CARD
+------------------------------------------------------------ */
+
+function renderPhotoCard(photo){
+
+  const memorial =
+    memorialMap.get(
+      photo.memorial_id
+    );
+
+  if(!memorial){
+    return "";
+  }
+
+  const alt =
+    photo.alt_text ||
+    `${memorial.full_name} memorial photograph`;
+
+  return `
+
+    <article
+      class="photo-card"
+      onclick="openViewerById('${escapeHtml(
+        photo.id
+      )}')"
+      tabindex="0"
+      role="button"
+      aria-label="View photograph"
+    >
+
+      <div
+        class="photo-image"
+        style="
+          background-image:url('${escapeHtml(
+            photo.image_url
+          )}');
+        "
+      ></div>
+
+      <div class="photo-overlay">
+
+        <div class="photo-memorial">
+          ${escapeHtml(
+            memorial.full_name
+          )}
+        </div>
+
+        ${
+          photo.caption
+            ? `
+              <div class="photo-caption">
+                ${escapeHtml(
+                  photo.caption
+                )}
+              </div>
+            `
+            : `
+              <div class="photo-caption">
+                Photograph preserved in remembrance.
+              </div>
+            `
+        }
+
+        <div class="photo-date">
+          ${escapeHtml(
+            formatDate(
+              photo.created_at
+            )
+          )}
+        </div>
+
+      </div>
+
+      <div class="photo-open">
+        ↗
+      </div>
+
+    </article>
+
+  `;
+}
+
+
+/* ------------------------------------------------------------
+   PAGINATION
+------------------------------------------------------------ */
+
+function renderPagination(
+  totalPages
+){
+
+  const pagination =
+    document.getElementById(
+      "pagination"
+    );
+
+  if(totalPages <= 1){
+
+    pagination.innerHTML =
+      "";
+
+    return;
+  }
+
+  let html = `
+
+    <button
+      class="page-btn"
+      onclick="changePage(${currentPage - 1})"
+      ${currentPage === 1 ? "disabled" : ""}
+    >
+      ‹
+    </button>
+
+  `;
+
+  const start =
+    Math.max(
+      1,
+      currentPage - 2
+    );
+
+  const end =
+    Math.min(
+      totalPages,
+      currentPage + 2
+    );
+
+  for(
+    let page = start;
+    page <= end;
+    page++
+  ){
+
+    html += `
+
+      <button
+        class="page-btn ${
+          page === currentPage
+            ? "active"
+            : ""
+        }"
+        onclick="changePage(${page})"
+      >
+        ${page}
+      </button>
+
+    `;
+
+  }
+
+  html += `
+
+    <button
+      class="page-btn"
+      onclick="changePage(${currentPage + 1})"
+      ${
+        currentPage === totalPages
+          ? "disabled"
+          : ""
+      }
+    >
+      ›
+    </button>
+
+  `;
+
+  pagination.innerHTML =
+    html;
+}
+
+
+function changePage(page){
+
+  const totalPages =
+    Math.max(
+      1,
+      Math.ceil(
+        filteredPhotos.length /
+        PAGE_SIZE
+      )
+    );
+
+  if(
+    page < 1 ||
+    page > totalPages
+  ){
+    return;
+  }
+
+  currentPage =
+    page;
+
+  renderPage();
+
+  window.scrollTo({
+    top:
+      document.querySelector(
+        ".content"
+      ).offsetTop - 100,
+    behavior:"smooth"
+  });
+}
+
+
+/* ------------------------------------------------------------
+   PHOTO VIEWER
+------------------------------------------------------------ */
+
+const viewer =
+  document.getElementById(
+    "viewer"
+  );
+
+const viewerImage =
+  document.getElementById(
+    "viewerImage"
+  );
+
+const viewerTitle =
+  document.getElementById(
+    "viewerTitle"
+  );
+
+const viewerCaption =
+  document.getElementById(
+    "viewerCaption"
+  );
+
+
+function openViewer(photo){
+
+  const memorial =
+    memorialMap.get(
+      photo.memorial_id
+    );
+
+  viewerImage.src =
+    photo.image_url;
+
+  viewerImage.alt =
+    photo.alt_text ||
+    (
+      memorial
+        ? memorial.full_name
+        : "Memorial photograph"
+    );
+
+  viewerTitle.textContent =
+    memorial
+      ? memorial.full_name
+      : "Memorial Photograph";
+
+  viewerCaption.textContent =
+    photo.caption ||
+    "Photograph preserved in remembrance.";
+
+  viewer.classList.add(
+    "open"
+  );
+
+  viewer.setAttribute(
+    "aria-hidden",
+    "false"
+  );
+
+  document.body.classList.add(
+    "modal-open"
+  );
+
+}
+
+
+function openViewerById(id){
+
+  const photo =
+    allPhotos.find(
+      item =>
+        item.id === id
+    );
+
+  if(!photo){
+    return;
+  }
+
+  openViewer(photo);
+}
+
+
+function closeViewer(){
+
+  viewer.classList.remove(
+    "open"
+  );
+
+  viewer.setAttribute(
+    "aria-hidden",
+    "true"
+  );
+
+  viewerImage.src =
+    "";
+
+  document.body.classList.remove(
+    "modal-open"
+  );
+
+}
+
+
+document
+  .getElementById(
+    "viewerClose"
+  )
+  .addEventListener(
+    "click",
+    closeViewer
+  );
+
+
+viewer.addEventListener(
+  "click",
+  event => {
+
+    if(
+      event.target === viewer
+    ){
+      closeViewer();
+    }
+
+  }
+);
+
+
+document.addEventListener(
+  "keydown",
+  event => {
+
+    if(
+      event.key === "Escape"
+    ){
+      closeViewer();
+    }
+
+  }
+);
+
+
+/* ------------------------------------------------------------
+   URL STATE
+------------------------------------------------------------ */
+
+function updateUrl(){
+
+  const params =
+    new URLSearchParams();
+
+  const query =
+    document.getElementById(
+      "searchInput"
+    )
+    .value
+    .trim();
+
+  const memorial =
+    document.getElementById(
+      "memorialFilter"
+    ).value;
+
+  const sort =
+    document.getElementById(
+      "sortSelect"
+    ).value;
+
+  if(query){
+    params.set(
+      "q",
+      query
+    );
+  }
+
+  if(memorial){
+    params.set(
+      "memorial",
+      memorial
+    );
+  }
+
+  if(sort !== "newest"){
+    params.set(
+      "sort",
+      sort
+    );
+  }
+
+  const queryString =
+    params.toString();
+
+  history.replaceState(
+    {},
+    "",
+    window.location.pathname +
+    (
+      queryString
+        ? "?" + queryString
+        : ""
+    )
+  );
+}
+
+
+function loadUrlState(){
+
+  const params =
+    new URLSearchParams(
+      window.location.search
+    );
+
+  const query =
+    params.get("q");
+
+  const memorial =
+    params.get("memorial");
+
+  const sort =
+    params.get("sort");
+
+  if(query){
+
+    document.getElementById(
+      "searchInput"
+    ).value =
+      query;
+
+  }
+
+  if(
+    memorial &&
+    memorialMap.has(
+      memorial
+    )
+  ){
+
+    document.getElementById(
+      "memorialFilter"
+    ).value =
+      memorial;
+
+  }
+
+  if(
+    ["oldest","caption"]
+      .includes(sort)
+  ){
+
+    document.getElementById(
+      "sortSelect"
+    ).value =
+      sort;
+
+  }
+}
+
+
+/* ------------------------------------------------------------
+   SEARCH EVENTS
+------------------------------------------------------------ */
+
+let searchTimer;
+
+document
+  .getElementById(
+    "searchInput"
+  )
+  .addEventListener(
+    "input",
+    () => {
+
+      clearTimeout(
+        searchTimer
+      );
+
+      searchTimer =
+        setTimeout(
+          () => {
+            applyFilters();
+          },
+          180
+        );
+
+    }
+  );
+
+
+document
+  .getElementById(
+    "memorialFilter"
+  )
+  .addEventListener(
+    "change",
+    applyFilters
+  );
+
+
+document
+  .getElementById(
+    "sortSelect"
+  )
+  .addEventListener(
+    "change",
+    applyFilters
+  );
+
+
+/* ------------------------------------------------------------
+   MOBILE MENU
+------------------------------------------------------------ */
+
+document
+  .getElementById(
+    "menuBtn"
+  )
+  .addEventListener(
+    "click",
+    () => {
+
+      document
+        .getElementById(
+          "navLinks"
+        )
+        .classList.toggle(
+          "mobile-open"
+        );
+
+    }
+  );
+
+
+document
+  .getElementById(
+    "navLinks"
+  )
+  .addEventListener(
+    "click",
+    event => {
+
+      if(
+        event.target.matches(
+          "a"
+        )
+      ){
+
+        document
+          .getElementById(
+            "navLinks"
+          )
+          .classList.remove(
+            "mobile-open"
+          );
+
+      }
+
+    }
+  );
+
+
+/* ------------------------------------------------------------
+   KEYBOARD ACCESSIBILITY
+------------------------------------------------------------ */
+
+document.addEventListener(
+  "keydown",
+  event => {
+
+    if(
+      event.key !== "Enter" &&
+      event.key !== " "
+    ){
+      return;
+    }
+
+    const card =
+      event.target.closest(
+        ".photo-card"
+      );
+
+    if(!card){
+      return;
+    }
+
+    event.preventDefault();
+
+    const id =
+      card
+        .getAttribute(
+          "onclick"
+        )
+        ?.match(
+          /openViewerById\('([^']+)'\)/
+        )?.[1];
+
+    if(id){
+      openViewerById(id);
+    }
+
+  }
+);
+
+
+/* ------------------------------------------------------------
+   INITIALIZE
+------------------------------------------------------------ */
+
+async function initialize(){
+
+  try{
+
+    await loadMemorials();
+
+    loadUrlState();
+
+    await loadPhotos();
+
+  }catch(error){
+
+    console.error(
+      "Photos page error:",
+      error
+    );
+
+    document.getElementById(
+      "photoGrid"
+    ).innerHTML = `
+
+      <div class="empty">
+
+        <div class="empty-icon">
+          !
+        </div>
+
+        <h3>
+          Unable To Load The Photo Archive
+        </h3>
+
+        <p>
+          The memorial photo archive could not
+          be reached right now. Please refresh
+          the page and try again.
+        </p>
+
+        <div style="margin-top:20px">
+
+          <button
+            class="btn primary"
+            onclick="location.reload()"
+          >
+            Try Again
+          </button>
+
+        </div>
+
+      </div>
+
+    `;
+
+  }
+
+}
+
+initialize();
+
+</script>
+
+</body>
+</html>

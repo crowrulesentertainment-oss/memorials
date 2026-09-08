@@ -1,0 +1,2463 @@
+<!doctype html>
+
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+
+<title>Videos — CrowRules Memorials</title>
+<meta name="theme-color" content="#050505">
+<meta name="description" content="Video memories, tributes, stories and remembrance from the CrowRules Memorials community.">
+
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Libre+Baskerville:wght@400;700&family=Montserrat:wght@400;500;600;700;800&family=Orbitron:wght@500;600;700;800&display=swap" rel="stylesheet">
+
+<style>
+:root{
+  --bg:#050505;
+  --bg2:#0a0a0a;
+  --panel:#101010;
+  --panel2:#151515;
+  --line:rgba(210,180,90,.18);
+  --line2:rgba(255,255,255,.08);
+  --gold:#d8b45a;
+  --gold2:#f0d58a;
+  --text:#f5f2ea;
+  --muted:#a9a59a;
+  --soft:#d4d0c5;
+  --danger:#d86b6b;
+  --shadow:0 30px 80px rgba(0,0,0,.48);
+  --radius:22px;
+}
+
+*{box-sizing:border-box}
+
+html{
+  scroll-behavior:smooth;
+}
+
+body{
+  margin:0;
+  background:
+    radial-gradient(circle at 15% 0%,rgba(216,180,90,.08),transparent 28%),
+    radial-gradient(circle at 90% 20%,rgba(255,255,255,.035),transparent 25%),
+    linear-gradient(180deg,#050505 0%,#080808 55%,#050505 100%);
+  color:var(--text);
+  font-family:Montserrat,Arial,sans-serif;
+  min-height:100vh;
+}
+
+body:before{
+  content:"";
+  position:fixed;
+  inset:0;
+  pointer-events:none;
+  opacity:.035;
+  background-image:
+    linear-gradient(rgba(255,255,255,.4) 1px,transparent 1px),
+    linear-gradient(90deg,rgba(255,255,255,.4) 1px,transparent 1px);
+  background-size:70px 70px;
+  mask-image:linear-gradient(to bottom,black,transparent 80%);
+}
+
+a{
+  color:inherit;
+  text-decoration:none;
+}
+
+button,
+input,
+select{
+  font:inherit;
+}
+
+button{
+  cursor:pointer;
+}
+
+img{
+  max-width:100%;
+  display:block;
+}
+
+.container{
+  width:min(1400px,calc(100% - 40px));
+  margin:auto;
+}
+
+/* HEADER */
+
+header{
+  position:sticky;
+  top:0;
+  z-index:100;
+  backdrop-filter:blur(18px);
+  background:rgba(5,5,5,.86);
+  border-bottom:1px solid var(--line2);
+}
+
+.nav{
+  min-height:78px;
+  display:flex;
+  align-items:center;
+  justify-content:space-between;
+  gap:24px;
+}
+
+.brand{
+  display:flex;
+  align-items:center;
+  gap:13px;
+  flex-shrink:0;
+}
+
+.brand-mark{
+  width:42px;
+  height:42px;
+  border:1px solid rgba(216,180,90,.55);
+  display:grid;
+  place-items:center;
+  transform:rotate(45deg);
+  box-shadow:0 0 25px rgba(216,180,90,.08);
+}
+
+.brand-mark span{
+  transform:rotate(-45deg);
+  font-family:Orbitron,sans-serif;
+  font-weight:800;
+  color:var(--gold);
+}
+
+.brand-copy strong{
+  display:block;
+  font-family:Orbitron,sans-serif;
+  font-size:14px;
+  letter-spacing:.16em;
+}
+
+.brand-copy small{
+  color:var(--muted);
+  font-size:9px;
+  letter-spacing:.24em;
+  text-transform:uppercase;
+}
+
+.nav-links{
+  display:flex;
+  align-items:center;
+  justify-content:flex-end;
+  gap:5px;
+  flex-wrap:wrap;
+}
+
+.nav-links a{
+  padding:9px 10px;
+  border-radius:8px;
+  color:#aaa79e;
+  font-size:10px;
+  font-weight:700;
+  letter-spacing:.08em;
+  text-transform:uppercase;
+  transition:.2s;
+}
+
+.nav-links a:hover,
+.nav-links a.active{
+  color:var(--gold2);
+  background:rgba(216,180,90,.08);
+}
+
+.nav-toggle{
+  display:none;
+  border:1px solid var(--line);
+  background:transparent;
+  color:var(--gold2);
+  padding:10px 12px;
+  border-radius:10px;
+}
+
+/* HERO */
+
+.hero{
+  padding:78px 0 42px;
+  position:relative;
+}
+
+.hero-grid{
+  display:grid;
+  grid-template-columns:1.15fr .85fr;
+  gap:34px;
+  align-items:end;
+}
+
+.kicker{
+  font-family:Orbitron,sans-serif;
+  color:var(--gold);
+  font-size:11px;
+  font-weight:700;
+  letter-spacing:.3em;
+  text-transform:uppercase;
+  margin-bottom:18px;
+}
+
+h1{
+  margin:0;
+  max-width:900px;
+  font-family:Orbitron,sans-serif;
+  font-size:clamp(42px,7vw,88px);
+  line-height:.94;
+  letter-spacing:-.045em;
+  text-transform:uppercase;
+}
+
+.hero p{
+  max-width:720px;
+  margin:24px 0 0;
+  color:var(--muted);
+  line-height:1.8;
+  font-size:15px;
+}
+
+.hero-note{
+  border-left:1px solid var(--gold);
+  padding:12px 0 12px 22px;
+  color:var(--soft);
+  line-height:1.7;
+  font-family:"Libre Baskerville",serif;
+  font-size:14px;
+}
+
+/* STATS */
+
+.stats{
+  display:grid;
+  grid-template-columns:repeat(4,1fr);
+  gap:12px;
+  margin:10px 0 38px;
+}
+
+.stat{
+  background:linear-gradient(145deg,rgba(255,255,255,.045),rgba(255,255,255,.015));
+  border:1px solid var(--line2);
+  border-radius:16px;
+  padding:20px;
+}
+
+.stat-value{
+  font-family:Orbitron,sans-serif;
+  color:var(--gold2);
+  font-size:25px;
+  font-weight:800;
+}
+
+.stat-label{
+  margin-top:7px;
+  color:var(--muted);
+  font-size:10px;
+  font-weight:700;
+  letter-spacing:.13em;
+  text-transform:uppercase;
+}
+
+/* CONTROLS */
+
+.controls{
+  display:grid;
+  grid-template-columns:minmax(260px,1fr) 240px 190px;
+  gap:12px;
+  margin-bottom:28px;
+}
+
+.control{
+  background:#0d0d0d;
+  border:1px solid var(--line2);
+  border-radius:13px;
+  color:var(--text);
+  min-height:48px;
+  padding:0 15px;
+  outline:none;
+}
+
+.control:focus{
+  border-color:rgba(216,180,90,.6);
+  box-shadow:0 0 0 3px rgba(216,180,90,.07);
+}
+
+input.control::placeholder{
+  color:#77736b;
+}
+
+select.control{
+  appearance:auto;
+}
+
+/* FEATURED VIDEO */
+
+.featured{
+  display:grid;
+  grid-template-columns:1.3fr .7fr;
+  border:1px solid var(--line);
+  border-radius:var(--radius);
+  overflow:hidden;
+  background:#0c0c0c;
+  box-shadow:var(--shadow);
+  margin-bottom:45px;
+}
+
+.featured-media{
+  min-height:430px;
+  position:relative;
+  background:#000;
+  overflow:hidden;
+}
+
+.featured-media img{
+  width:100%;
+  height:100%;
+  min-height:430px;
+  object-fit:cover;
+  opacity:.68;
+}
+
+.featured-overlay{
+  position:absolute;
+  inset:0;
+  background:
+    linear-gradient(90deg,rgba(0,0,0,.12),rgba(0,0,0,.72)),
+    linear-gradient(0deg,rgba(0,0,0,.8),transparent 55%);
+}
+
+.play-big{
+  position:absolute;
+  left:30px;
+  bottom:28px;
+  width:70px;
+  height:70px;
+  border-radius:50%;
+  border:1px solid rgba(255,255,255,.35);
+  background:rgba(0,0,0,.55);
+  color:white;
+  font-size:23px;
+  backdrop-filter:blur(8px);
+}
+
+.featured-copy{
+  padding:42px;
+  display:flex;
+  flex-direction:column;
+  justify-content:center;
+}
+
+.eyebrow{
+  color:var(--gold);
+  font-family:Orbitron,sans-serif;
+  font-size:10px;
+  font-weight:700;
+  letter-spacing:.22em;
+  text-transform:uppercase;
+}
+
+.featured-copy h2{
+  font-family:Orbitron,sans-serif;
+  font-size:clamp(26px,3vw,43px);
+  line-height:1.05;
+  margin:15px 0;
+}
+
+.featured-copy p{
+  color:var(--muted);
+  line-height:1.7;
+  font-size:13px;
+}
+
+.meta{
+  display:flex;
+  flex-wrap:wrap;
+  gap:9px;
+  margin:16px 0;
+}
+
+.pill{
+  border:1px solid var(--line2);
+  border-radius:100px;
+  padding:7px 10px;
+  color:#aaa79f;
+  font-size:9px;
+  font-weight:700;
+  letter-spacing:.08em;
+  text-transform:uppercase;
+}
+
+.btn{
+  display:inline-flex;
+  justify-content:center;
+  align-items:center;
+  gap:8px;
+  min-height:43px;
+  padding:0 17px;
+  border-radius:10px;
+  border:1px solid var(--line);
+  background:rgba(216,180,90,.08);
+  color:var(--gold2);
+  font-size:10px;
+  font-weight:800;
+  letter-spacing:.1em;
+  text-transform:uppercase;
+  transition:.2s;
+}
+
+.btn:hover{
+  background:rgba(216,180,90,.16);
+  transform:translateY(-1px);
+}
+
+.btn.secondary{
+  background:transparent;
+  color:#c5c1b7;
+  border-color:var(--line2);
+}
+
+/* LAYOUT */
+
+.content-layout{
+  display:grid;
+  grid-template-columns:minmax(0,1fr) 310px;
+  gap:28px;
+  align-items:start;
+}
+
+.section-head{
+  display:flex;
+  justify-content:space-between;
+  align-items:end;
+  gap:20px;
+  margin-bottom:18px;
+}
+
+.section-head h2{
+  margin:0;
+  font-family:Orbitron,sans-serif;
+  font-size:21px;
+  letter-spacing:.03em;
+  text-transform:uppercase;
+}
+
+.section-head p{
+  margin:7px 0 0;
+  color:var(--muted);
+  font-size:12px;
+}
+
+/* VIDEO GRID */
+
+.video-grid{
+  display:grid;
+  grid-template-columns:repeat(3,minmax(0,1fr));
+  gap:16px;
+}
+
+.video-card{
+  background:linear-gradient(145deg,#111,#0b0b0b);
+  border:1px solid var(--line2);
+  border-radius:18px;
+  overflow:hidden;
+  transition:.25s;
+}
+
+.video-card:hover{
+  transform:translateY(-4px);
+  border-color:var(--line);
+  box-shadow:0 18px 45px rgba(0,0,0,.35);
+}
+
+.video-thumb{
+  aspect-ratio:16/9;
+  position:relative;
+  background:#090909;
+  overflow:hidden;
+}
+
+.video-thumb img{
+  width:100%;
+  height:100%;
+  object-fit:cover;
+  opacity:.78;
+  transition:.3s;
+}
+
+.video-card:hover .video-thumb img{
+  transform:scale(1.035);
+  opacity:.9;
+}
+
+.thumb-shade{
+  position:absolute;
+  inset:0;
+  background:linear-gradient(0deg,rgba(0,0,0,.75),transparent 65%);
+}
+
+.play{
+  position:absolute;
+  left:15px;
+  bottom:13px;
+  width:42px;
+  height:42px;
+  display:grid;
+  place-items:center;
+  border-radius:50%;
+  border:1px solid rgba(255,255,255,.25);
+  background:rgba(0,0,0,.68);
+  color:#fff;
+}
+
+.duration{
+  position:absolute;
+  right:12px;
+  bottom:12px;
+  padding:5px 7px;
+  border-radius:5px;
+  background:rgba(0,0,0,.8);
+  font-family:Orbitron,sans-serif;
+  font-size:9px;
+  color:#fff;
+}
+
+.video-body{
+  padding:17px;
+}
+
+.video-body h3{
+  margin:0;
+  font-size:15px;
+  line-height:1.35;
+}
+
+.video-body p{
+  margin:9px 0;
+  color:var(--muted);
+  font-size:11px;
+  line-height:1.6;
+}
+
+.video-meta{
+  display:flex;
+  align-items:center;
+  justify-content:space-between;
+  gap:10px;
+  color:#79766f;
+  font-size:9px;
+  text-transform:uppercase;
+  letter-spacing:.07em;
+}
+
+/* SIDEBAR */
+
+.sidebar{
+  position:sticky;
+  top:98px;
+  display:grid;
+  gap:16px;
+}
+
+.side-card{
+  border:1px solid var(--line2);
+  background:rgba(255,255,255,.025);
+  border-radius:18px;
+  padding:20px;
+}
+
+.side-card h3{
+  margin:0 0 15px;
+  font-family:Orbitron,sans-serif;
+  font-size:12px;
+  letter-spacing:.1em;
+  text-transform:uppercase;
+}
+
+.side-list{
+  display:grid;
+  gap:9px;
+}
+
+.side-item{
+  display:grid;
+  grid-template-columns:38px 1fr auto;
+  gap:10px;
+  align-items:center;
+  padding:9px;
+  border:1px solid transparent;
+  border-radius:10px;
+  transition:.2s;
+}
+
+.side-item:hover{
+  background:rgba(216,180,90,.05);
+  border-color:var(--line2);
+}
+
+.side-number{
+  width:34px;
+  height:34px;
+  display:grid;
+  place-items:center;
+  border-radius:8px;
+  background:rgba(216,180,90,.08);
+  color:var(--gold2);
+  font-family:Orbitron,sans-serif;
+  font-size:10px;
+}
+
+.side-name{
+  font-size:11px;
+  font-weight:700;
+}
+
+.side-sub{
+  margin-top:3px;
+  color:#77746d;
+  font-size:9px;
+}
+
+.side-count{
+  color:var(--gold);
+  font-family:Orbitron,sans-serif;
+  font-size:10px;
+}
+
+/* EMPTY */
+
+.empty{
+  border:1px dashed rgba(216,180,90,.22);
+  border-radius:18px;
+  padding:55px 25px;
+  text-align:center;
+  background:rgba(216,180,90,.025);
+}
+
+.empty-icon{
+  font-size:32px;
+  opacity:.7;
+  margin-bottom:14px;
+}
+
+.empty h3{
+  margin:0 0 8px;
+  font-family:Orbitron,sans-serif;
+  font-size:16px;
+}
+
+.empty p{
+  margin:0 auto;
+  max-width:470px;
+  color:var(--muted);
+  line-height:1.7;
+  font-size:12px;
+}
+
+/* PAGINATION */
+
+.pagination{
+  display:flex;
+  justify-content:center;
+  gap:7px;
+  margin:32px 0 55px;
+  flex-wrap:wrap;
+}
+
+.page-btn{
+  min-width:40px;
+  height:40px;
+  padding:0 12px;
+  border:1px solid var(--line2);
+  border-radius:9px;
+  background:#0c0c0c;
+  color:#aaa69c;
+}
+
+.page-btn:hover,
+.page-btn.active{
+  color:var(--gold2);
+  border-color:var(--line);
+  background:rgba(216,180,90,.08);
+}
+
+/* MISSION */
+
+.mission{
+  margin:20px 0 70px;
+  padding:55px;
+  border-top:1px solid var(--line);
+  border-bottom:1px solid var(--line);
+  text-align:center;
+}
+
+.mission .eyebrow{
+  margin-bottom:14px;
+}
+
+.mission h2{
+  max-width:850px;
+  margin:0 auto;
+  font-family:"Libre Baskerville",serif;
+  font-size:clamp(25px,4vw,43px);
+  line-height:1.35;
+}
+
+.mission p{
+  max-width:700px;
+  margin:20px auto 0;
+  color:var(--muted);
+  line-height:1.8;
+  font-size:13px;
+}
+
+/* LOADING */
+
+.loading{
+  padding:55px;
+  text-align:center;
+  color:var(--muted);
+  border:1px solid var(--line2);
+  border-radius:18px;
+}
+
+.loader{
+  width:30px;
+  height:30px;
+  border:2px solid rgba(216,180,90,.18);
+  border-top-color:var(--gold);
+  border-radius:50%;
+  animation:spin .8s linear infinite;
+  margin:0 auto 14px;
+}
+
+@keyframes spin{
+  to{transform:rotate(360deg)}
+}
+
+/* VIDEO MODAL */
+
+.modal{
+  position:fixed;
+  inset:0;
+  z-index:500;
+  display:none;
+  align-items:center;
+  justify-content:center;
+  padding:24px;
+  background:rgba(0,0,0,.86);
+  backdrop-filter:blur(12px);
+}
+
+.modal.open{
+  display:flex;
+}
+
+.modal-box{
+  width:min(1100px,100%);
+  max-height:94vh;
+  overflow:auto;
+  border:1px solid var(--line);
+  border-radius:20px;
+  background:#090909;
+  box-shadow:0 40px 100px rgba(0,0,0,.7);
+}
+
+.modal-head{
+  display:flex;
+  justify-content:space-between;
+  align-items:center;
+  gap:20px;
+  padding:16px 20px;
+  border-bottom:1px solid var(--line2);
+}
+
+.modal-title{
+  font-family:Orbitron,sans-serif;
+  font-size:13px;
+}
+
+.close{
+  width:38px;
+  height:38px;
+  border-radius:50%;
+  border:1px solid var(--line2);
+  background:transparent;
+  color:#ddd;
+  font-size:18px;
+}
+
+.video-player{
+  width:100%;
+  aspect-ratio:16/9;
+  background:#000;
+}
+
+.video-player iframe,
+.video-player video{
+  width:100%;
+  height:100%;
+  border:0;
+  display:block;
+}
+
+.modal-info{
+  padding:22px;
+}
+
+.modal-info h2{
+  margin:0 0 10px;
+  font-family:Orbitron,sans-serif;
+  font-size:22px;
+}
+
+.modal-info p{
+  color:var(--muted);
+  line-height:1.7;
+  font-size:13px;
+}
+
+/* TOAST */
+
+.toast{
+  position:fixed;
+  right:20px;
+  bottom:20px;
+  z-index:800;
+  max-width:360px;
+  padding:13px 16px;
+  border:1px solid var(--line);
+  border-radius:10px;
+  background:#111;
+  color:#ddd;
+  font-size:11px;
+  transform:translateY(20px);
+  opacity:0;
+  pointer-events:none;
+  transition:.25s;
+}
+
+.toast.show{
+  transform:translateY(0);
+  opacity:1;
+}
+
+/* FOOTER */
+
+footer{
+  border-top:1px solid var(--line2);
+  padding:40px 0;
+  color:#77746c;
+}
+
+.footer-grid{
+  display:flex;
+  justify-content:space-between;
+  gap:30px;
+  flex-wrap:wrap;
+}
+
+.footer-brand{
+  font-family:Orbitron,sans-serif;
+  color:#aaa69d;
+  font-size:12px;
+  letter-spacing:.14em;
+}
+
+.footer-links{
+  display:flex;
+  gap:17px;
+  flex-wrap:wrap;
+}
+
+.footer-links a{
+  font-size:10px;
+  text-transform:uppercase;
+  letter-spacing:.08em;
+}
+
+.footer-links a:hover{
+  color:var(--gold2);
+}
+
+.copyright{
+  margin-top:22px;
+  font-size:10px;
+}
+
+/* RESPONSIVE */
+
+@media(max-width:1100px){
+  .nav-links{
+    display:none;
+    position:absolute;
+    top:78px;
+    left:0;
+    right:0;
+    padding:14px 20px 20px;
+    background:rgba(5,5,5,.98);
+    border-bottom:1px solid var(--line2);
+    flex-direction:column;
+    align-items:stretch;
+  }
+
+  .nav-links.open{
+    display:flex;
+  }
+
+  .nav-links a{
+    padding:13px;
+  }
+
+  .nav-toggle{
+    display:block;
+  }
+
+  .hero-grid,
+  .featured,
+  .content-layout{
+    grid-template-columns:1fr;
+  }
+
+  .sidebar{
+    position:static;
+  }
+
+  .video-grid{
+    grid-template-columns:repeat(2,minmax(0,1fr));
+  }
+
+  .controls{
+    grid-template-columns:1fr 1fr;
+  }
+
+  .controls .search{
+    grid-column:1/-1;
+  }
+}
+
+@media(max-width:700px){
+  .container{
+    width:min(100% - 24px,1400px);
+  }
+
+  .hero{
+    padding-top:50px;
+  }
+
+  h1{
+    font-size:44px;
+  }
+
+  .stats{
+    grid-template-columns:1fr 1fr;
+  }
+
+  .controls{
+    grid-template-columns:1fr;
+  }
+
+  .controls .search{
+    grid-column:auto;
+  }
+
+  .video-grid{
+    grid-template-columns:1fr;
+  }
+
+  .featured-copy{
+    padding:27px;
+  }
+
+  .featured-media,
+  .featured-media img{
+    min-height:280px;
+  }
+
+  .mission{
+    padding:38px 20px;
+  }
+
+  .section-head{
+    align-items:start;
+    flex-direction:column;
+  }
+
+  .modal{
+    padding:8px;
+  }
+
+  .modal-box{
+    border-radius:12px;
+  }
+}
+
+@media(max-width:430px){
+  .stats{
+    grid-template-columns:1fr;
+  }
+
+  .brand-copy small{
+    display:none;
+  }
+}
+</style>
+
+</head>
+
+<body>
+
+<header>
+  <div class="container nav">
+
+```
+<a class="brand" href="index.html" aria-label="CrowRules Memorials Home">
+  <div class="brand-mark"><span>CR</span></div>
+  <div class="brand-copy">
+    <strong>CROWRULES</strong>
+    <small>Memorials</small>
+  </div>
+</a>
+
+<button class="nav-toggle" id="navToggle" aria-label="Open navigation">MENU</button>
+
+<nav class="nav-links" id="navLinks">
+  <a href="index.html">Home</a>
+  <a href="memorials.html">Memorials</a>
+  <a href="featured.html">Featured</a>
+  <a href="recent.html">Recent</a>
+  <a href="on-this-day.html">On This Day</a>
+  <a href="stories.html">Stories</a>
+  <a href="tributes.html">Tributes</a>
+  <a href="candles.html">Candles</a>
+  <a href="photos.html">Photos</a>
+  <a class="active" href="videos.html">Videos</a>
+  <a href="search.html">Search</a>
+  <a href="create-memorial.html">Create</a>
+</nav>
+```
+
+  </div>
+</header>
+
+<main>
+
+<section class="hero">
+  <div class="container hero-grid">
+
+```
+<div>
+  <div class="kicker">CrowRules Memorials / Video Archive</div>
+  <h1>Memories<br>In Motion.</h1>
+  <p>
+    A place for filmed memories, memorial services, interviews,
+    conversations, tributes and moments that deserve to remain
+    part of the story.
+  </p>
+</div>
+
+<div class="hero-note">
+  Some memories live in photographs.
+  Some live in words.
+  And some are carried in a voice, a smile, a laugh or a moment
+  captured on video.
+</div>
+```
+
+  </div>
+</section>
+
+<section class="container">
+
+  <div class="stats">
+    <div class="stat">
+      <div class="stat-value" id="statVideos">—</div>
+      <div class="stat-label">Videos</div>
+    </div>
+
+```
+<div class="stat">
+  <div class="stat-value" id="statLives">—</div>
+  <div class="stat-label">Lives Represented</div>
+</div>
+
+<div class="stat">
+  <div class="stat-value" id="statAuthors">—</div>
+  <div class="stat-label">Contributors</div>
+</div>
+
+<div class="stat">
+  <div class="stat-value" id="statRecent">—</div>
+  <div class="stat-label">Added Last 30 Days</div>
+</div>
+```
+
+  </div>
+
+  <div class="controls">
+
+```
+<input
+  id="searchInput"
+  class="control search"
+  type="search"
+  placeholder="Search videos, titles, memorials or contributors…"
+  autocomplete="off"
+>
+
+<select id="memorialFilter" class="control">
+  <option value="">All Memorials</option>
+</select>
+
+<select id="sortSelect" class="control">
+  <option value="newest">Newest First</option>
+  <option value="oldest">Oldest First</option>
+  <option value="title">Title A–Z</option>
+</select>
+```
+
+  </div>
+
+  <section id="featuredSection"></section>
+
+  <div class="content-layout">
+
+```
+<section>
+
+  <div class="section-head">
+    <div>
+      <h2>Video Archive</h2>
+      <p id="resultSummary">Loading memories in motion…</p>
+    </div>
+  </div>
+
+  <div id="videoArea">
+    <div class="loading">
+      <div class="loader"></div>
+      Loading video memories…
+    </div>
+  </div>
+
+  <div id="pagination" class="pagination"></div>
+
+</section>
+
+<aside class="sidebar">
+
+  <div class="side-card">
+    <h3>Most Represented</h3>
+    <div id="mostRepresented" class="side-list">
+      <div style="color:#777;font-size:11px">Loading…</div>
+    </div>
+  </div>
+
+  <div class="side-card">
+    <h3>Video Archive</h3>
+    <p style="margin:0;color:#888;font-size:11px;line-height:1.8">
+      Videos preserve something photographs cannot:
+      movement, voice, expression and the feeling of being there.
+    </p>
+  </div>
+
+</aside>
+```
+
+  </div>
+
+</section>
+
+<section class="container">
+  <div class="mission">
+    <div class="eyebrow">Why Video Matters</div>
+    <h2>
+      A recorded moment can become a doorway back to someone we love.
+    </h2>
+    <p>
+      CrowRules Memorials preserves space for video memories alongside
+      photographs, stories, tributes and candles — creating a fuller
+      picture of the people whose lives continue to matter.
+    </p>
+  </div>
+</section>
+
+</main>
+
+<footer>
+  <div class="container">
+
+```
+<div class="footer-grid">
+  <div class="footer-brand">CROWRULES MEMORIALS</div>
+
+  <div class="footer-links">
+    <a href="index.html">Home</a>
+    <a href="memorials.html">Memorials</a>
+    <a href="stories.html">Stories</a>
+    <a href="tributes.html">Tributes</a>
+    <a href="candles.html">Candles</a>
+    <a href="photos.html">Photos</a>
+    <a href="videos.html">Videos</a>
+    <a href="guestbook.html">Guestbook</a>
+    <a href="create-memorial.html">Create Memorial</a>
+  </div>
+</div>
+
+<div class="copyright">
+  © <span id="year"></span> CrowRules Entertainment. Every life leaves a story.
+</div>
+```
+
+  </div>
+</footer>
+
+<div class="modal" id="videoModal" aria-hidden="true">
+
+  <div class="modal-box">
+
+```
+<div class="modal-head">
+  <div class="modal-title" id="modalTitle">Video</div>
+  <button class="close" id="modalClose" aria-label="Close">×</button>
+</div>
+
+<div class="video-player" id="modalPlayer"></div>
+
+<div class="modal-info">
+  <div class="meta" id="modalMeta"></div>
+  <h2 id="modalHeading"></h2>
+  <p id="modalDescription"></p>
+</div>
+```
+
+  </div>
+
+</div>
+
+<div class="toast" id="toast"></div>
+
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+
+<script>
+/* ============================================================
+   CROWRULES MEMORIALS — VIDEOS
+   ============================================================ */
+
+const SUPABASE_URL =
+  "https://cevylpnoexugwgygvtgu.supabase.co";
+
+const SUPABASE_KEY =
+  "sb_publishable_AdfM5y6RqvF3tbvEVzDZSg_JuGTQLD-";
+
+const db = window.supabase.createClient(
+  SUPABASE_URL,
+  SUPABASE_KEY
+);
+
+/*
+  IMPORTANT
+
+  The current memorial schema contains memorial_photos,
+  memorial_stories, tributes, candles and guestbook data,
+  but does not contain a memorial_videos table.
+
+  This page therefore supports video memories through an
+  optional future `memorial_videos` table.
+
+  Expected future structure:
+
+    id uuid
+    memorial_id uuid
+    title text
+    video_url text
+    thumbnail_url text
+    description text
+    author_name text
+    duration text
+    published boolean
+    created_at timestamptz
+
+  The page will automatically use that table when it exists.
+
+  Until then, the page gracefully displays the archive state
+  rather than breaking the Memorials site.
+*/
+
+const state = {
+  videos: [],
+  memorials: [],
+  filtered: [],
+  page: 1,
+  perPage: 9,
+  search: "",
+  memorial: "",
+  sort: "newest",
+  tableAvailable: false
+};
+
+const $ = id => document.getElementById(id);
+
+function escapeHtml(value){
+  return String(value ?? "")
+    .replace(/&/g,"&amp;")
+    .replace(/</g,"&lt;")
+    .replace(/>/g,"&gt;")
+    .replace(/"/g,"&quot;")
+    .replace(/'/g,"&#039;");
+}
+
+function shorten(value,max=150){
+  const text = String(value ?? "").trim();
+
+  if(text.length <= max) return text;
+
+  return text.slice(0,max).trim() + "…";
+}
+
+function formatDate(value){
+  if(!value) return "Date unavailable";
+
+  const date = new Date(
+    String(value).includes("T")
+      ? value
+      : value + "T00:00:00"
+  );
+
+  if(Number.isNaN(date.getTime())){
+    return "Date unavailable";
+  }
+
+  return new Intl.DateTimeFormat("en-US",{
+    month:"short",
+    day:"numeric",
+    year:"numeric"
+  }).format(date);
+}
+
+function memorialUrl(slug){
+  return "memorial.html?slug=" +
+    encodeURIComponent(slug || "");
+}
+
+function safeImage(url){
+  if(!url) return "";
+
+  try{
+    const parsed = new URL(url);
+
+    if(parsed.protocol !== "http:" &&
+       parsed.protocol !== "https:"){
+      return "";
+    }
+
+    return parsed.href;
+  }catch{
+    return "";
+  }
+}
+
+function isVideoUrl(url){
+  if(!url) return false;
+
+  const value = String(url).toLowerCase();
+
+  return (
+    value.includes("youtube.com") ||
+    value.includes("youtu.be") ||
+    value.includes("vimeo.com") ||
+    /\.(mp4|webm|ogg)(\?|#|$)/i.test(value)
+  );
+}
+
+function youtubeEmbed(url){
+
+  try{
+    const parsed = new URL(url);
+
+    let id = "";
+
+    if(parsed.hostname.includes("youtu.be")){
+      id = parsed.pathname.replace("/","");
+    }
+
+    if(parsed.hostname.includes("youtube.com")){
+      id = parsed.searchParams.get("v") || "";
+
+      if(parsed.pathname.startsWith("/embed/")){
+        id = parsed.pathname.split("/embed/")[1];
+      }
+
+      if(parsed.pathname.startsWith("/shorts/")){
+        id = parsed.pathname.split("/shorts/")[1];
+      }
+    }
+
+    if(!id) return "";
+
+    id = id.split(/[?&#]/)[0];
+
+    return "https://www.youtube.com/embed/" +
+      encodeURIComponent(id) +
+      "?autoplay=1&rel=0";
+
+  }catch{
+    return "";
+  }
+}
+
+function vimeoEmbed(url){
+
+  try{
+    const parsed = new URL(url);
+    const match = parsed.pathname.match(/\/(\d+)/);
+
+    if(!match) return "";
+
+    return "https://player.vimeo.com/video/" +
+      match[1] +
+      "?autoplay=1";
+
+  }catch{
+    return "";
+  }
+}
+
+function renderVideoPlayer(video){
+
+  const url = safeImage(video.video_url);
+
+  if(!url){
+    return `
+      <div style="
+        width:100%;
+        height:100%;
+        display:grid;
+        place-items:center;
+        color:#777;
+        font-size:12px;
+      ">
+        Video source unavailable.
+      </div>
+    `;
+  }
+
+  const youtube = youtubeEmbed(url);
+
+  if(youtube){
+    return `
+      <iframe
+        src="${escapeHtml(youtube)}"
+        title="${escapeHtml(video.title)}"
+        allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
+        allowfullscreen>
+      </iframe>
+    `;
+  }
+
+  const vimeo = vimeoEmbed(url);
+
+  if(vimeo){
+    return `
+      <iframe
+        src="${escapeHtml(vimeo)}"
+        title="${escapeHtml(video.title)}"
+        allow="autoplay; fullscreen; picture-in-picture"
+        allowfullscreen>
+      </iframe>
+    `;
+  }
+
+  if(/\.(mp4|webm|ogg)(\?|#|$)/i.test(url)){
+    return `
+      <video
+        src="${escapeHtml(url)}"
+        controls
+        autoplay
+        playsinline>
+      </video>
+    `;
+  }
+
+  return `
+    <div style="
+      height:100%;
+      display:grid;
+      place-items:center;
+      padding:25px;
+      text-align:center;
+      color:#aaa;
+    ">
+      <div>
+        <div style="font-size:28px;margin-bottom:12px">▶</div>
+        <div style="font-size:12px">
+          This video is hosted externally.
+        </div>
+        <a
+          href="${escapeHtml(url)}"
+          target="_blank"
+          rel="noopener noreferrer"
+          class="btn"
+          style="margin-top:15px">
+          Open Video
+        </a>
+      </div>
+    </div>
+  `;
+}
+
+function toast(message){
+  const el = $("toast");
+
+  el.textContent = message;
+  el.classList.add("show");
+
+  clearTimeout(toast.timer);
+
+  toast.timer = setTimeout(()=>{
+    el.classList.remove("show");
+  },3200);
+}
+
+/* ------------------------------------------------------------
+   NAV
+------------------------------------------------------------ */
+
+$("navToggle").addEventListener("click",()=>{
+  $("navLinks").classList.toggle("open");
+});
+
+document.querySelectorAll(".nav-links a").forEach(link=>{
+  link.addEventListener("click",()=>{
+    $("navLinks").classList.remove("open");
+  });
+});
+
+/* ------------------------------------------------------------
+   URL STATE
+------------------------------------------------------------ */
+
+function readUrlState(){
+
+  const params = new URLSearchParams(location.search);
+
+  state.search = params.get("q") || "";
+  state.memorial = params.get("memorial") || "";
+  state.sort = params.get("sort") || "newest";
+  state.page = Math.max(
+    1,
+    Number(params.get("page") || 1)
+  );
+
+  $("searchInput").value = state.search;
+  $("memorialFilter").value = state.memorial;
+  $("sortSelect").value = state.sort;
+}
+
+function updateUrl(){
+
+  const params = new URLSearchParams();
+
+  if(state.search){
+    params.set("q",state.search);
+  }
+
+  if(state.memorial){
+    params.set("memorial",state.memorial);
+  }
+
+  if(state.sort !== "newest"){
+    params.set("sort",state.sort);
+  }
+
+  if(state.page > 1){
+    params.set("page",String(state.page));
+  }
+
+  const query = params.toString();
+
+  history.replaceState(
+    null,
+    "",
+    location.pathname + (query ? "?" + query : "")
+  );
+}
+
+/* ------------------------------------------------------------
+   LOAD MEMORIALS
+------------------------------------------------------------ */
+
+async function loadMemorials(){
+
+  const { data, error } = await db
+    .from("memorials")
+    .select(`
+      id,
+      slug,
+      full_name,
+      birth_date,
+      passing_date,
+      location,
+      short_bio,
+      portrait_url,
+      published
+    `)
+    .eq("published",true)
+    .order("full_name",{ascending:true});
+
+  if(error){
+    console.error(error);
+    throw error;
+  }
+
+  state.memorials = data || [];
+
+  populateMemorialFilter();
+}
+
+function populateMemorialFilter(){
+
+  const current = state.memorial;
+
+  $("memorialFilter").innerHTML =
+    `<option value="">All Memorials</option>` +
+    state.memorials.map(m=>`
+      <option
+        value="${escapeHtml(m.id)}"
+        ${m.id === current ? "selected" : ""}>
+        ${escapeHtml(m.full_name)}
+      </option>
+    `).join("");
+}
+
+/* ------------------------------------------------------------
+   LOAD VIDEOS
+------------------------------------------------------------ */
+
+async function loadVideos(){
+
+  const { data, error } = await db
+    .from("memorial_videos")
+    .select(`
+      id,
+      memorial_id,
+      title,
+      video_url,
+      thumbnail_url,
+      description,
+      author_name,
+      duration,
+      published,
+      created_at
+    `)
+    .eq("published",true)
+    .order("created_at",{ascending:false});
+
+  if(error){
+
+    console.warn(
+      "memorial_videos table is not currently available.",
+      error
+    );
+
+    state.tableAvailable = false;
+    state.videos = [];
+
+    return;
+  }
+
+  state.tableAvailable = true;
+
+  state.videos = (data || []).map(video=>{
+
+    const memorial =
+      state.memorials.find(
+        m => m.id === video.memorial_id
+      );
+
+    return {
+      ...video,
+      memorial
+    };
+
+  }).filter(video=>video.memorial);
+
+}
+
+/* ------------------------------------------------------------
+   STATS
+------------------------------------------------------------ */
+
+function renderStats(){
+
+  const videos = state.videos;
+
+  const lives = new Set(
+    videos.map(v=>v.memorial_id)
+  ).size;
+
+  const authors = new Set(
+    videos
+      .map(v=>String(v.author_name || "").trim())
+      .filter(Boolean)
+      .map(v=>v.toLowerCase())
+  ).size;
+
+  const cutoff =
+    Date.now() -
+    30 * 24 * 60 * 60 * 1000;
+
+  const recent = videos.filter(v=>{
+    const t = new Date(v.created_at).getTime();
+    return Number.isFinite(t) && t >= cutoff;
+  }).length;
+
+  $("statVideos").textContent =
+    videos.length.toLocaleString();
+
+  $("statLives").textContent =
+    lives.toLocaleString();
+
+  $("statAuthors").textContent =
+    authors.toLocaleString();
+
+  $("statRecent").textContent =
+    recent.toLocaleString();
+}
+
+/* ------------------------------------------------------------
+   FILTER
+------------------------------------------------------------ */
+
+function applyFilters(){
+
+  const query =
+    state.search.trim().toLowerCase();
+
+  state.filtered = state.videos.filter(video=>{
+
+    const memorial = video.memorial || {};
+
+    const searchable = [
+      video.title,
+      video.description,
+      video.author_name,
+      memorial.full_name,
+      memorial.location,
+      memorial.short_bio
+    ]
+      .filter(Boolean)
+      .join(" ")
+      .toLowerCase();
+
+    const matchesSearch =
+      !query || searchable.includes(query);
+
+    const matchesMemorial =
+      !state.memorial ||
+      video.memorial_id === state.memorial;
+
+    return matchesSearch && matchesMemorial;
+
+  });
+
+  state.filtered.sort((a,b)=>{
+
+    if(state.sort === "title"){
+      return String(a.title || "")
+        .localeCompare(
+          String(b.title || ""),
+          undefined,
+          {sensitivity:"base"}
+        );
+    }
+
+    const ad = new Date(a.created_at).getTime();
+    const bd = new Date(b.created_at).getTime();
+
+    if(state.sort === "oldest"){
+      return ad - bd;
+    }
+
+    return bd - ad;
+  });
+
+  const maxPage = Math.max(
+    1,
+    Math.ceil(
+      state.filtered.length / state.perPage
+    )
+  );
+
+  if(state.page > maxPage){
+    state.page = maxPage;
+  }
+
+  updateUrl();
+  renderFeatured();
+  renderArchive();
+  renderSidebar();
+}
+
+/* ------------------------------------------------------------
+   FEATURED
+------------------------------------------------------------ */
+
+function renderFeatured(){
+
+  const section = $("featuredSection");
+
+  if(!state.filtered.length){
+    section.innerHTML = "";
+    return;
+  }
+
+  const video = state.filtered[0];
+  const memorial = video.memorial || {};
+
+  const image =
+    safeImage(video.thumbnail_url) ||
+    safeImage(memorial.portrait_url);
+
+  section.innerHTML = `
+    <div class="featured">
+
+      <div class="featured-media">
+
+        ${
+          image
+          ? `<img
+              src="${escapeHtml(image)}"
+              alt="${escapeHtml(video.title)}">`
+          : `
+            <div style="
+              width:100%;
+              height:100%;
+              min-height:430px;
+              display:grid;
+              place-items:center;
+              font-family:Orbitron,sans-serif;
+              color:#6f6b62;
+              font-size:11px;
+              letter-spacing:.15em;
+            ">
+              CROWRULES MEMORIALS
+            </div>
+          `
+        }
+
+        <div class="featured-overlay"></div>
+
+        <button
+          class="play-big"
+          onclick="openVideo('${escapeHtml(video.id)}')"
+          aria-label="Play featured video">
+          ▶
+        </button>
+
+      </div>
+
+      <div class="featured-copy">
+
+        <div class="eyebrow">Featured Memory</div>
+
+        <h2>${escapeHtml(video.title || "Untitled Video")}</h2>
+
+        <div class="meta">
+
+          <span class="pill">
+            ${escapeHtml(memorial.full_name)}
+          </span>
+
+          ${
+            video.duration
+            ? `<span class="pill">
+                ${escapeHtml(video.duration)}
+              </span>`
+            : ""
+          }
+
+          <span class="pill">
+            ${escapeHtml(formatDate(video.created_at))}
+          </span>
+
+        </div>
+
+        <p>
+          ${escapeHtml(
+            shorten(
+              video.description ||
+              memorial.short_bio ||
+              "A video memory preserved in honor of a life remembered.",
+              230
+            )
+          )}
+        </p>
+
+        <div style="display:flex;gap:9px;flex-wrap:wrap;margin-top:8px">
+
+          <button
+            class="btn"
+            onclick="openVideo('${escapeHtml(video.id)}')">
+            ▶ Watch Video
+          </button>
+
+          <a
+            class="btn secondary"
+            href="${memorialUrl(memorial.slug)}">
+            View Memorial
+          </a>
+
+        </div>
+
+      </div>
+
+    </div>
+  `;
+}
+
+/* ------------------------------------------------------------
+   ARCHIVE
+------------------------------------------------------------ */
+
+function renderArchive(){
+
+  const area = $("videoArea");
+
+  const total = state.filtered.length;
+
+  $("resultSummary").textContent =
+    total
+      ? `${total.toLocaleString()} video ${total === 1 ? "memory" : "memories"} found`
+      : "No video memories match your search.";
+
+  if(!total){
+
+    if(!state.tableAvailable){
+
+      area.innerHTML = `
+        <div class="empty">
+
+          <div class="empty-icon">▶</div>
+
+          <h3>Video Archive Ready</h3>
+
+          <p>
+            The CrowRules Memorials video archive is ready for
+            video memories. Once the
+            <strong>memorial_videos</strong> table is connected,
+            published videos will automatically appear here.
+          </p>
+
+        </div>
+      `;
+
+    }else{
+
+      area.innerHTML = `
+        <div class="empty">
+
+          <div class="empty-icon">⌁</div>
+
+          <h3>No Videos Found</h3>
+
+          <p>
+            Try another search or choose a different memorial.
+          </p>
+
+        </div>
+      `;
+
+    }
+
+    $("pagination").innerHTML = "";
+    return;
+  }
+
+  const start =
+    (state.page - 1) *
+    state.perPage;
+
+  const items =
+    state.filtered.slice(
+      start,
+      start + state.perPage
+    );
+
+  area.innerHTML = `
+    <div class="video-grid">
+      ${items.map(renderVideoCard).join("")}
+    </div>
+  `;
+
+  renderPagination();
+}
+
+function renderVideoCard(video){
+
+  const memorial = video.memorial || {};
+
+  const image =
+    safeImage(video.thumbnail_url) ||
+    safeImage(memorial.portrait_url);
+
+  return `
+    <article class="video-card">
+
+      <div class="video-thumb">
+
+        ${
+          image
+          ? `<img
+              src="${escapeHtml(image)}"
+              alt="${escapeHtml(
+                video.title ||
+                memorial.full_name ||
+                "Memorial video"
+              )}"
+              loading="lazy">`
+          : `
+            <div style="
+              width:100%;
+              height:100%;
+              display:grid;
+              place-items:center;
+              color:#625f57;
+              font-family:Orbitron,sans-serif;
+              font-size:10px;
+              letter-spacing:.12em;
+            ">
+              VIDEO MEMORY
+            </div>
+          `
+        }
+
+        <div class="thumb-shade"></div>
+
+        <button
+          class="play"
+          onclick="openVideo('${escapeHtml(video.id)}')"
+          aria-label="Play video">
+          ▶
+        </button>
+
+        ${
+          video.duration
+          ? `<div class="duration">
+              ${escapeHtml(video.duration)}
+            </div>`
+          : ""
+        }
+
+      </div>
+
+      <div class="video-body">
+
+        <h3>
+          ${escapeHtml(
+            video.title || "Untitled Video"
+          )}
+        </h3>
+
+        <p>
+          ${escapeHtml(
+            shorten(
+              video.description ||
+              "A preserved video memory.",
+              105
+            )
+          )}
+        </p>
+
+        <div class="video-meta">
+
+          <span>
+            ${escapeHtml(memorial.full_name)}
+          </span>
+
+          <span>
+            ${escapeHtml(
+              formatDate(video.created_at)
+            )}
+          </span>
+
+        </div>
+
+        <div style="
+          display:flex;
+          gap:8px;
+          margin-top:14px;
+        ">
+
+          <button
+            class="btn"
+            style="flex:1"
+            onclick="openVideo('${escapeHtml(video.id)}')">
+            Watch
+          </button>
+
+          <a
+            class="btn secondary"
+            href="${memorialUrl(memorial.slug)}"
+            aria-label="View memorial">
+            Memorial
+          </a>
+
+        </div>
+
+      </div>
+
+    </article>
+  `;
+}
+
+/* ------------------------------------------------------------
+   SIDEBAR
+------------------------------------------------------------ */
+
+function renderSidebar(){
+
+  const counts = new Map();
+
+  state.videos.forEach(video=>{
+    const memorial = video.memorial;
+
+    if(!memorial) return;
+
+    const current =
+      counts.get(memorial.id) || {
+        memorial,
+        count:0
+      };
+
+    current.count++;
+    counts.set(memorial.id,current);
+  });
+
+  const ranked =
+    [...counts.values()]
+      .sort((a,b)=>b.count-a.count)
+      .slice(0,7);
+
+  if(!ranked.length){
+
+    $("mostRepresented").innerHTML = `
+      <div style="
+        color:#777;
+        font-size:11px;
+        line-height:1.6;
+      ">
+        No video memories yet.
+      </div>
+    `;
+
+    return;
+  }
+
+  $("mostRepresented").innerHTML =
+    ranked.map((item,index)=>`
+
+      <a
+        class="side-item"
+        href="${memorialUrl(item.memorial.slug)}">
+
+        <div class="side-number">
+          ${String(index+1).padStart(2,"0")}
+        </div>
+
+        <div>
+          <div class="side-name">
+            ${escapeHtml(item.memorial.full_name)}
+          </div>
+
+          <div class="side-sub">
+            Video memories
+          </div>
+        </div>
+
+        <div class="side-count">
+          ${item.count}
+        </div>
+
+      </a>
+
+    `).join("");
+}
+
+/* ------------------------------------------------------------
+   PAGINATION
+------------------------------------------------------------ */
+
+function renderPagination(){
+
+  const totalPages =
+    Math.ceil(
+      state.filtered.length /
+      state.perPage
+    );
+
+  if(totalPages <= 1){
+    $("pagination").innerHTML = "";
+    return;
+  }
+
+  const buttons = [];
+
+  if(state.page > 1){
+    buttons.push(`
+      <button
+        class="page-btn"
+        onclick="goPage(${state.page-1})">
+        ←
+      </button>
+    `);
+  }
+
+  const start =
+    Math.max(1,state.page-2);
+
+  const end =
+    Math.min(totalPages,state.page+2);
+
+  for(let page=start;page<=end;page++){
+
+    buttons.push(`
+      <button
+        class="page-btn ${page === state.page ? "active" : ""}"
+        onclick="goPage(${page})">
+        ${page}
+      </button>
+    `);
+
+  }
+
+  if(state.page < totalPages){
+    buttons.push(`
+      <button
+        class="page-btn"
+        onclick="goPage(${state.page+1})">
+        →
+      </button>
+    `);
+  }
+
+  $("pagination").innerHTML =
+    buttons.join("");
+}
+
+function goPage(page){
+
+  state.page = page;
+
+  updateUrl();
+
+  renderArchive();
+
+  window.scrollTo({
+    top:$("videoArea").offsetTop - 110,
+    behavior:"smooth"
+  });
+}
+
+/* ------------------------------------------------------------
+   VIDEO MODAL
+------------------------------------------------------------ */
+
+window.openVideo = function(id){
+
+  const video =
+    state.videos.find(
+      item => String(item.id) === String(id)
+    );
+
+  if(!video) return;
+
+  const memorial =
+    video.memorial || {};
+
+  $("modalTitle").textContent =
+    video.title || "Video";
+
+  $("modalHeading").textContent =
+    video.title || "Untitled Video";
+
+  $("modalDescription").textContent =
+    video.description ||
+    `A video memory preserved in honor of ${memorial.full_name || "a life remembered"}.`;
+
+  $("modalMeta").innerHTML = `
+    <span class="pill">
+      ${escapeHtml(memorial.full_name || "Memorial")}
+    </span>
+
+    ${
+      video.author_name
+      ? `<span class="pill">
+          ${escapeHtml(video.author_name)}
+        </span>`
+      : ""
+    }
+
+    ${
+      video.duration
+      ? `<span class="pill">
+          ${escapeHtml(video.duration)}
+        </span>`
+      : ""
+    }
+
+    <span class="pill">
+      ${escapeHtml(formatDate(video.created_at))}
+    </span>
+  `;
+
+  $("modalPlayer").innerHTML =
+    renderVideoPlayer(video);
+
+  $("videoModal").classList.add("open");
+  $("videoModal").setAttribute("aria-hidden","false");
+
+  document.body.style.overflow = "hidden";
+};
+
+function closeVideo(){
+
+  $("videoModal").classList.remove("open");
+  $("videoModal").setAttribute("aria-hidden","true");
+
+  $("modalPlayer").innerHTML = "";
+
+  document.body.style.overflow = "";
+}
+
+$("modalClose").addEventListener(
+  "click",
+  closeVideo
+);
+
+$("videoModal").addEventListener(
+  "click",
+  event=>{
+    if(event.target === $("videoModal")){
+      closeVideo();
+    }
+  }
+);
+
+document.addEventListener(
+  "keydown",
+  event=>{
+    if(event.key === "Escape"){
+      closeVideo();
+    }
+  }
+);
+
+/* ------------------------------------------------------------
+   CONTROLS
+------------------------------------------------------------ */
+
+let searchTimer;
+
+$("searchInput").addEventListener(
+  "input",
+  event=>{
+
+    clearTimeout(searchTimer);
+
+    searchTimer = setTimeout(()=>{
+
+      state.search =
+        event.target.value.trim();
+
+      state.page = 1;
+
+      applyFilters();
+
+    },180);
+  }
+);
+
+$("memorialFilter").addEventListener(
+  "change",
+  event=>{
+
+    state.memorial =
+      event.target.value;
+
+    state.page = 1;
+
+    applyFilters();
+  }
+);
+
+$("sortSelect").addEventListener(
+  "change",
+  event=>{
+
+    state.sort =
+      event.target.value;
+
+    state.page = 1;
+
+    applyFilters();
+  }
+);
+
+/* ------------------------------------------------------------
+   INIT
+------------------------------------------------------------ */
+
+async function init(){
+
+  $("year").textContent =
+    new Date().getFullYear();
+
+  readUrlState();
+
+  try{
+
+    await loadMemorials();
+
+    await loadVideos();
+
+    renderStats();
+
+    applyFilters();
+
+  }catch(error){
+
+    console.error(error);
+
+    $("videoArea").innerHTML = `
+      <div class="empty">
+
+        <div class="empty-icon">!</div>
+
+        <h3>Archive Temporarily Unavailable</h3>
+
+        <p>
+          We could not connect to the memorial video archive.
+          Please refresh the page and try again.
+        </p>
+
+      </div>
+    `;
+
+    $("resultSummary").textContent =
+      "Unable to load the video archive.";
+
+    toast(
+      "Unable to load the memorial archive."
+    );
+
+  }
+
+}
+
+init();
+
+</script>
+
+</body>
+</html>
