@@ -1,68 +1,33 @@
 (()=>{
   'use strict';
   if(document.querySelector('.mr-header')) return;
-
-  const groups = [
-    ['Explore', [['Home','index.html'],['Memorials','memorials.html'],['Featured','featured.html'],['Recent','recent.html'],['On This Day','on-this-day.html'],['Search','search.html']]],
-    ['Remember', [['Ways to Remember','ways-to-remember.html'],['Memory Gallery','memory-gallery.html'],['Photos','photos.html'],['Life Story','life-story.html'],['Life Soundtrack','life-soundtrack.html'],['Favorite Things','favorite-things.html'],['Favorite Foods','favorite-foods.html'],['Places','places.html'],['Movies & TV','movies-tv.html'],['Pets & Animals','pets-animals.html'],['Hobbies & Talents','hobbies-talents.html']]],
-    ['Honor', [['Light a Candle','candles.html'],['Legacy Garden','legacy-garden.html'],['Acts of Kindness','acts-of-kindness.html'],['Give in Their Memory','donate-in-memory.html'],['Annual Remembrance','annual-remembrance.html'],['Memorial Constellation','memorial-constellation.html'],['One More Day','one-more-day.html']]],
-    ['Stories', [['Memory Wall','memory-wall.html'],['Stories','stories.html'],['Funny Stories','funny-stories.html'],['Letters Never Sent','letters-never-sent.html'],['Recorded Interviews','recorded-interviews.html'],['Memory Theater','memory-theater.html'],['Creative Tributes','creative-tributes.html'],['Tributes','tributes.html'],['Quotes & Sayings','quotes-sayings.html'],['What They Meant','what-they-meant.html']]],
-    ['Legacy', [['Accomplishments','accomplishments.html'],['Legacy Lessons','legacy-lessons.html'],['Family Tree','family-tree.html'],['Digital Memory House','digital-memory-house.html'],['Memory Calendar','milestone-calendar.html'],['Videos','videos.html'],['Did You Know?','did-you-know.html']]]
+  const groups=[
+    ['Explore',[['Home','index.html'],['Memorials','memorials.html'],['Featured','featured.html'],['Recent','recent.html'],['On This Day','on-this-day.html'],['Search','search.html']]],
+    ['Remember',[['Ways to Remember','ways-to-remember.html'],['Memory Gallery','memory-gallery.html'],['Photos','photos.html'],['Life Story','life-story.html'],['Life Soundtrack','life-soundtrack.html'],['Favorite Things','favorite-things.html'],['Favorite Foods','favorite-foods.html'],['Places','places.html'],['Movies & TV','movies-tv.html'],['Pets & Animals','pets-animals.html'],['Hobbies & Talents','hobbies-talents.html']]],
+    ['Honor',[['Light a Candle','candles.html'],['Legacy Garden','legacy-garden.html'],['Acts of Kindness','acts-of-kindness.html'],['Give in Their Memory','donate-in-memory.html'],['Annual Remembrance','annual-remembrance.html'],['Memorial Constellation','memorial-constellation.html'],['One More Day','one-more-day.html']]],
+    ['Stories',[['Memory Wall','memory-wall.html'],['Stories','stories.html'],['Funny Stories','funny-stories.html'],['Letters Never Sent','letters-never-sent.html'],['Recorded Interviews','recorded-interviews.html'],['Memory Theater','memory-theater.html'],['Creative Tributes','creative-tributes.html'],['Tributes','tributes.html'],['Quotes & Sayings','quotes-sayings.html'],['What They Meant','what-they-meant.html']]],
+    ['Legacy',[['Accomplishments','accomplishments.html'],['Legacy Lessons','legacy-lessons.html'],['Family Tree','family-tree.html'],['Digital Memory House','digital-memory-house.html'],['Memory Calendar','milestone-calendar.html'],['Videos','videos.html'],['Did You Know?','did-you-know.html']]]
   ];
-
-  const params = new URLSearchParams(location.search);
-  const slug = params.get('slug');
-  const currentFile = location.pathname.split('/').pop() || 'index.html';
-  const withContext = url => slug ? `${url}${url.includes('?')?'&':'?'}slug=${encodeURIComponent(slug)}` : url;
-
-  document.querySelectorAll('body > header:not(.mr-header), header.site-header, .site-header').forEach(el=>{el.dataset.mrLegacy='true';el.style.display='none';});
-
-  const loadCss=(href,key)=>{if(!document.querySelector(`link[data-${key}]`)){const l=document.createElement('link');l.rel='stylesheet';l.href=href;l.dataset[key]='true';document.head.appendChild(l);}};
-  loadCss('assets/memorial-nav.css','mr-nav');
-  loadCss('assets/memorial-site.css','mr-site');
-
-  const installImageProtection=()=>{
-    const fallback='data:image/svg+xml;charset=UTF-8,'+encodeURIComponent(`<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 900"><defs><radialGradient id="g"><stop stop-color="#2b2515"/><stop offset="1" stop-color="#070707"/></radialGradient></defs><rect width="1200" height="900" fill="url(#g)"/><circle cx="600" cy="330" r="150" fill="none" stroke="#d4af37" stroke-opacity=".28" stroke-width="4"/><path d="M600 210v240M480 330h240" stroke="#d4af37" stroke-opacity=".55" stroke-width="8" stroke-linecap="round"/><text x="600" y="650" fill="#f1d77a" font-family="Arial,sans-serif" font-size="34" font-weight="700" text-anchor="middle" letter-spacing="5">CROWRULES MEMORIALS</text></svg>`);
-    document.querySelectorAll('img').forEach(img=>{
-      if(img.dataset.mrProtected) return;
-      img.dataset.mrProtected='true';
-      img.loading=img.loading||'lazy';
-      img.decoding=img.decoding||'async';
-      img.addEventListener('error',()=>{if(img.dataset.mrFallback)return;img.dataset.mrFallback='true';img.classList.add('mr-image-fallback');img.alt=img.alt||'Memorial image unavailable';img.src=fallback;},{once:true});
-      img.addEventListener('load',()=>img.classList.remove('mr-image-loading'),{once:true});
-      if(!img.complete) img.classList.add('mr-image-loading');
-    });
-  };
-
-  const header=document.createElement('header');
-  header.className='mr-header';
-  header.innerHTML=`<div class="mr-nav"><a class="mr-brand" href="${withContext('index.html')}" aria-label="CrowRules Memorials home"><span class="mr-mark" aria-hidden="true">CR</span><span><b>CROWRULES</b><small>MEMORIALS</small></span></a><nav class="mr-links" aria-label="Memorials navigation"></nav><button class="mr-menu" type="button" aria-label="Open navigation" aria-expanded="false">☰</button><div class="mr-mobile" aria-label="Mobile navigation"></div></div>`;
-  const links=header.querySelector('.mr-links');
-  const mobile=header.querySelector('.mr-mobile');
-
-  groups.forEach(([label,items])=>{
-    const drop=document.createElement('div');drop.className='mr-drop';
-    const trigger=document.createElement('button');trigger.type='button';trigger.className='mr-drop-trigger';trigger.setAttribute('aria-expanded','false');trigger.setAttribute('aria-haspopup','true');trigger.innerHTML=`${label}<span aria-hidden="true">⌄</span>`;
-    const menu=document.createElement('div');menu.className='mr-drop-menu';menu.setAttribute('role','menu');
-    items.forEach(([title,url])=>{
-      const a=document.createElement('a');a.href=withContext(url);a.textContent=title;if(url===currentFile)a.setAttribute('aria-current','page');menu.appendChild(a);
-      const m=a.cloneNode(true);mobile.appendChild(m);
-    });
-    trigger.addEventListener('click',e=>{e.stopPropagation();const open=drop.classList.toggle('open');trigger.setAttribute('aria-expanded',String(open));document.querySelectorAll('.mr-drop.open').forEach(other=>{if(other!==drop){other.classList.remove('open');const b=other.querySelector('.mr-drop-trigger');if(b)b.setAttribute('aria-expanded','false');}});});
-    drop.append(trigger,menu);links.appendChild(drop);
-  });
-
+  const params=new URLSearchParams(location.search),slug=params.get('slug'),memorialId=params.get('memorial_id');
+  const currentFile=location.pathname.split('/').pop()||'index.html';
+  const context=new URLSearchParams();if(slug)context.set('slug',slug);if(memorialId)context.set('memorial_id',memorialId);
+  const withContext=url=>context.toString()?`${url}${url.includes('?')?'&':'?'}${context}`:url;
+  document.querySelectorAll('body > header:not(.mr-header),header.site-header,.site-header').forEach(el=>{el.dataset.mrLegacy='true';el.style.display='none';});
+  const load=(href,key)=>{if(!document.querySelector(`link[data-${key}]`)){const l=document.createElement('link');l.rel='stylesheet';l.href=href;l.dataset[key]='true';document.head.appendChild(l);}};
+  load('assets/memorial-nav.css?v=20260913','mr-nav');load('assets/memorial-site.css?v=20260913','mr-site');
+  const header=document.createElement('header');header.className='mr-header';header.innerHTML=`<div class="mr-nav"><a class="mr-brand" href="${withContext('index.html')}" aria-label="CrowRules Memorials home"><span class="mr-mark" aria-hidden="true">CR</span><span><b>CROWRULES</b><small>MEMORIALS</small></span></a><nav class="mr-links" aria-label="Memorials navigation"></nav><button class="mr-menu" type="button" aria-label="Open navigation" aria-expanded="false">☰</button><div class="mr-mobile" aria-label="Mobile navigation"></div></div>`;
+  const links=header.querySelector('.mr-links'),mobile=header.querySelector('.mr-mobile');
+  groups.forEach(([label,items])=>{const drop=document.createElement('div');drop.className='mr-drop';const trigger=document.createElement('button');trigger.type='button';trigger.className='mr-drop-trigger';trigger.setAttribute('aria-expanded','false');trigger.setAttribute('aria-haspopup','true');trigger.innerHTML=`${label}<span aria-hidden="true">⌄</span>`;const menu=document.createElement('div');menu.className='mr-drop-menu';menu.setAttribute('role','menu');items.forEach(([title,url])=>{const a=document.createElement('a');a.href=withContext(url);a.textContent=title;if(url===currentFile)a.setAttribute('aria-current','page');menu.appendChild(a);mobile.appendChild(a.cloneNode(true));});trigger.addEventListener('click',e=>{e.stopPropagation();const open=drop.classList.toggle('open');trigger.setAttribute('aria-expanded',String(open));document.querySelectorAll('.mr-drop.open').forEach(other=>{if(other!==drop){other.classList.remove('open');const b=other.querySelector('.mr-drop-trigger');if(b)b.setAttribute('aria-expanded','false');}});});drop.append(trigger,menu);links.appendChild(drop);});
   [['Create Memorial','create-memorial.html','mr-create'],['Guestbook','guestbook.html','mr-guestbook']].forEach(([title,url,cls])=>{const a=document.createElement('a');a.href=withContext(url);a.textContent=title;a.className=cls;if(url===currentFile)a.setAttribute('aria-current','page');links.appendChild(a);mobile.appendChild(a.cloneNode(true));});
-  if(slug){const a=document.createElement('a');a.href=`memorial.html?slug=${encodeURIComponent(slug)}`;a.textContent='Current Memorial';a.className='mr-current';links.appendChild(a);mobile.appendChild(a.cloneNode(true));}
-
+  if(slug){const a=document.createElement('a');a.href=withContext('memorial.html');a.textContent='Current Memorial';a.className='mr-current';links.appendChild(a);mobile.appendChild(a.cloneNode(true));}
   document.body.prepend(header);
-  const button=header.querySelector('.mr-menu');
-  button.addEventListener('click',()=>{const open=mobile.classList.toggle('open');button.setAttribute('aria-expanded',String(open));document.body.classList.toggle('mr-nav-open',open);});
+  const button=header.querySelector('.mr-menu');button.addEventListener('click',()=>{const open=mobile.classList.toggle('open');button.setAttribute('aria-expanded',String(open));document.body.classList.toggle('mr-nav-open',open);});
   document.addEventListener('click',e=>{if(!header.contains(e.target)){mobile.classList.remove('open');document.body.classList.remove('mr-nav-open');document.querySelectorAll('.mr-drop.open').forEach(d=>{d.classList.remove('open');const b=d.querySelector('.mr-drop-trigger');if(b)b.setAttribute('aria-expanded','false');});}});
   document.addEventListener('keydown',e=>{if(e.key==='Escape'){document.querySelectorAll('.mr-drop.open').forEach(d=>d.classList.remove('open'));mobile.classList.remove('open');button.setAttribute('aria-expanded','false');document.body.classList.remove('mr-nav-open');}});
   mobile.querySelectorAll('a').forEach(a=>a.addEventListener('click',()=>{mobile.classList.remove('open');document.body.classList.remove('mr-nav-open');}));
   window.addEventListener('resize',()=>{if(window.innerWidth>1250){mobile.classList.remove('open');document.body.classList.remove('mr-nav-open');}});
-
-  installImageProtection();
-  new MutationObserver(installImageProtection).observe(document.body,{childList:true,subtree:true});
+  const fallback='data:image/svg+xml;charset=UTF-8,'+encodeURIComponent(`<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 900"><defs><radialGradient id="g"><stop stop-color="#2b2515"/><stop offset="1" stop-color="#070707"/></radialGradient></defs><rect width="1200" height="900" fill="url(#g)"/><circle cx="600" cy="330" r="150" fill="none" stroke="#d4af37" stroke-opacity=".28" stroke-width="4"/><path d="M600 210v240M480 330h240" stroke="#d4af37" stroke-opacity=".55" stroke-width="8" stroke-linecap="round"/><text x="600" y="650" fill="#f1d77a" font-family="Arial,sans-serif" font-size="34" font-weight="700" text-anchor="middle" letter-spacing="5">CROWRULES MEMORIALS</text></svg>`);
+  const protect=()=>document.querySelectorAll('img').forEach(img=>{if(img.dataset.mrProtected)return;img.dataset.mrProtected='true';img.loading=img.loading||'lazy';img.decoding=img.decoding||'async';img.addEventListener('error',()=>{if(img.dataset.mrFallback)return;img.dataset.mrFallback='true';img.classList.add('mr-image-fallback');img.alt=img.alt||'Memorial image unavailable';img.src=fallback;},{once:true});});
+  protect();new MutationObserver(protect).observe(document.body,{childList:true,subtree:true});
+  const s=document.createElement('script');s.defer=true;s.src='assets/memorial-site.js?v=20260913';document.body.appendChild(s);
 })();
