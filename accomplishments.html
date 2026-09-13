@@ -1,1 +1,213 @@
-<!doctype html><html><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>Accomplishments | CrowRules Memorials</title><style>body{margin:0;background:#050505;color:#eee;font:16px Arial}.w{max-width:900px;margin:auto;padding:60px 20px}.g,a{color:#d4af37}.c{padding:24px;margin:12px 0;background:#111;border:1px solid #29251b;border-radius:18px}</style></head><body><main class="w"><a href="memorial.html">← Memorial</a><p class="g">CROWRULES MEMORIALS</p><h1>🏆 A Life Well Lived</h1><p>Celebrate accomplishments big and small—from raising a family to serving a community.</p><div class="c"><h2>Career & Education</h2><p>Work, school, training and professional achievements.</p></div><div class="c"><h2>Family</h2><p>Milestones and contributions to loved ones.</p></div><div class="c"><h2>Community</h2><p>Volunteer work, service and local impact.</p></div></main><script defer src="assets/memorial-nav.js"></script></body></html>
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+  <meta name="theme-color" content="#070707">
+  <meta name="description" content="Celebrate the accomplishments, milestones, service, talents and lasting impact of a life remembered through CrowRules Memorials.">
+  <title>Accomplishments | CrowRules Memorials</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;500;600;700&family=Orbitron:wght@500;600;700&display=swap" rel="stylesheet">
+  <style>
+    :root{
+      --bg:#050505;--panel:#101010;--panel2:#151515;--line:#2b2618;--gold:#d4af37;--gold2:#f1d77a;
+      --text:#f4f1e8;--muted:#aaa49a;--success:#8fcf9b;--danger:#e4a0a0;--shadow:0 24px 70px rgba(0,0,0,.42)
+    }
+    *{box-sizing:border-box}
+    html{scroll-behavior:smooth}
+    body{margin:0;background:radial-gradient(circle at 50% -10%,rgba(212,175,55,.11),transparent 34%),var(--bg);color:var(--text);font:15px/1.65 Montserrat,Arial,sans-serif}
+    a{color:var(--gold2);text-decoration:none}a:hover{text-decoration:underline}
+    button,input,select{font:inherit}
+    .page{width:min(1180px,calc(100% - 32px));margin:auto;padding:42px 0 80px}
+    .hero{position:relative;overflow:hidden;border:1px solid var(--line);border-radius:28px;padding:48px 34px;background:linear-gradient(135deg,rgba(212,175,55,.09),rgba(255,255,255,.025) 42%,rgba(0,0,0,.45));box-shadow:var(--shadow)}
+    .hero:after{content:"";position:absolute;width:280px;height:280px;right:-100px;top:-130px;border:1px solid rgba(212,175,55,.18);border-radius:50%;box-shadow:0 0 0 32px rgba(212,175,55,.025),0 0 0 64px rgba(212,175,55,.018)}
+    .eyebrow{color:var(--gold);font:700 12px/1 Orbitron,Arial,sans-serif;letter-spacing:.22em;text-transform:uppercase}
+    h1,h2,h3{font-family:Orbitron,Arial,sans-serif;line-height:1.2;margin:0}
+    h1{font-size:clamp(30px,6vw,58px);margin:13px 0 12px;max-width:850px}
+    .hero p{max-width:780px;color:#c8c3b8;font-size:17px;margin:0}
+    .memorial-banner{display:none;align-items:center;gap:14px;margin-top:25px;padding:12px 15px;border:1px solid var(--line);border-radius:15px;background:rgba(0,0,0,.35);width:max-content;max-width:100%}
+    .memorial-banner.show{display:flex}.mini-portrait{width:46px;height:46px;border-radius:50%;object-fit:cover;border:1px solid rgba(212,175,55,.55);background:#181818}.memorial-name{font-weight:700}.memorial-dates{color:var(--muted);font-size:12px}
+    .toolbar{display:flex;gap:12px;flex-wrap:wrap;align-items:center;margin:25px 0}
+    .search{flex:1 1 300px;position:relative}.search input{width:100%;padding:14px 16px 14px 44px;border:1px solid var(--line);border-radius:14px;background:#0d0d0d;color:var(--text);outline:none}.search input:focus{border-color:var(--gold);box-shadow:0 0 0 3px rgba(212,175,55,.1)}.search span{position:absolute;left:15px;top:11px;font-size:20px;color:var(--gold)}
+    select{padding:14px 38px 14px 14px;border:1px solid var(--line);border-radius:14px;background:#0d0d0d;color:var(--text);outline:none}
+    .btn{border:1px solid var(--gold);border-radius:14px;background:linear-gradient(135deg,#17130a,#0d0d0d);color:var(--gold2);padding:13px 17px;font-weight:700;cursor:pointer}.btn:hover{background:#18140a}.btn.secondary{border-color:var(--line);color:#d7d1c4}
+    .stats{display:grid;grid-template-columns:repeat(4,1fr);gap:12px;margin:20px 0 28px}.stat{border:1px solid var(--line);border-radius:17px;padding:18px;background:linear-gradient(145deg,#111,#0a0a0a)}.stat strong{display:block;color:var(--gold2);font:700 25px Orbitron,Arial,sans-serif}.stat span{color:var(--muted);font-size:11px;letter-spacing:.12em;text-transform:uppercase}
+    .section-head{display:flex;justify-content:space-between;align-items:end;gap:18px;margin:38px 0 16px}.section-head h2{font-size:22px}.section-head p{margin:0;color:var(--muted);font-size:13px}
+    .grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:16px}
+    .card{position:relative;border:1px solid var(--line);border-radius:20px;padding:23px;background:linear-gradient(145deg,#121212,#0b0b0b);box-shadow:0 14px 35px rgba(0,0,0,.18);transition:transform .2s,border-color .2s}.card:hover{transform:translateY(-2px);border-color:#514321}.card:before{content:"";position:absolute;left:0;top:22px;bottom:22px;width:3px;border-radius:0 4px 4px 0;background:var(--gold)}
+    .card-top{display:flex;justify-content:space-between;gap:15px;align-items:flex-start}.card h3{font-size:18px}.date{white-space:nowrap;color:var(--gold);font-size:12px;font-weight:700}.org{display:inline-block;margin:10px 0 8px;color:#d6c88f;font-size:12px;font-weight:700;text-transform:uppercase;letter-spacing:.08em}.desc{margin:0;color:#c2bdb3}.empty,.loading,.error{padding:40px 24px;text-align:center;border:1px dashed #393321;border-radius:20px;background:#0c0c0c;color:var(--muted)}.error{border-color:#4c2929;color:#d8aaaa}
+    .categories{display:grid;grid-template-columns:repeat(3,1fr);gap:12px}.category{border:1px solid var(--line);border-radius:18px;padding:20px;background:#0e0e0e}.category .icon{font-size:24px}.category h3{font-size:14px;margin:9px 0 5px}.category p{margin:0;color:var(--muted);font-size:12px}
+    .callout{margin-top:30px;padding:28px;border:1px solid var(--line);border-radius:22px;background:linear-gradient(135deg,rgba(212,175,55,.09),rgba(0,0,0,.2));text-align:center}.callout h2{font-size:20px;margin-bottom:8px}.callout p{color:var(--muted);max-width:700px;margin:0 auto 18px}
+    footer{margin-top:45px;padding-top:22px;border-top:1px solid var(--line);text-align:center;color:#777;font-size:12px}
+    .sr-only{position:absolute;width:1px;height:1px;padding:0;margin:-1px;overflow:hidden;clip:rect(0,0,0,0);white-space:nowrap;border:0}
+    @media(max-width:800px){.stats{grid-template-columns:repeat(2,1fr)}.grid,.categories{grid-template-columns:1fr}.hero{padding:35px 23px}.page{width:min(100% - 22px,1180px)}}
+    @media(max-width:480px){.stats{grid-template-columns:1fr 1fr}.stat{padding:14px}.stat strong{font-size:20px}.toolbar>*{width:100%}.btn{width:100%}}
+  </style>
+</head>
+<body>
+  <main class="page">
+    <section class="hero" aria-labelledby="page-title">
+      <div class="eyebrow">CrowRules Memorials · Legacy</div>
+      <h1 id="page-title">A Life Well Lived</h1>
+      <p>Celebrate the accomplishments that shaped a life — from education and career milestones to family, service, creativity, leadership and the everyday achievements that mattered.</p>
+      <div class="memorial-banner" id="memorialBanner" aria-live="polite">
+        <img id="memorialPortrait" class="mini-portrait" alt="">
+        <div><div class="memorial-name" id="memorialName"></div><div class="memorial-dates" id="memorialDates"></div></div>
+      </div>
+    </section>
+
+    <section aria-labelledby="stats-title">
+      <h2 id="stats-title" class="sr-only">Accomplishment statistics</h2>
+      <div class="stats">
+        <div class="stat"><strong id="totalCount">—</strong><span>Accomplishments</span></div>
+        <div class="stat"><strong id="yearCount">—</strong><span>Years represented</span></div>
+        <div class="stat"><strong id="orgCount">—</strong><span>Organizations</span></div>
+        <div class="stat"><strong id="memorialCount">—</strong><span>Lives honored</span></div>
+      </div>
+    </section>
+
+    <div class="toolbar" aria-label="Accomplishment filters">
+      <label class="search"><span aria-hidden="true">⌕</span><span class="sr-only">Search accomplishments</span><input id="searchInput" type="search" placeholder="Search accomplishments, organizations or stories…" autocomplete="off"></label>
+      <label><span class="sr-only">Filter by memorial</span><select id="memorialFilter"><option value="">All memorials</option></select></label>
+      <label><span class="sr-only">Sort accomplishments</span><select id="sortSelect"><option value="newest">Newest first</option><option value="oldest">Oldest first</option><option value="title">Title A–Z</option></select></label>
+      <button class="btn secondary" id="clearBtn" type="button">Clear filters</button>
+    </div>
+
+    <section aria-labelledby="accomplishments-title">
+      <div class="section-head">
+        <div><h2 id="accomplishments-title">Accomplishments & Milestones</h2><p id="resultSummary">Loading the legacy archive…</p></div>
+      </div>
+      <div id="accomplishmentsGrid" class="grid" aria-live="polite"><div class="loading">Loading accomplishments…</div></div>
+    </section>
+
+    <section aria-labelledby="categories-title">
+      <div class="section-head"><div><h2 id="categories-title">Every Kind of Achievement Matters</h2><p>Accomplishment is more than a job title or award.</p></div></div>
+      <div class="categories">
+        <article class="category"><div class="icon">🎓</div><h3>Education</h3><p>Degrees, certifications, training, learning and knowledge passed to others.</p></article>
+        <article class="category"><div class="icon">💼</div><h3>Career</h3><p>Work, leadership, entrepreneurship, professional milestones and service.</p></article>
+        <article class="category"><div class="icon">❤️</div><h3>Family</h3><p>Raising children, caring for loved ones and building a family legacy.</p></article>
+        <article class="category"><div class="icon">🤝</div><h3>Community</h3><p>Volunteer work, advocacy, mentorship and contributions to a community.</p></article>
+        <article class="category"><div class="icon">🎨</div><h3>Creative Life</h3><p>Art, music, writing, performance, inventions and creative accomplishments.</p></article>
+        <article class="category"><div class="icon">🏆</div><h3>Personal Milestones</h3><p>Goals reached, challenges overcome and moments that deserve to be remembered.</p></article>
+      </div>
+    </section>
+
+    <section class="callout" aria-labelledby="add-title">
+      <h2 id="add-title">Remember what they achieved</h2>
+      <p>Every accomplishment tells part of the story. Add a milestone, organization, date or personal achievement to help future generations understand the life behind the name.</p>
+      <a class="btn" href="create-memorial.html">Create a Memorial</a>
+    </section>
+
+    <footer>© <span id="year"></span> CrowRules Memorials · Remembering lives, preserving legacies.</footer>
+  </main>
+
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+  <script defer src="assets/memorial-nav.js"></script>
+  <script>
+    (() => {
+      'use strict';
+      const SUPABASE_URL = 'https://cevylpnoexugwgygvtgu.supabase.co';
+      const SUPABASE_PUBLISHABLE_KEY = 'sb_publishable_AdfM5y6RqvF3tbvEVzDZSg_JuGTQLD-';
+      const db = window.supabase.createClient(SUPABASE_URL, SUPABASE_PUBLISHABLE_KEY);
+      const params = new URLSearchParams(location.search);
+      const requestedSlug = params.get('slug');
+      const requestedMemorialId = params.get('memorial_id') || params.get('memorialId');
+      let allItems = [];
+      let memorials = [];
+
+      const $ = id => document.getElementById(id);
+      $('year').textContent = new Date().getFullYear();
+
+      const esc = value => String(value ?? '').replace(/[&<>'"]/g, ch => ({'&':'&amp;','<':'&lt;','>':'&gt;',"'":'&#39;','"':'&quot;'}[ch]));
+      const fmtDate = value => {
+        if (!value) return '';
+        const d = new Date(value + (String(value).length === 10 ? 'T00:00:00' : ''));
+        return Number.isNaN(d.getTime()) ? esc(value) : new Intl.DateTimeFormat(undefined,{month:'long',day:'numeric',year:'numeric'}).format(d);
+      };
+      const yearOf = value => value ? String(value).slice(0,4) : '';
+
+      function render(items) {
+        const grid = $('accomplishmentsGrid');
+        $('resultSummary').textContent = `${items.length} ${items.length === 1 ? 'accomplishment' : 'accomplishments'} shown`;
+        if (!items.length) {
+          grid.innerHTML = '<div class="empty" style="grid-column:1/-1"><strong>No accomplishments found.</strong><br>Try clearing the filters or choose another memorial.</div>';
+          return;
+        }
+        grid.innerHTML = items.map(item => {
+          const memorial = memorials.find(m => m.id === item.memorial_id);
+          const memorialLabel = memorial ? `<div style="margin-top:12px;font-size:11px;color:#888">Remembering <a href="memorial.html?slug=${encodeURIComponent(memorial.slug || '')}">${esc(memorial.full_name)}</a></div>` : '';
+          return `<article class="card"><div class="card-top"><h3>${esc(item.title)}</h3>${item.achievement_date ? `<time class="date" datetime="${esc(item.achievement_date)}">${fmtDate(item.achievement_date)}</time>` : ''}</div>${item.organization ? `<div class="org">${esc(item.organization)}</div>` : ''}<p class="desc">${esc(item.description || 'A meaningful accomplishment remembered as part of a life story.')}</p>${memorialLabel}</article>`;
+        }).join('');
+      }
+
+      function applyFilters() {
+        const q = $('searchInput').value.trim().toLowerCase();
+        const memorialId = $('memorialFilter').value;
+        const sort = $('sortSelect').value;
+        let items = allItems.filter(item => {
+          if (memorialId && item.memorial_id !== memorialId) return false;
+          if (!q) return true;
+          return [item.title,item.description,item.organization].filter(Boolean).join(' ').toLowerCase().includes(q);
+        });
+        items.sort((a,b) => {
+          if (sort === 'title') return String(a.title).localeCompare(String(b.title));
+          const av = a.achievement_date || a.created_at || '';
+          const bv = b.achievement_date || b.created_at || '';
+          return sort === 'oldest' ? String(av).localeCompare(String(bv)) : String(bv).localeCompare(String(av));
+        });
+        render(items);
+      }
+
+      function populateMemorials() {
+        const select = $('memorialFilter');
+        memorials.slice().sort((a,b) => String(a.full_name).localeCompare(String(b.full_name))).forEach(m => {
+          const option = document.createElement('option'); option.value = m.id; option.textContent = m.full_name; select.appendChild(option);
+        });
+      }
+
+      function showCurrentMemorial() {
+        const current = memorials.find(m => (requestedMemorialId && m.id === requestedMemorialId) || (requestedSlug && m.slug === requestedSlug));
+        if (!current) return;
+        $('memorialBanner').classList.add('show');
+        $('memorialName').textContent = current.full_name || 'Memorial';
+        $('memorialDates').textContent = [current.birth_date,current.passing_date].filter(Boolean).map(yearOf).join(' — ');
+        const img = $('memorialPortrait');
+        if (current.portrait_url) { img.src = current.portrait_url; img.alt = current.full_name || 'Memorial portrait'; } else { img.style.display = 'none'; }
+        $('memorialFilter').value = current.id;
+      }
+
+      async function load() {
+        try {
+          const memorialQuery = db.from('memorials').select('id,slug,full_name,birth_date,passing_date,portrait_url').eq('published', true).order('full_name');
+          const accomplishmentQuery = db.from('memorial_accomplishments').select('id,memorial_id,title,description,achievement_date,organization,sort_order,created_at').order('achievement_date',{ascending:false,nullsFirst:false}).order('sort_order',{ascending:true});
+          const [{data: mData,error:mError},{data:aData,error:aError}] = await Promise.all([memorialQuery,accomplishmentQuery]);
+          if (mError) throw mError;
+          if (aError) throw aError;
+          memorials = mData || [];
+          const visibleIds = new Set(memorials.map(m => m.id));
+          allItems = (aData || []).filter(item => visibleIds.has(item.memorial_id));
+          populateMemorials();
+          showCurrentMemorial();
+          $('totalCount').textContent = allItems.length.toLocaleString();
+          $('yearCount').textContent = new Set(allItems.map(x => yearOf(x.achievement_date)).filter(Boolean)).size.toLocaleString();
+          $('orgCount').textContent = new Set(allItems.map(x => String(x.organization || '').trim().toLowerCase()).filter(Boolean)).size.toLocaleString();
+          $('memorialCount').textContent = new Set(allItems.map(x => x.memorial_id)).size.toLocaleString();
+          applyFilters();
+        } catch (error) {
+          console.error('Unable to load accomplishments:', error);
+          $('accomplishmentsGrid').innerHTML = '<div class="error" style="grid-column:1/-1"><strong>Unable to load the accomplishment archive.</strong><br>Please try again in a moment.</div>';
+          $('resultSummary').textContent = 'The archive could not be loaded.';
+          ['totalCount','yearCount','orgCount','memorialCount'].forEach(id => $(id).textContent = '—');
+        }
+      }
+
+      $('searchInput').addEventListener('input', applyFilters);
+      $('memorialFilter').addEventListener('change', applyFilters);
+      $('sortSelect').addEventListener('change', applyFilters);
+      $('clearBtn').addEventListener('click', () => { $('searchInput').value=''; $('memorialFilter').value=''; $('sortSelect').value='newest'; applyFilters(); });
+      load();
+    })();
+  </script>
+</body>
+</html>
