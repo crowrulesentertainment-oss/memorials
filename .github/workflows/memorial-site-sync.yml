@@ -27,7 +27,7 @@ jobs:
 
           root = Path('.')
           changed = []
-          version = '20260913.3'
+          version = '20260913.4'
 
           for path in sorted(root.rglob('*.html')):
               if '.git' in path.parts or 'node_modules' in path.parts:
