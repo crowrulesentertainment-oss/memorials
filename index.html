@@ -17,14 +17,13 @@ content="CrowRules Memorials preserves lives through stories, photographs, tribu
 
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+
 <link
   href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;500;600;700;800&family=Orbitron:wght@500;600;700;800&display=swap"
   rel="stylesheet"
 >
 
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
-
-<!-- CrowRules Memorials shared navigation -->
 
 <style>
 :root{
@@ -39,6 +38,7 @@ content="CrowRules Memorials preserves lives through stories, photographs, tribu
   --line2:#3a3020;
   --radius:18px;
   --shadow:0 20px 60px rgba(0,0,0,.35);
+  --nav-height:74px;
 }
 
 *{
@@ -47,6 +47,7 @@ content="CrowRules Memorials preserves lives through stories, photographs, tribu
 
 html{
   scroll-behavior:smooth;
+  scroll-padding-top:calc(var(--nav-height) + 20px);
 }
 
 body{
@@ -67,6 +68,10 @@ body{
   font-family:Montserrat,Arial,sans-serif;
 }
 
+body.nav-open{
+  overflow:hidden;
+}
+
 a{
   color:inherit;
   text-decoration:none;
@@ -77,12 +82,18 @@ a{
   -webkit-tap-highlight-color:transparent;
 }
 
+button{
+  font-family:inherit;
+}
+
 .container{
   width:min(1380px,calc(100% - 36px));
   margin:auto;
 }
 
-/* Accessibility */
+/* =========================================
+   ACCESSIBILITY
+========================================= */
 
 .skip-link{
   position:fixed;
@@ -100,12 +111,180 @@ a{
   top:15px;
 }
 
-/* Hero */
+/* =========================================
+   TOP NAVIGATION
+========================================= */
+
+.site-nav{
+  position:fixed;
+  inset:0 0 auto 0;
+  z-index:9000;
+  height:var(--nav-height);
+  border-bottom:1px solid rgba(201,168,93,.18);
+  background:rgba(5,5,5,.92);
+  backdrop-filter:blur(18px);
+  -webkit-backdrop-filter:blur(18px);
+}
+
+.nav-inner{
+  width:min(1480px,calc(100% - 30px));
+  height:100%;
+  margin:auto;
+  display:flex;
+  align-items:center;
+  justify-content:space-between;
+  gap:18px;
+}
+
+.brand{
+  display:flex;
+  align-items:center;
+  gap:11px;
+  min-width:max-content;
+}
+
+.brand-mark{
+  width:38px;
+  height:38px;
+  display:grid;
+  place-items:center;
+  border:1px solid rgba(201,168,93,.6);
+  border-radius:10px;
+  background:
+    radial-gradient(
+      circle,
+      rgba(201,168,93,.16),
+      transparent 65%
+    );
+  color:var(--gold2);
+  font:700 16px Orbitron,sans-serif;
+}
+
+.brand-text strong{
+  display:block;
+  color:#f4f1e9;
+  font:700 14px Orbitron,sans-serif;
+  letter-spacing:.5px;
+}
+
+.brand-text span{
+  display:block;
+  margin-top:2px;
+  color:#777;
+  font-size:7px;
+  font-weight:700;
+  letter-spacing:2px;
+  text-transform:uppercase;
+}
+
+.nav-links{
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  gap:3px;
+}
+
+.nav-link{
+  position:relative;
+  padding:10px 11px;
+  border-radius:8px;
+  color:#999;
+  font-size:9px;
+  font-weight:700;
+  letter-spacing:.4px;
+  transition:.2s ease;
+}
+
+.nav-link:hover,
+.nav-link:focus-visible{
+  color:var(--gold2);
+  background:rgba(201,168,93,.07);
+  outline:none;
+}
+
+.nav-link.active{
+  color:var(--gold2);
+}
+
+.nav-link.active::after{
+  content:"";
+  position:absolute;
+  left:11px;
+  right:11px;
+  bottom:4px;
+  height:2px;
+  border-radius:2px;
+  background:var(--gold);
+}
+
+.nav-create{
+  display:inline-flex;
+  align-items:center;
+  justify-content:center;
+  min-height:38px;
+  padding:9px 13px;
+  border:1px solid var(--gold);
+  border-radius:8px;
+  background:rgba(201,168,93,.08);
+  color:var(--gold2);
+  font-size:9px;
+  font-weight:800;
+  transition:.2s ease;
+  white-space:nowrap;
+}
+
+.nav-create:hover,
+.nav-create:focus-visible{
+  background:var(--gold);
+  color:#080808;
+  outline:none;
+}
+
+.nav-toggle{
+  display:none;
+  width:42px;
+  height:42px;
+  padding:0;
+  border:1px solid var(--line);
+  border-radius:9px;
+  background:#0d0d0d;
+  color:var(--gold2);
+  cursor:pointer;
+}
+
+.nav-toggle span{
+  display:block;
+  width:18px;
+  height:2px;
+  margin:4px auto;
+  background:currentColor;
+  transition:.2s ease;
+}
+
+.nav-toggle[aria-expanded="true"] span:nth-child(1){
+  transform:translateY(6px) rotate(45deg);
+}
+
+.nav-toggle[aria-expanded="true"] span:nth-child(2){
+  opacity:0;
+}
+
+.nav-toggle[aria-expanded="true"] span:nth-child(3){
+  transform:translateY(-6px) rotate(-45deg);
+}
+
+.mobile-nav{
+  display:none;
+}
+
+/* =========================================
+   HERO
+========================================= */
 
 .hero{
   position:relative;
   overflow:hidden;
-  padding:92px 0 58px;
+  padding:calc(var(--nav-height) + 92px) 0 58px;
   border-bottom:1px solid var(--line);
 }
 
@@ -213,7 +392,9 @@ a{
   border-color:var(--gold2);
 }
 
-/* Stats */
+/* =========================================
+   STATS
+========================================= */
 
 .stats{
   position:relative;
@@ -248,7 +429,9 @@ a{
   text-transform:uppercase;
 }
 
-/* Sections */
+/* =========================================
+   SECTIONS
+========================================= */
 
 .section{
   padding:58px 0 80px;
@@ -280,7 +463,9 @@ a{
   line-height:1.7;
 }
 
-/* Cards */
+/* =========================================
+   CARDS
+========================================= */
 
 .cards{
   display:grid;
@@ -395,7 +580,9 @@ a{
   color:var(--gold2);
 }
 
-/* CTA */
+/* =========================================
+   CTA
+========================================= */
 
 .archive-cta{
   margin-top:28px;
@@ -415,7 +602,9 @@ a{
   box-shadow:var(--shadow);
 }
 
-/* Loading / errors */
+/* =========================================
+   LOADING / ERRORS
+========================================= */
 
 .loading,
 .error,
@@ -453,7 +642,9 @@ a{
   }
 }
 
-/* Footer */
+/* =========================================
+   FOOTER
+========================================= */
 
 .site-footer{
   padding:38px 0;
@@ -481,9 +672,72 @@ a{
   outline:none;
 }
 
-/* Responsive */
+/* =========================================
+   RESPONSIVE
+========================================= */
 
-@media(max-width:1000px){
+@media(max-width:1120px){
+
+  .nav-links{
+    display:none;
+  }
+
+  .nav-toggle{
+    display:block;
+  }
+
+  .mobile-nav{
+    position:fixed;
+    top:var(--nav-height);
+    left:0;
+    right:0;
+    display:block;
+    max-height:0;
+    overflow:hidden;
+    border-bottom:1px solid transparent;
+    background:rgba(5,5,5,.98);
+    transition:max-height .25s ease,border-color .25s ease;
+  }
+
+  .mobile-nav.open{
+    max-height:calc(100vh - var(--nav-height));
+    border-color:var(--line);
+    overflow-y:auto;
+  }
+
+  .mobile-nav-inner{
+    width:min(700px,calc(100% - 30px));
+    margin:auto;
+    padding:14px 0 22px;
+  }
+
+  .mobile-link{
+    display:block;
+    padding:15px 13px;
+    border-bottom:1px solid rgba(255,255,255,.05);
+    color:#aaa;
+    font-size:11px;
+    font-weight:700;
+  }
+
+  .mobile-link:hover,
+  .mobile-link:focus-visible,
+  .mobile-link.active{
+    color:var(--gold2);
+    outline:none;
+  }
+
+  .mobile-create{
+    display:flex;
+    justify-content:center;
+    margin-top:14px;
+    padding:13px;
+    border:1px solid var(--gold);
+    border-radius:9px;
+    color:var(--gold2);
+    font-size:10px;
+    font-weight:800;
+  }
 
   .cards{
     grid-template-columns:repeat(2,1fr);
@@ -493,8 +747,12 @@ a{
 
 @media(max-width:700px){
 
+  .container{
+    width:calc(100% - 24px);
+  }
+
   .hero{
-    padding:64px 0 46px;
+    padding:calc(var(--nav-height) + 64px) 0 46px;
   }
 
   .stats{
@@ -515,12 +773,25 @@ a{
     margin-top:16px;
   }
 
+  .brand-text span{
+    display:none;
+  }
+
 }
 
 @media(max-width:500px){
 
-  .container{
-    width:calc(100% - 24px);
+  .brand-mark{
+    width:34px;
+    height:34px;
+  }
+
+  .brand-text strong{
+    font-size:12px;
+  }
+
+  .nav-inner{
+    width:calc(100% - 20px);
   }
 
   .hero h1{
@@ -554,8 +825,6 @@ a{
 }
 </style>
 
-<script defer src="assets/memorial-nav.js?v=20260913.7"></script>
-<script defer src="assets/index-upgrade.js?v=20260913.1"></script>
 </head>
 
 <body>
@@ -564,155 +833,281 @@ a{
   Skip to main content
 </a>
 
+<!-- =========================================
+     TOP NAVIGATION
+========================================= -->
+
+<header class="site-nav">
+
+  <div class="nav-inner">
+
+<a class="brand" href="index.html" aria-label="CrowRules Memorials home">
+
+  <div class="brand-mark">
+    ✦
+  </div>
+
+  <div class="brand-text">
+    <strong>CrowRules Memorials</strong>
+    <span>Remember · Honor · Celebrate</span>
+  </div>
+
+</a>
+
+<nav class="nav-links" aria-label="Main navigation">
+
+  <a class="nav-link active" href="index.html">
+    Home
+  </a>
+
+  <a class="nav-link" href="memorials.html">
+    Memorials
+  </a>
+
+  <a class="nav-link" href="featured.html">
+    Featured
+  </a>
+
+  <a class="nav-link" href="recent.html">
+    Recent
+  </a>
+
+  <a class="nav-link" href="ways-to-remember.html">
+    Ways to Remember
+  </a>
+
+  <a class="nav-link" href="light-a-candle.html">
+    Candles
+  </a>
+
+  <a class="nav-link" href="about.html">
+    About
+  </a>
+
+  <a class="nav-create" href="create-memorial.html">
+    Create Memorial
+  </a>
+
+</nav>
+
+<button
+  class="nav-toggle"
+  id="navToggle"
+  type="button"
+  aria-label="Open navigation menu"
+  aria-expanded="false"
+  aria-controls="mobileNav"
+>
+  <span></span>
+  <span></span>
+  <span></span>
+</button>
+
+  </div>
+
+</header>
+
+<!-- MOBILE NAVIGATION -->
+
+<div
+  class="mobile-nav"
+  id="mobileNav"
+  aria-hidden="true"
+>
+
+  <nav
+    class="mobile-nav-inner"
+    aria-label="Mobile navigation"
+  >
+
+<a class="mobile-link active" href="index.html">
+  Home
+</a>
+
+<a class="mobile-link" href="memorials.html">
+  Memorial Archive
+</a>
+
+<a class="mobile-link" href="featured.html">
+  Featured Lives
+</a>
+
+<a class="mobile-link" href="recent.html">
+  Recently Added
+</a>
+
+<a class="mobile-link" href="ways-to-remember.html">
+  Ways to Remember
+</a>
+
+<a class="mobile-link" href="light-a-candle.html">
+  Light a Candle
+</a>
+
+<a class="mobile-link" href="about.html">
+  About Memorials
+</a>
+
+<a class="mobile-create" href="create-memorial.html">
+  + Create a Memorial
+</a>
+
+  </nav>
+
+</div>
+
 <main id="main-content">
 
-  <!-- HERO -->
+<!-- =========================================
+     HERO
+========================================= -->
 
-  <section class="hero">
-    <div class="container">
+<section class="hero">
 
-  <div class="eyebrow">
-    CrowRules Memorials · The Memory Archive
+  <div class="container">
+
+<div class="eyebrow">
+  CrowRules Memorials · The Memory Archive
+</div>
+
+<h1>
+  Lives <span>Remembered.</span>
+</h1>
+
+<p>
+  A living archive for preserving the people, stories,
+  photographs, favorite things, places, tributes, candles
+  and memories that keep a life present.
+</p>
+
+<div class="actions">
+
+  <a class="btn gold" href="memorials.html">
+    Explore Memorials →
+  </a>
+
+  <a class="btn" href="featured.html">
+    Featured Lives
+  </a>
+
+  <a class="btn" href="recent.html">
+    Recently Added
+  </a>
+
+  <a class="btn" href="create-memorial.html">
+    Create a Memorial
+  </a>
+
+</div>
+
+<div class="stats">
+
+  <div class="stat">
+    <strong id="totalCount">—</strong>
+    <span>Published Memorials</span>
   </div>
 
-  <h1>
-    Lives <span>Remembered.</span>
-  </h1>
+  <div class="stat">
+    <strong id="featuredCount">—</strong>
+    <span>Featured Lives</span>
+  </div>
 
-  <p>
-    A living archive for preserving the people, stories, photographs,
-    favorite things, places, tributes, candles and memories that keep
-    a life present.
-  </p>
+  <div class="stat">
+    <strong id="memoryCount">∞</strong>
+    <span>Memories to Preserve</span>
+  </div>
 
-  <div class="actions">
-
-    <a class="btn gold" href="memorials.html">
-      Explore Memorials →
-    </a>
-
-    <a class="btn" href="featured.html">
-      Featured Lives
-    </a>
-
-    <a class="btn" href="recent.html">
-      Recently Added
-    </a>
-
-    <a class="btn" href="create-memorial.html">
-      Create a Memorial
-    </a>
+</div>
 
   </div>
 
-  <div class="stats">
+</section>
 
-    <div class="stat">
-      <strong id="totalCount">—</strong>
-      <span>Published Memorials</span>
+<!-- =========================================
+     FEATURED
+========================================= -->
+
+<section class="section">
+
+  <div class="container">
+
+<div class="section-head">
+
+  <div>
+
+    <div class="section-kicker">
+      FEATURED MEMORIES
     </div>
 
-    <div class="stat">
-      <strong id="featuredCount">—</strong>
-      <span>Featured Lives</span>
-    </div>
+    <h2>
+      Lives worth remembering.
+    </h2>
 
-    <div class="stat">
-      <strong id="memoryCount">∞</strong>
-      <span>Memories to Preserve</span>
+    <p>
+      Featured memorials are loaded directly from the
+      CrowRules Memorials database.
+    </p>
+
+  </div>
+
+  <a class="btn" href="memorials.html">
+    View Full Archive →
+  </a>
+
+</div>
+
+<div id="featuredGrid" class="cards">
+
+  <div class="loading">
+
+    <div>
+
+      <div class="spinner"></div>
+
+      <p>
+        Loading memorials from Supabase…
+      </p>
+
     </div>
 
   </div>
 
 </div>
 
-  </section>
+<div class="archive-cta">
 
-  <!-- FEATURED -->
+  <div>
 
-  <section class="section">
-
-<div class="container">
-
-  <div class="section-head">
-
-    <div>
-
-      <div class="section-kicker">
-        FEATURED MEMORIES
-      </div>
-
-      <h2>
-        Lives worth remembering.
-      </h2>
-
-      <p>
-        Featured memorials are loaded directly from the
-        CrowRules Memorials database.
-      </p>
-
+    <div class="section-kicker">
+      YOUR MEMORY MATTERS
     </div>
 
-    <a class="btn" href="memorials.html">
-      View Full Archive →
-    </a>
+    <h2 style="font-size:22px">
+      Help preserve a life.
+    </h2>
+
+    <p>
+      Create a memorial and build a lasting place for stories,
+      photographs, tributes, candles and memories.
+    </p>
 
   </div>
 
-
-  <div id="featuredGrid" class="cards">
-
-    <div class="loading">
-
-      <div>
-
-        <div class="spinner"></div>
-
-        <p>
-          Loading memorials from Supabase…
-        </p>
-
-      </div>
-
-    </div>
-
-  </div>
-
-
-  <!-- CREATE MEMORIAL -->
-
-  <div class="archive-cta">
-
-    <div>
-
-      <div class="section-kicker">
-        YOUR MEMORY MATTERS
-      </div>
-
-      <h2 style="font-size:22px">
-        Help preserve a life.
-      </h2>
-
-      <p>
-        Create a memorial and build a lasting place for stories,
-        photographs, tributes, candles and memories.
-      </p>
-
-    </div>
-
-    <a class="btn gold" href="create-memorial.html">
-      Create a Memorial →
-    </a>
-
-  </div>
+  <a class="btn gold" href="create-memorial.html">
+    Create a Memorial →
+  </a>
 
 </div>
 
-  </section>
+  </div>
+
+</section>
 
 </main>
 
-<!-- FOOTER -->
+<!-- =========================================
+     FOOTER
+========================================= -->
 
 <footer class="site-footer">
 
@@ -723,6 +1118,10 @@ a{
 </div>
 
 <div class="footer-links">
+
+  <a href="index.html">
+    Home
+  </a>
 
   <a href="memorials.html">
     Memorials
@@ -748,6 +1147,10 @@ a{
     Create a Memorial
   </a>
 
+  <a href="about.html">
+    About
+  </a>
+
 </div>
 
 <div style="margin-top:14px">
@@ -763,53 +1166,168 @@ a{
 
   'use strict';
 
+  /* =========================================
+     MOBILE NAVIGATION
+  ========================================= */
+
+  const navToggle =
+    document.getElementById('navToggle');
+
+  const mobileNav =
+    document.getElementById('mobileNav');
+
+  const mobileLinks =
+    document.querySelectorAll('.mobile-link, .mobile-create');
+
+  function closeMobileNav(){
+
+    mobileNav.classList.remove('open');
+
+    mobileNav.setAttribute(
+      'aria-hidden',
+      'true'
+    );
+
+    navToggle.setAttribute(
+      'aria-expanded',
+      'false'
+    );
+
+    navToggle.setAttribute(
+      'aria-label',
+      'Open navigation menu'
+    );
+
+    document.body.classList.remove('nav-open');
+
+  }
+
+  function openMobileNav(){
+
+    mobileNav.classList.add('open');
+
+    mobileNav.setAttribute(
+      'aria-hidden',
+      'false'
+    );
+
+    navToggle.setAttribute(
+      'aria-expanded',
+      'true'
+    );
+
+    navToggle.setAttribute(
+      'aria-label',
+      'Close navigation menu'
+    );
+
+    document.body.classList.add('nav-open');
+
+  }
+
+  navToggle.addEventListener(
+    'click',
+    () => {
+
+      const expanded =
+        navToggle.getAttribute('aria-expanded') === 'true';
+
+      if(expanded){
+        closeMobileNav();
+      }else{
+        openMobileNav();
+      }
+
+    }
+  );
+
+  mobileLinks.forEach(link => {
+
+    link.addEventListener(
+      'click',
+      closeMobileNav
+    );
+
+  });
+
+  document.addEventListener(
+    'keydown',
+    event => {
+
+      if(event.key === 'Escape'){
+        closeMobileNav();
+      }
+
+    }
+  );
+
+  window.addEventListener(
+    'resize',
+    () => {
+
+      if(window.innerWidth > 1120){
+        closeMobileNav();
+      }
+
+    }
+  );
+
+
+  /* =========================================
+     SUPABASE
+  ========================================= */
+
   const SUPABASE_URL =
     'https://cevylpnoexugwgygvtgu.supabase.co';
 
   const SUPABASE_KEY =
     'sb_publishable_AdfM5y6RqvF3tbvEVzDZSg_JuGTQLD-';
 
-  const $ = id =>
-    document.getElementById(id);
+  const $ =
+    id => document.getElementById(id);
 
-  const escapeHTML = value =>
-    String(value ?? '').replace(
-      /[&<>"']/g,
-      char => ({
-        '&':'&amp;',
-        '<':'&lt;',
-        '>':'&gt;',
-        '"':'&quot;',
-        "'":'&#39;'
-      }[char])
-    );
 
-  const formatDate = value => {
+  const escapeHTML =
+    value =>
+      String(value ?? '').replace(
+        /[&<>"']/g,
+        char => ({
+          '&':'&amp;',
+          '<':'&lt;',
+          '>':'&gt;',
+          '"':'&quot;',
+          "'":'&#39;'
+        }[char])
+      );
 
-    if (!value) {
-      return '—';
-    }
 
-    const date =
-      new Date(value + 'T00:00:00');
+  const formatDate =
+    value => {
 
-    if (Number.isNaN(date.getTime())) {
-      return '—';
-    }
-
-    return date.toLocaleDateString(
-      undefined,
-      {
-        year:'numeric',
-        month:'short',
-        day:'numeric'
+      if(!value){
+        return '—';
       }
-    );
 
-  };
+      const date =
+        new Date(value + 'T00:00:00');
+
+      if(Number.isNaN(date.getTime())){
+        return '—';
+      }
+
+      return date.toLocaleDateString(
+        undefined,
+        {
+          year:'numeric',
+          month:'short',
+          day:'numeric'
+        }
+      );
+
+    };
 
 
-  function memorialURL(slug) {
+  function memorialURL(slug){
 
     return 'memorial.html?slug=' +
       encodeURIComponent(slug || '');
@@ -817,7 +1335,7 @@ a{
   }
 
 
-  function candleURL(slug) {
+  function candleURL(slug){
 
     return 'light-a-candle.html?slug=' +
       encodeURIComponent(slug || '');
@@ -825,7 +1343,7 @@ a{
   }
 
 
-  function renderCard(memorial) {
+  function renderCard(memorial){
 
     const name =
       escapeHTML(
@@ -932,15 +1450,17 @@ a{
   }
 
 
-  async function loadMemorials() {
+  async function loadMemorials(){
 
     const grid =
       $('featuredGrid');
 
-    try {
+    try{
 
-      if (!window.supabase ||
-          !window.supabase.createClient) {
+      if(
+        !window.supabase ||
+        !window.supabase.createClient
+      ){
 
         throw new Error(
           'Supabase client unavailable.'
@@ -974,7 +1494,10 @@ a{
               'created_at'
             ].join(',')
           )
-          .eq('published', true)
+          .eq(
+            'published',
+            true
+          )
           .order(
             'created_at',
             {
@@ -984,13 +1507,14 @@ a{
           .limit(1000);
 
 
-      if (response.error) {
+      if(response.error){
         throw response.error;
       }
 
 
       const rows =
         response.data || [];
+
 
       const featured =
         rows.filter(
@@ -1003,6 +1527,7 @@ a{
         .textContent =
         rows.length.toLocaleString();
 
+
       $('featuredCount')
         .textContent =
         featured.length.toLocaleString();
@@ -1010,7 +1535,7 @@ a{
 
       /*
        * Random featured rotation.
-       * Every page load can present a different
+       * Each page load can display a different
        * selection from the featured memorials.
        */
 
@@ -1019,10 +1544,10 @@ a{
           .sort(
             () => Math.random() - 0.5
           )
-          .slice(0, 6);
+          .slice(0,6);
 
 
-      if (!selection.length) {
+      if(!selection.length){
 
         grid.innerHTML = `
           <div class="empty">
@@ -1055,6 +1580,7 @@ a{
         `;
 
         return;
+
       }
 
 
@@ -1064,7 +1590,7 @@ a{
           .join('');
 
 
-    } catch (error) {
+    }catch(error){
 
       console.error(
         'CrowRules Memorials:',
@@ -1112,9 +1638,9 @@ a{
   }
 
 
-  if (
+  if(
     document.readyState === 'loading'
-  ) {
+  ){
 
     document.addEventListener(
       'DOMContentLoaded',
@@ -1122,7 +1648,7 @@ a{
       { once:true }
     );
 
-  } else {
+  }else{
 
     loadMemorials();
 
