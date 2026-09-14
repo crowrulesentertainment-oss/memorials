@@ -1,1 +1,1 @@
-window.CROWRULES_MEMORIALS_CONFIG={supabaseUrl:'https://cevylpnoexugwgygvtgu.supabase.co',supabaseKey:'sb_publishable_AdfM5y6RqvF3tbvEVzDZSg_JuGTQLD-'};
+window.CROWRULES_MEMORIALS_CONFIG={supabaseUrl:'https://cevylpnoexugwgygvtgu.supabase.co',supabaseKey:'sb_publishable_AdfM5y6RqvF3tbvEVzDZSg_JuGTQLD-'};(function(){var s=document.createElement('script');s.src=new URL('memorials-page-upgrade.js?v=20260913.6',document.currentScript?.src||location.href).href;document.body.appendChild(s)})();
