@@ -27,6 +27,7 @@ jobs:
 
           root = Path('.')
           changed = []
+          version = '20260913.2'
 
           for path in sorted(root.rglob('*.html')):
               if '.git' in path.parts or 'node_modules' in path.parts:
@@ -34,20 +35,14 @@ jobs:
 
               text = path.read_text(encoding='utf-8')
               original = text
-
-              # Remove old/duplicate shared-nav script tags so every page has one canonical loader.
               text = re.sub(
                   r'<script[^>]+src=["\'][^"\']*assets/memorial-nav\.js(?:\?[^"\']*)?["\'][^>]*></script>\s*',
-                  '',
-                  text,
-                  flags=re.I,
+                  '', text, flags=re.I
               )
 
-              # Calculate the correct relative path for root or future nested HTML pages.
-              rel_assets = Path('assets')
               depth = len(path.parent.parts)
               prefix = '../' * depth
-              nav_src = f'{prefix}assets/memorial-nav.js?v=20260913'
+              nav_src = f'{prefix}assets/memorial-nav.js?v={version}'
               tag = f'<script defer src="{nav_src}"></script>'
 
               if re.search(r'</head>', text, flags=re.I):
