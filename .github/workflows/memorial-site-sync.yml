@@ -27,7 +27,7 @@ jobs:
 
           root = Path('.')
           changed = []
-          version = '20260913.5'
+          version = '20260913.6'
 
           for path in sorted(root.rglob('*.html')):
               if '.git' in path.parts or 'node_modules' in path.parts:
@@ -36,12 +36,8 @@ jobs:
               text = path.read_text(encoding='utf-8')
               original = text
 
-              text = re.sub(
-                  r'<script[^>]+src=["\'][^"\']*(?:\.\./)*assets/memorial-nav\.js(?:\?[^"\']*)?["\'][^>]*></script>\s*',
-                  '', text, flags=re.I)
-              text = re.sub(
-                  r'<script[^>]+src=["\'][^"\']*(?:\.\./)*assets/index-upgrade\.js(?:\?[^"\']*)?["\'][^>]*></script>\s*',
-                  '', text, flags=re.I)
+              text = re.sub(r'<script[^>]+src=["\'][^"\']*(?:\.\./)*assets/memorial-nav\.js(?:\?[^"\']*)?["\'][^>]*></script>\s*', '', text, flags=re.I)
+              text = re.sub(r'<script[^>]+src=["\'][^"\']*(?:\.\./)*assets/index-upgrade\.js(?:\?[^"\']*)?["\'][^>]*></script>\s*', '', text, flags=re.I)
 
               depth = len(path.parent.parts)
               prefix = '../' * depth
@@ -54,7 +50,7 @@ jobs:
                   text = f'{tag}\n{text}'
 
               if path.name.lower() == 'index.html':
-                  upgrade_src = f'{prefix}assets/index-upgrade.js?v=20260913.1'
+                  upgrade_src = f'{prefix}assets/index-upgrade.js?v=20260913.2'
                   upgrade_tag = f'<script defer src="{upgrade_src}"></script>'
                   if re.search(r'</head>', text, flags=re.I):
                       text = re.sub(r'</head>', f'{upgrade_tag}\n</head>', text, count=1, flags=re.I)
