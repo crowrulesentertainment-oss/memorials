@@ -36,14 +36,12 @@ jobs:
               text = path.read_text(encoding='utf-8')
               original = text
 
-              # Remove every previous shared navigation loader so each page gets
-              # exactly one current loader, regardless of its previous version.
               text = re.sub(
                   r'<script[^>]+src=["\'][^"\']*(?:\.\./)*assets/memorial-nav\.js(?:\?[^"\']*)?["\'][^>]*></script>\s*',
-                  '',
-                  text,
-                  flags=re.I,
-              )
+                  '', text, flags=re.I)
+              text = re.sub(
+                  r'<script[^>]+src=["\'][^"\']*(?:\.\./)*assets/index-upgrade\.js(?:\?[^"\']*)?["\'][^>]*></script>\s*',
+                  '', text, flags=re.I)
 
               depth = len(path.parent.parts)
               prefix = '../' * depth
@@ -51,36 +49,38 @@ jobs:
               tag = f'<script defer src="{nav_src}"></script>'
 
               if re.search(r'</head>', text, flags=re.I):
-                  text = re.sub(
-                      r'</head>',
-                      f'{tag}\n</head>',
-                      text,
-                      count=1,
-                      flags=re.I,
-                  )
+                  text = re.sub(r'</head>', f'{tag}\n</head>', text, count=1, flags=re.I)
               else:
                   text = f'{tag}\n{text}'
+
+              if path.name.lower() == 'index.html':
+                  upgrade_src = f'{prefix}assets/index-upgrade.js?v=20260913.1'
+                  upgrade_tag = f'<script defer src="{upgrade_src}"></script>'
+                  if re.search(r'</head>', text, flags=re.I):
+                      text = re.sub(r'</head>', f'{upgrade_tag}\n</head>', text, count=1, flags=re.I)
+                  else:
+                      text = upgrade_tag + '\n' + text
 
               if text != original:
                   path.write_text(text, encoding='utf-8')
                   changed.append(str(path))
 
-          print(f'Applied shared navigation to {len(changed)} HTML page(s).')
+          print(f'Applied shared navigation and homepage upgrade to {len(changed)} HTML page(s).')
           for item in changed:
               print(f'  - {item}')
           PY
 
-      - name: Commit navigation changes
+      - name: Commit navigation and homepage changes
         shell: bash
         run: |
           set -euo pipefail
           if git diff --quiet -- '*.html'; then
-            echo "Every HTML page already has the current shared Memorials navigation."
+            echo "Every HTML page already has the current shared navigation and homepage is upgraded."
             exit 0
           fi
 
           git config user.name "github-actions[bot]"
-          git config user.email "41898282+users.noreply.github.com"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
           git add -- '*.html'
-          git commit -m "[memorial-sync] Add shared navigation to every HTML page"
+          git commit -m "[memorial-sync] Upgrade homepage and shared navigation"
           git push
