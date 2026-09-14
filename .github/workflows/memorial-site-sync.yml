@@ -17,24 +17,64 @@ jobs:
         with:
           fetch-depth: 0
 
-      - name: Add shared Memorials engine to every page
+      - name: Normalize shared Memorials navigation on every HTML page
         shell: bash
         run: |
-          set -e
-          changed=0
-          for file in *.html; do
-            [ -f "$file" ] || continue
-            if ! grep -q 'assets/memorial-nav.js' "$file"; then
-              printf '\n<script defer src="assets/memorial-nav.js?v=20260913"></script>\n' >> "$file"
-              changed=1
-            fi
-          done
-          if [ "$changed" = "1" ]; then
-            git config user.name "github-actions[bot]"
-            git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
-            git add -- '*.html'
-            git commit -m "[memorial-sync] Apply site-wide Memorials engine"
-            git push
-          else
-            echo "All root HTML pages already use the shared Memorials engine."
+          set -euo pipefail
+          python3 <<'PY'
+          from pathlib import Path
+          import re
+
+          root = Path('.')
+          changed = []
+
+          for path in sorted(root.rglob('*.html')):
+              if '.git' in path.parts or 'node_modules' in path.parts:
+                  continue
+
+              text = path.read_text(encoding='utf-8')
+              original = text
+
+              # Remove old/duplicate shared-nav script tags so every page has one canonical loader.
+              text = re.sub(
+                  r'<script[^>]+src=["\'][^"\']*assets/memorial-nav\.js(?:\?[^"\']*)?["\'][^>]*></script>\s*',
+                  '',
+                  text,
+                  flags=re.I,
+              )
+
+              # Calculate the correct relative path for root or future nested HTML pages.
+              rel_assets = Path('assets')
+              depth = len(path.parent.parts)
+              prefix = '../' * depth
+              nav_src = f'{prefix}assets/memorial-nav.js?v=20260913'
+              tag = f'<script defer src="{nav_src}"></script>'
+
+              if re.search(r'</head>', text, flags=re.I):
+                  text = re.sub(r'</head>', f'{tag}\n</head>', text, count=1, flags=re.I)
+              else:
+                  text = f'{tag}\n{text}'
+
+              if text != original:
+                  path.write_text(text, encoding='utf-8')
+                  changed.append(str(path))
+
+          print(f'Normalized {len(changed)} HTML page(s).')
+          for item in changed:
+              print(f'  - {item}')
+          PY
+
+      - name: Commit normalized navigation changes
+        shell: bash
+        run: |
+          set -euo pipefail
+          if git diff --quiet -- '*.html'; then
+            echo "All HTML pages already have the canonical shared Memorials navigation loader."
+            exit 0
           fi
+
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add -- '*.html'
+          git commit -m "[memorial-sync] Normalize dropdown navigation across all pages"
+          git push
