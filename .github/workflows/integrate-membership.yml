@@ -17,47 +17,38 @@ jobs:
         with:
           fetch-depth: 1
 
-      - name: Inject Universal CrowRules Membership and Navigation into every HTML page
+      - name: Normalize Universal CrowRules Membership + Navigation on every HTML page
         shell: bash
         run: |
           set -euo pipefail
 
-          css='<link rel="stylesheet" href="assets/css/crowrules-membership.css">'
-          nav='<script src="assets/memorial-nav.js"></script>'
-          js='<script src="assets/js/crowrules-membership.js"></script>'
-
           while IFS= read -r file; do
             [ -f "$file" ] || continue
 
-            python3 - "$file" "$css" "$nav" "$js" <<'PY'
-import sys
+            python3 - "$file" <<'PY'
+import re, sys
 from pathlib import Path
 
 path = Path(sys.argv[1])
-css = sys.argv[2]
-nav = sys.argv[3]
-js = sys.argv[4]
-
 text = path.read_text(encoding="utf-8")
 
 if "</head>" not in text.lower():
     raise SystemExit(f"No closing </head> found in {path}")
 
-injection_parts = []
-if "assets/css/crowrules-membership.css" not in text:
-    injection_parts.append(css)
-if "assets/memorial-nav.js" not in text:
-    injection_parts.append(nav)
-if "assets/js/crowrules-membership.js" not in text:
-    injection_parts.append(js)
+# Remove every previous copy of the shared membership/navigation assets.
+patterns = [
+    r'\s*<link\s+[^>]*href=["\'][^"\']*assets/css/crowrules-membership\.css[^"\']*["\'][^>]*>',
+    r'\s*<link\s+[^>]*href=["\'][^"\']*assets/css/memorial-universal\.css[^"\']*["\'][^>]*>',
+    r'\s*<script\s+[^>]*src=["\'][^"\']*assets/memorial-nav\.js[^"\']*["\'][^>]*>\s*</script>',
+    r'\s*<script\s+[^>]*src=["\'][^"\']*assets/js/crowrules-membership\.js[^"\']*["\'][^>]*>\s*</script>',
+]
+for pattern in patterns:
+    text = re.sub(pattern, "", text, flags=re.I)
 
-if not injection_parts:
-    raise SystemExit(0)
+injection = """\n  <link rel="stylesheet" href="assets/css/crowrules-membership.css?v=20260917.2">\n  <link rel="stylesheet" href="assets/css/memorial-universal.css?v=20260917.2">\n  <script defer src="assets/memorial-nav.js?v=20260917.2"></script>\n  <script defer src="assets/js/crowrules-membership.js?v=20260917.2"></script>\n"""
 
 idx = text.lower().rfind("</head>")
-injection = "\n  " + "\n  ".join(injection_parts) + "\n"
 text = text[:idx] + injection + text[idx:]
-
 path.write_text(text, encoding="utf-8")
 PY
           done < <(find . -type f -name '*.html' -not -path './.git/*' -print)
