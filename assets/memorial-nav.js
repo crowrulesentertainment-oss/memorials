@@ -1,23 +1,38 @@
 (()=>{'use strict';
 const boot=()=>{
-  // Legacy navigation only.
-  // This file intentionally does not create, remove, clone, or replace navigation.
-  const nav=document.querySelector('#mainNav, .main-nav, nav');
+  const nav=document.querySelector('#mainNav, .main-nav, nav[aria-label="Primary Navigation"], nav');
   if(!nav) return;
 
-  const currentFile=(location.pathname.split('/').pop()||'index.html').toLowerCase();
+  nav.classList.add('memorial-legacy-nav');
+  nav.setAttribute('aria-label',nav.getAttribute('aria-label')||'Primary Navigation');
 
-  nav.querySelectorAll('a[href]').forEach(a=>{
-    const href=(a.getAttribute('href')||'').split('#')[0].split('?')[0].toLowerCase();
-    const file=href.split('/').pop()||'index.html';
-
+  const links=[...nav.querySelectorAll(':scope > a')];
+  links.forEach(a=>{
     a.classList.remove('active');
     a.removeAttribute('aria-current');
 
-    if(file===currentFile){
+    const href=(a.getAttribute('href')||'').split('#')[0].split('?')[0];
+    const file=(href.split('/').pop()||'index.html').toLowerCase();
+    const current=(location.pathname.split('/').pop()||'index.html').toLowerCase();
+
+    if(file===current){
       a.classList.add('active');
       a.setAttribute('aria-current','page');
     }
+  });
+
+  // Keep the legacy layout in one horizontal row when space allows.
+  nav.style.display='flex';
+  nav.style.flexWrap='wrap';
+  nav.style.alignItems='center';
+  nav.style.justifyContent='center';
+  nav.style.gap='8px';
+
+  links.forEach(a=>{
+    a.style.display='inline-flex';
+    a.style.alignItems='center';
+    a.style.justifyContent='center';
+    a.style.whiteSpace='nowrap';
   });
 
   document.dispatchEvent(new CustomEvent('crowrules:memorial-nav-ready',{detail:{nav}}));
