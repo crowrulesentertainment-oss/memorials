@@ -16,7 +16,7 @@ const boot=()=>{
   const h=document.createElement('header');
   h.className='mr-header';
   h.innerHTML='<div class="mr-nav"><a class="mr-brand" href="index.html" aria-label="CrowRules Memorials home"><span class="mr-mark">CR</span><span><b>CROWRULES</b><small>MEMORIALS</small></span></a><nav id="mainNav" class="mr-links" aria-label="Primary Navigation"></nav><button class="mr-menu" type="button" aria-label="Open navigation" aria-expanded="false">☰</button><div class="mr-mobile"></div></div>';
-  const nav=h.querySelector('#mainNav'), mobile=h.querySelector('.mr-mobile');
+  const nav=h.querySelector('#mainNav'),mobile=h.querySelector('.mr-mobile');
   items.forEach(([label,url,cls])=>{
     const a=document.createElement('a');
     a.href=url;
@@ -24,7 +24,8 @@ const boot=()=>{
     if(cls) a.className=cls;
     if(url.toLowerCase()===currentFile){a.classList.add('active');a.setAttribute('aria-current','page');}
     nav.appendChild(a);
-    mobile.appendChild(a.cloneNode(true));
+    const m=a.cloneNode(true);
+    mobile.appendChild(m);
   });
   document.body.prepend(h);
   document.dispatchEvent(new CustomEvent('crowrules:memorial-nav-ready',{detail:{header:h}}));
