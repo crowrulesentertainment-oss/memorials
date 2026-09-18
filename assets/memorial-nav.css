@@ -16,3 +16,7 @@ body>header:not(.mr-header),body>header.site-header,.site-header{display:none!im
 @media(max-width:800px){.mr-mobile.open{grid-template-columns:repeat(2,minmax(0,1fr))}}
 @media(max-width:500px){.mr-nav{width:calc(100% - 14px);min-height:68px}.mr-mobile.open{top:68px;max-height:calc(100vh - 68px);grid-template-columns:1fr;padding:10px}.mr-brand small{display:none}.mr-mark{width:39px;height:39px}.mr-mobile a{min-height:46px}.mr-menu{width:42px;height:42px}}
 @media(prefers-reduced-motion:reduce){.mr-header *{transition:none!important}}
+/* Universal Membership navigation item */
+.mr-membership{position:relative}
+.mr-membership::before{content:"";display:inline-block;width:7px;height:7px;margin-right:7px;border-radius:50%;background:#c9a85d;box-shadow:0 0 10px rgba(201,168,93,.65);vertical-align:middle}
+@media(max-width:1249px){.mr-membership::before{display:none}}
