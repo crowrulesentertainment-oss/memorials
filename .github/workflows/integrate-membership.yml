@@ -1,0 +1,72 @@
+name: Integrate Universal CrowRules Membership
+
+on:
+  push:
+    branches: [main]
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+jobs:
+  integrate-membership:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout Memorials
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 1
+
+      - name: Inject Universal CrowRules Membership into every HTML page
+        shell: bash
+        run: |
+          set -euo pipefail
+
+          css='<link rel="stylesheet" href="assets/css/crowrules-membership.css">'
+          js='<script src="assets/js/crowrules-membership.js"></script>'
+
+          for file in ./*.html; do
+            [ -f "$file" ] || continue
+
+            if grep -q 'assets/js/crowrules-membership.js' "$file"; then
+              continue
+            fi
+
+            python3 - "$file" "$css" "$js" <<'PY'
+import sys
+from pathlib import Path
+
+path = Path(sys.argv[1])
+css = sys.argv[2]
+js = sys.argv[3]
+
+text = path.read_text(encoding="utf-8")
+
+if "assets/js/crowrules-membership.js" in text:
+    raise SystemExit(0)
+
+if "</head>" not in text.lower():
+    raise SystemExit(f"No closing </head> found in {path}")
+
+idx = text.lower().rfind("</head>")
+injection = f"\n  {css}\n  {js}\n"
+text = text[:idx] + injection + text[idx:]
+
+path.write_text(text, encoding="utf-8")
+PY
+          done
+
+      - name: Commit integrated pages
+        run: |
+          git config user.name "CrowRules Membership Bot"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+
+          git add '*.html'
+
+          if git diff --cached --quiet; then
+            echo "All Memorials HTML pages already contain Universal CrowRules Membership."
+            exit 0
+          fi
+
+          git commit -m "Integrate Universal CrowRules Membership across Memorials"
+          git push
