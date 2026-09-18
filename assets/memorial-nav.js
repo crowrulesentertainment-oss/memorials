@@ -1,56 +1,31 @@
 (()=>{'use strict';
 const boot=()=>{
-  if(document.querySelector('.mr-header')) return;
-  document.querySelectorAll('header:not(.mr-header), #mainNav, .main-nav, .site-header, .mobile-toggle').forEach(el=>el.remove());
+  // Legacy navigation only.
+  // This file intentionally does not create, remove, clone, or replace navigation.
+  const nav=document.querySelector('#mainNav, .main-nav, nav');
+  if(!nav) return;
+
   const currentFile=(location.pathname.split('/').pop()||'index.html').toLowerCase();
-  const items=[
-    ['Home','index.html'],
-    ['Memorials','memorials.html'],
-    ['Featured','featured.html'],
-    ['Recent','recent.html'],
-    ['On This Day','on-this-day.html'],
-    ['Stories','stories.html'],
-    ['Tributes','tributes.html'],
-    ['Search','search.html'],
-    ['Membership','membership.html','membership-nav-link']
-  ];
-  const h=document.createElement('header');
-  h.className='mr-header';
-  h.innerHTML='<div class="mr-nav"><a class="mr-brand" href="index.html" aria-label="CrowRules Memorials home"><span class="mr-mark">CR</span><span><b>CROWRULES</b><small>MEMORIALS</small></span></a><nav id="mainNav" class="mr-links" aria-label="Primary Navigation"></nav><button class="mr-menu" type="button" aria-label="Open navigation" aria-expanded="false">☰</button><div class="mr-mobile"></div></div>';
-  const nav=h.querySelector('#mainNav'),mobile=h.querySelector('.mr-mobile');
-  items.forEach(([label,url,cls])=>{
-    const a=document.createElement('a');
-    a.href=url;
-    a.textContent=label;
-    if(cls) a.className=cls;
-    if(url.toLowerCase()===currentFile){a.classList.add('active');a.setAttribute('aria-current','page');}
-    nav.appendChild(a);
-    const m=a.cloneNode(true);
-    mobile.appendChild(m);
-  });
-  document.body.prepend(h);
-  document.dispatchEvent(new CustomEvent('crowrules:memorial-nav-ready',{detail:{header:h}}));
-  const menu=h.querySelector('.mr-menu');
-  menu.onclick=()=>{
-    const open=mobile.classList.toggle('open');
-    menu.setAttribute('aria-expanded',String(open));
-    document.body.classList.toggle('mr-nav-open',open);
-  };
-  document.addEventListener('click',e=>{
-    if(!h.contains(e.target)){
-      mobile.classList.remove('open');
-      menu.setAttribute('aria-expanded','false');
-      document.body.classList.remove('mr-nav-open');
+
+  nav.querySelectorAll('a[href]').forEach(a=>{
+    const href=(a.getAttribute('href')||'').split('#')[0].split('?')[0].toLowerCase();
+    const file=href.split('/').pop()||'index.html';
+
+    a.classList.remove('active');
+    a.removeAttribute('aria-current');
+
+    if(file===currentFile){
+      a.classList.add('active');
+      a.setAttribute('aria-current','page');
     }
   });
-  document.addEventListener('keydown',e=>{
-    if(e.key==='Escape'){
-      mobile.classList.remove('open');
-      menu.setAttribute('aria-expanded','false');
-      document.body.classList.remove('mr-nav-open');
-    }
-  });
+
+  document.dispatchEvent(new CustomEvent('crowrules:memorial-nav-ready',{detail:{nav}}));
 };
-if(document.readyState==='loading') document.addEventListener('DOMContentLoaded',boot,{once:true});
-else boot();
+
+if(document.readyState==='loading'){
+  document.addEventListener('DOMContentLoaded',boot,{once:true});
+}else{
+  boot();
+}
 })();
