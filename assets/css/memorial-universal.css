@@ -1,0 +1,27 @@
+/* CROWRULES MEMORIALS — UNIVERSAL VISUAL LAYER */
+:root{
+  --cr-mem-bg:#050505;
+  --cr-mem-panel:#0d0d0d;
+  --cr-mem-panel2:#121212;
+  --cr-mem-gold:#c9a85d;
+  --cr-mem-gold2:#f0d98b;
+  --cr-mem-text:#f4f1e9;
+  --cr-mem-muted:#929292;
+}
+html,body{
+  background:
+    radial-gradient(circle at 50% -10%,rgba(201,168,93,.09),transparent 32%),
+    linear-gradient(180deg,#050505 0%,#070707 48%,#050505 100%) !important;
+  color:var(--cr-mem-text);
+  font-family:Montserrat,Arial,sans-serif;
+}
+body{overflow-x:hidden}
+input,textarea,select{
+  color:var(--cr-mem-text);
+  background:#0d0d0d;
+  border-color:rgba(255,255,255,.10);
+}
+.mr-header .mr-nav{order:1}
+.mr-header .crum-bar{order:2;width:100%}
+@media(max-width:900px){.crum-inner{min-height:52px}}
+@media(max-width:560px){.crum-inner{min-height:48px}}
