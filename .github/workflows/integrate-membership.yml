@@ -25,7 +25,7 @@ jobs:
           css='<link rel="stylesheet" href="assets/css/crowrules-membership.css">'
           js='<script src="assets/js/crowrules-membership.js"></script>'
 
-          for file in ./*.html; do
+          while IFS= read -r file; do
             [ -f "$file" ] || continue
 
             if grep -q 'assets/js/crowrules-membership.js' "$file"; then
@@ -54,7 +54,7 @@ text = text[:idx] + injection + text[idx:]
 
 path.write_text(text, encoding="utf-8")
 PY
-          done
+          done < <(find . -type f -name '*.html' -not -path './.git/*' -print)
 
       - name: Commit integrated pages
         run: |
