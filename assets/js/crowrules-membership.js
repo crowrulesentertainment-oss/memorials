@@ -21,5 +21,5 @@ async function refresh(){try{const p=await getStatus();return p}catch(e){console
 function bind(){if(!client)return;client.auth.onAuthStateChange((e,s)=>{currentSession=s||null;setTimeout(()=>refresh(),0)})}
 async function boot(){await init();bind();await refresh()}
 window.CrowRulesMembership={init,status:getStatus,refresh,ensureCrow:ensure,getMembership:membership,getCurrentMembership:()=>currentMembership,getCurrentSession:()=>currentSession};
-document.addEventListener("crowrules:memorial-nav-ready",()=>{const b=document.getElementById("cr-universal-membership-bar"),h=document.querySelector(".mr-header");if(b&&h&&b.parentNode!==h)h.appendChild(b)},{once:true});if(document.readyState==="loading")document.addEventListener("DOMContentLoaded",boot,{once:true});else boot();
+if(document.readyState==="loading")document.addEventListener("DOMContentLoaded",boot,{once:true});else boot();
 })();
