@@ -1,6 +1,8 @@
 (()=>{'use strict';
 const boot=()=>{
   if(document.querySelector('.mr-header')) return;
+  document.querySelectorAll('body > header').forEach(el=>el.remove());
+  document.querySelectorAll('body > #mainNav').forEach(el=>el.remove());
   const currentFile=(location.pathname.split('/').pop()||'index.html').toLowerCase();
   const items=[
     ['Home','index.html'],
