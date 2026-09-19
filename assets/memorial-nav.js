@@ -11,18 +11,18 @@ function injectMembershipCss(){
     #${MEMBERSHIP_BAR_ID}{
       position:relative;
       z-index:1490;
-      width:100%;
-      border-bottom:1px solid rgba(201,168,106,.18);
-      background:linear-gradient(90deg,rgba(201,168,106,.08),rgba(10,10,12,.96) 42%,rgba(201,168,106,.06));
-      box-shadow:0 8px 28px rgba(0,0,0,.16);
+      width:auto;
+      border:0;
+      background:transparent;
+      box-shadow:none;
     }
     #${MEMBERSHIP_BAR_ID} .cr-membership-inner{
-      width:min(1180px,calc(100% - 28px));
-      min-height:42px;
+      width:auto;
+      min-height:38px;
       margin:0 auto;
       display:flex;
       align-items:center;
-      justify-content:space-between;
+      justify-content:center;
       gap:12px;
       padding:6px 0;
       font-family:Montserrat,Arial,sans-serif;
@@ -115,8 +115,10 @@ function renderMembershipBar(){
     </div>
   `;
 
-  const header=document.querySelector('header');
-  if(header) header.insertAdjacentElement('afterend',bar);
+  const nav=document.querySelector('#mainNav, .main-nav, nav[aria-label="Primary Navigation"], header nav');
+  const donate=[...(nav?.querySelectorAll('a')||[])].find(a=>/^\s*donate\s*$/i.test(a.textContent||''));
+  if(donate) donate.insertAdjacentElement('afterend',bar);
+  else if(nav) nav.appendChild(bar);
   else document.body.insertAdjacentElement('afterbegin',bar);
 }
 
