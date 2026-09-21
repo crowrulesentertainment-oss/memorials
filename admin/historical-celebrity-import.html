@@ -189,7 +189,7 @@ $("importAll").addEventListener("click",async()=>{
 
   // Two-year windows keep each Edge Function request small enough to avoid timeouts.
   const ranges=[];
-  for(let y=2000;y<=2019;y+=2) ranges.push([y,Math.min(y+1,2019)]);
+  for(let y=2000;y<=2019;y++) ranges.push([y,y]);
 
   try{
     for(const [startYear,endYear] of ranges){
@@ -204,7 +204,11 @@ $("importAll").addEventListener("click",async()=>{
         }
       });
 
-      if(error) throw new Error(error.message||"Edge Function request failed.");
+      if(error){
+        let detail=error.message||"Edge Function request failed.";
+        try{ if(error.context){ const body=await error.context.json(); detail=body?.error||body?.message||detail; } }catch(_){ }
+        throw new Error(detail);
+      }
       if(data?.error) throw new Error(data.error);
 
       total+=(data.results||[]).reduce((n,r)=>n+Number(r.inserted||0),0);
