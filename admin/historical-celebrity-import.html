@@ -133,9 +133,15 @@ $("import").addEventListener("click",async()=>{
   const rows=selected.filter(x=>!taken.has(x.slug)).map(x=>({
     slug:x.slug,
     full_name:x.full_name,
+    birth_date:x.birth_date,
     passing_date:x.passing_date,
     portrait_url:x.portrait_url,
     short_bio:"Historical memorial record imported from Wikidata. Please review and expand the biography before considering this memorial complete.",
+    memorial_type:"person",
+    is_celebrity:true,
+    profession:x.profession,
+    source_url:"https://www.wikidata.org/wiki/"+x.qid,
+    source_name:"Wikidata",
     featured:false,
     published:false
   }));
