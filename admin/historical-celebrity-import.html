@@ -27,9 +27,10 @@
 <div class="control"><label>Start year</label><select id="start"></select></div>
 <div class="control"><label>End year</label><select id="end"></select></div>
 <div class="control"><label>Minimum Wikipedia sitelinks</label><input id="minLinks" type="number" min="1" max="500" value="8"></div>
-<div class="control"><label>Batch size</label><select id="limit"><option>50</option><option>100</option><option>200</option></select></div>
+<div class="control"><label>Batch size</label><select id="limit"><option>50</option><option>100</option><option>150</option><option>200</option></select></div>
 <button id="load" class="primary">Load Candidates</button>
-<button id="import">Import Selected</button><button id="importAll" class="primary">Import All 2000–2019</button>
+<button id="import">Import Selected</button>
+<button id="importAll" class="primary">Import All 2000–2019</button>
 </section>
 
 <div id="status" class="status">Ready.</div>
@@ -43,65 +44,120 @@ const SUPABASE_URL="https://cevylpnoexugwgygvtgu.supabase.co";
 const SUPABASE_KEY="sb_publishable_AdfM5y6RqvF3tbvEVzDZSg_JuGTQLD-";
 const db=window.supabase.createClient(SUPABASE_URL,SUPABASE_KEY);
 const $=id=>document.getElementById(id);
-for(let y=2000;y<=2019;y++){ $("start").add(new Option(y,y)); $("end").add(new Option(y,y)); }
-$("start").value=2000; $("end").value=2019;
+
+for(let y=2000;y<=2019;y++){
+  $("start").add(new Option(y,y));
+  $("end").add(new Option(y,y));
+}
+$("start").value=2000;
+$("end").value=2019;
+
 let candidates=[];
 
-function esc(v){return String(v??"").replace(/[&<>"]/g,m=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;"}[m]));}
-function slugify(v){return String(v||"").normalize("NFKD").replace(/[\u0300-\u036f]/g,"").toLowerCase().replace(/[^a-z0-9]+/g,"-").replace(/^-+|-+$/g,"").slice(0,140);}
-function imageUrl(v){return "https://commons.wikimedia.org/wiki/Special:FilePath/"+encodeURIComponent(v.replace(/^File:/i,""))+"?width=900";}
-function setStatus(t,kind=""){ $("status").textContent=t; $("status").className="status "+kind; }
+function esc(v){
+  return String(v??"").replace(/[&<>"]/g,m=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;"}[m]));
+}
+function slugify(v){
+  return String(v||"").normalize("NFKD").replace(/[\u0300-\u036f]/g,"").toLowerCase().replace(/[^a-z0-9]+/g,"-").replace(/^-+|-+$/g,"").slice(0,140);
+}
+function imageUrl(v){
+  return "https://commons.wikimedia.org/wiki/Special:FilePath/"+encodeURIComponent(String(v||"").replace(/^File:/i,""))+"?width=900";
+}
+function setStatus(t,kind=""){
+  $("status").textContent=t;
+  $("status").className="status "+kind;
+}
+
+function buildQuery(startYear,endYear,minLinks,limit){
+  return `SELECT ?item ?itemLabel ?birth ?death ?image ?sitelinks (SAMPLE(?occupationLabel) AS ?profession) WHERE {
+    ?item wdt:P31 wd:Q5;
+          wdt:P569 ?birth;
+          wdt:P570 ?death;
+          wdt:P18 ?image;
+          wikibase:sitelinks ?sitelinks;
+          wdt:P106 ?occupation.
+
+    VALUES ?occupation {
+      wd:Q33999 wd:Q639669 wd:Q177220 wd:Q49757 wd:Q2526255
+      wd:Q245068 wd:Q2066131 wd:Q1930187 wd:Q947873 wd:Q3282637
+      wd:Q10800557 wd:Q3665646 wd:Q3455803 wd:Q483501 wd:Q482980
+      wd:Q4610556
+    }
+
+    ?occupation rdfs:label ?occupationLabel.
+    FILTER(LANG(?occupationLabel)="en")
+    FILTER(?death >= "${startYear}-01-01T00:00:00Z"^^xsd:dateTime &&
+           ?death < "${endYear+1}-01-01T00:00:00Z"^^xsd:dateTime)
+    FILTER(?sitelinks>=${minLinks})
+
+    ?article schema:about ?item;
+             schema:isPartOf <https://en.wikipedia.org/>.
+
+    SERVICE wikibase:label { bd:serviceParam wikibase:language "en". }
+  }
+  GROUP BY ?item ?itemLabel ?birth ?death ?image ?sitelinks
+  ORDER BY ?death ?itemLabel
+  LIMIT ${limit}`;
+}
+
+async function fetchWithTimeout(url,options={},ms=45000){
+  const controller=new AbortController();
+  const timer=setTimeout(()=>controller.abort(),ms);
+  try{
+    return await fetch(url,{...options,signal:controller.signal});
+  }finally{
+    clearTimeout(timer);
+  }
+}
 
 async function loadCandidates(){
-  const a=Number($("start").value), b=Number($("end").value), min=Number($("minLinks").value)||8, limit=Number($("limit").value)||50;
-  if(b<a){setStatus("End year must be the same as or later than the start year.","bad");return;}
+  const a=Number($("start").value);
+  const b=Number($("end").value);
+  const min=Math.max(1,Number($("minLinks").value)||8);
+  const limit=Math.min(200,Math.max(25,Number($("limit").value)||50));
+
+  if(b<a){
+    setStatus("End year must be the same as or later than the start year.","bad");
+    return;
+  }
+
   setStatus("Querying Wikidata…");
   $("grid").innerHTML='<div class="empty">Loading historical candidates…</div>';
-  const query=`SELECT ?item ?itemLabel ?birth ?death ?image ?sitelinks (SAMPLE(?occupationLabel) AS ?occupationLabel) WHERE {
-  ?item wdt:P31 wd:Q5;
-        wdt:P569 ?birth;
-        wdt:P570 ?death;
-        wdt:P18 ?image;
-        wikibase:sitelinks ?sitelinks;
-        wdt:P106 ?occupation.
-  VALUES ?occupation {
-    wd:Q33999 wd:Q639669 wd:Q177220 wd:Q49757 wd:Q2526255
-    wd:Q245068 wd:Q2066131 wd:Q1930187 wd:Q947873 wd:Q3282637
-    wd:Q10800557 wd:Q3665646 wd:Q3455803 wd:Q483501 wd:Q482980
-    wd:Q4610556
-  }
-  ?occupation rdfs:label ?occupationLabel.
-  FILTER(LANG(?occupationLabel)="en")
-  FILTER(?death >= "${a}-01-01T00:00:00Z"^^xsd:dateTime && ?death < "${b+1}-01-01T00:00:00Z"^^xsd:dateTime)
-  FILTER(?sitelinks>=${min})
-  ?article schema:about ?item;
-           schema:isPartOf <https://en.wikipedia.org/>.
-  SERVICE wikibase:label { bd:serviceParam wikibase:language "en". }
-}
-GROUP BY ?item ?itemLabel ?birth ?death ?image ?sitelinks
-ORDER BY ?death ?itemLabel
-LIMIT ${limit}`
+
   try{
+    const query=buildQuery(a,b,min,limit);
     const url="https://query.wikidata.org/sparql?format=json&query="+encodeURIComponent(query);
-    const res=await fetch(url,{headers:{Accept:"application/sparql-results+json"}});
-    if(!res.ok) throw new Error("Wikidata returned HTTP "+res.status);
+    const res=await fetchWithTimeout(url,{
+      headers:{
+        Accept:"application/sparql-results+json",
+        "User-Agent":"CrowRules-Memorials/1.0 (historical archive)"
+      }
+    });
+
+    if(!res.ok){
+      const body=await res.text().catch(()=> "");
+      throw new Error("Wikidata HTTP "+res.status+(body?" — "+body.slice(0,180):""));
+    }
+
     const json=await res.json();
-    candidates=json.results.bindings.map((r,i)=>({
+    candidates=(json.results?.bindings||[]).map((r,i)=>({
       key:i,
       qid:r.item.value.split("/").pop(),
       full_name:r.itemLabel.value,
       passing_date:r.death.value.slice(0,10),
       portrait_url:imageUrl(r.image.value),
       wikipedia_links:Number(r.sitelinks.value),
-      birth_date:r.birth?.value?.slice(0,10)||null,\n      profession:r.occupationLabel?.value||null,
+      birth_date:r.birth?.value?.slice(0,10)||null,
+      profession:r.profession?.value||null,
       slug:slugify(r.itemLabel.value)
     }));
+
     render();
     setStatus("Loaded "+candidates.length+" candidates. Review them before importing.","ok");
   }catch(e){
     console.error(e);
-    $("grid").innerHTML='<div class="empty">Could not load Wikidata candidates. Try a smaller year range or a lower batch size.</div>';
-    setStatus(e.message||"Wikidata query failed.","bad");
+    $("grid").innerHTML='<div class="empty">Could not load Wikidata candidates. Try a smaller range or lower batch size.</div>';
+    setStatus(e.name==="AbortError"?"Wikidata timed out. Try 1–2 years at a time.":(e.message||"Wikidata query failed."),"bad");
   }
 }
 
@@ -119,40 +175,69 @@ function render(){
     </article>`).join(""):'<div class="empty">No candidates matched the current filters.</div>';
 }
 
-$("selectAll").addEventListener("change",e=>document.querySelectorAll(".pick").forEach(x=>x.checked=e.target.checked));
+$("selectAll").addEventListener("change",e=>{
+  document.querySelectorAll(".pick").forEach(x=>x.checked=e.target.checked);
+});
 $("load").addEventListener("click",loadCandidates);
 
 $("importAll").addEventListener("click",async()=>{
   if(!confirm("Run the historical archive import for 2000–2019? New records will be unpublished for review.")) return;
+
   $("importAll").disabled=true;
-  const ranges=[[2000,2003],[2004,2007],[2008,2011],[2012,2015],[2016,2019]];
+  $("load").disabled=true;
   let total=0;
+
+  // Two-year windows keep each Edge Function request small enough to avoid timeouts.
+  const ranges=[];
+  for(let y=2000;y<=2019;y+=2) ranges.push([y,Math.min(y+1,2019)]);
+
   try{
     for(const [startYear,endYear] of ranges){
       setStatus("Importing "+startYear+"–"+endYear+"…");
+
       const {data,error}=await db.functions.invoke("memorials-historical-import",{
-        body:{startYear,endYear,minLinks:Number($("minLinks").value)||8,limit:Number($("limit").value)||150}
+        body:{
+          startYear,
+          endYear,
+          minLinks:Math.max(5,Number($("minLinks").value)||8),
+          limit:Math.min(150,Math.max(25,Number($("limit").value)||150))
+        }
       });
-      if(error) throw error;
+
+      if(error) throw new Error(error.message||"Edge Function request failed.");
       if(data?.error) throw new Error(data.error);
-      total += (data.results||[]).reduce((n,r)=>n+(r.inserted||0),0);
+
+      total+=(data.results||[]).reduce((n,r)=>n+Number(r.inserted||0),0);
       setStatus("Completed "+startYear+"–"+endYear+" · "+total+" new memorials so far.","ok");
     }
+
     setStatus("Historical archive import complete. "+total+" new memorials were added unpublished for review.","ok");
   }catch(e){
     setStatus("Archive import stopped: "+(e.message||e),"bad");
   }finally{
     $("importAll").disabled=false;
+    $("load").disabled=false;
   }
 });
 
 $("import").addEventListener("click",async()=>{
   const selected=[...document.querySelectorAll(".pick:checked")].map(x=>candidates[Number(x.dataset.i)]);
-  if(!selected.length){setStatus("Select at least one candidate first.","bad");return;}
+
+  if(!selected.length){
+    setStatus("Select at least one candidate first.","bad");
+    return;
+  }
+
   setStatus("Checking existing memorials…");
+
   const slugs=selected.map(x=>x.slug);
   const {data:existing,error:checkError}=await db.from("memorials").select("slug").in("slug",slugs);
-  if(checkError){setStatus("Database check failed: "+checkError.message,"bad");return;}
+
+  if(checkError){
+    setStatus("Database check failed: "+checkError.message,"bad");
+    return;
+  }
+
   const taken=new Set((existing||[]).map(x=>x.slug));
   const rows=selected.filter(x=>!taken.has(x.slug)).map(x=>({
     slug:x.slug,
@@ -169,10 +254,21 @@ $("import").addEventListener("click",async()=>{
     featured:false,
     published:false
   }));
-  if(!rows.length){setStatus("All selected memorial slugs already exist.","ok");return;}
+
+  if(!rows.length){
+    setStatus("All selected memorial slugs already exist.","ok");
+    return;
+  }
+
   setStatus("Importing "+rows.length+" new memorials…");
+
   const {error}=await db.from("memorials").insert(rows);
-  if(error){setStatus("Import failed: "+error.message,"bad");return;}
+
+  if(error){
+    setStatus("Import failed: "+error.message,"bad");
+    return;
+  }
+
   setStatus("Imported "+rows.length+" memorials. They were created unpublished for review.","ok");
 });
 </script>
