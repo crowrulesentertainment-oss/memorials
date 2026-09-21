@@ -57,8 +57,9 @@ async function loadCandidates(){
   if(b<a){setStatus("End year must be the same as or later than the start year.","bad");return;}
   setStatus("Querying Wikidata…");
   $("grid").innerHTML='<div class="empty">Loading historical candidates…</div>';
-  const query=`SELECT ?item ?itemLabel ?death ?image ?sitelinks WHERE {
+  const query=`SELECT ?item ?itemLabel ?birth ?death ?image ?sitelinks (SAMPLE(?occupationLabel) AS ?occupationLabel) WHERE {
   ?item wdt:P31 wd:Q5;
+        wdt:P569 ?birth;
         wdt:P570 ?death;
         wdt:P18 ?image;
         wikibase:sitelinks ?sitelinks;
@@ -69,15 +70,17 @@ async function loadCandidates(){
     wd:Q10800557 wd:Q3665646 wd:Q3455803 wd:Q483501 wd:Q482980
     wd:Q4610556
   }
-  FILTER(YEAR(?death)>=${a} && YEAR(?death)<=${b})
+  ?occupation rdfs:label ?occupationLabel.
+  FILTER(LANG(?occupationLabel)="en")
+  FILTER(?death >= "${a}-01-01T00:00:00Z"^^xsd:dateTime && ?death < "${b+1}-01-01T00:00:00Z"^^xsd:dateTime)
   FILTER(?sitelinks>=${min})
   ?article schema:about ?item;
            schema:isPartOf <https://en.wikipedia.org/>.
   SERVICE wikibase:label { bd:serviceParam wikibase:language "en". }
 }
-GROUP BY ?item ?itemLabel ?death ?image ?sitelinks
-ORDER BY YEAR(?death) ?itemLabel
-LIMIT ${limit}`;
+GROUP BY ?item ?itemLabel ?birth ?death ?image ?sitelinks
+ORDER BY ?death ?itemLabel
+LIMIT ${limit}`
   try{
     const url="https://query.wikidata.org/sparql?format=json&query="+encodeURIComponent(query);
     const res=await fetch(url,{headers:{Accept:"application/sparql-results+json"}});
@@ -89,7 +92,7 @@ LIMIT ${limit}`;
       full_name:r.itemLabel.value,
       passing_date:r.death.value.slice(0,10),
       portrait_url:imageUrl(r.image.value),
-      wikipedia_links:Number(r.links.value),
+      wikipedia_links:Number(r.sitelinks.value),\n      birth_date:r.birth?.value?.slice(0,10)||null,\n      profession:r.occupationLabel?.value||null,
       slug:slugify(r.itemLabel.value)
     }));
     render();
@@ -109,7 +112,7 @@ function render(){
       <img src="${esc(c.portrait_url)}" alt="${esc(c.full_name)}" loading="lazy" onerror="this.style.opacity=.25">
       <div class="body">
         <div class="name">${esc(c.full_name)}</div>
-        <div class="meta">Died ${esc(c.passing_date)} · ${c.wikipedia_links} Wikipedia article links · ${esc(c.qid)}</div>
+        <div class="meta">${c.profession?esc(c.profession)+" · ":""}Died ${esc(c.passing_date)} · ${c.wikipedia_links} Wikipedia article links · ${esc(c.qid)}</div>
         <label class="check"><input type="checkbox" class="pick" data-i="${i}"> Import this memorial</label>
       </div>
     </article>`).join(""):'<div class="empty">No candidates matched the current filters.</div>';
