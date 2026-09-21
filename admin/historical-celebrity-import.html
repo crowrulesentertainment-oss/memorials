@@ -29,7 +29,7 @@
 <div class="control"><label>Minimum Wikipedia sitelinks</label><input id="minLinks" type="number" min="1" max="500" value="8"></div>
 <div class="control"><label>Batch size</label><select id="limit"><option>50</option><option>100</option><option>200</option></select></div>
 <button id="load" class="primary">Load Candidates</button>
-<button id="import">Import Selected</button>
+<button id="import">Import Selected</button><button id="importAll" class="primary">Import All 2000–2019</button>
 </section>
 
 <div id="status" class="status">Ready.</div>
@@ -121,6 +121,30 @@ function render(){
 
 $("selectAll").addEventListener("change",e=>document.querySelectorAll(".pick").forEach(x=>x.checked=e.target.checked));
 $("load").addEventListener("click",loadCandidates);
+
+$("importAll").addEventListener("click",async()=>{
+  if(!confirm("Run the historical archive import for 2000–2019? New records will be unpublished for review.")) return;
+  $("importAll").disabled=true;
+  const ranges=[[2000,2003],[2004,2007],[2008,2011],[2012,2015],[2016,2019]];
+  let total=0;
+  try{
+    for(const [startYear,endYear] of ranges){
+      setStatus("Importing "+startYear+"–"+endYear+"…");
+      const {data,error}=await db.functions.invoke("memorials-historical-import",{
+        body:{startYear,endYear,minLinks:Number($("minLinks").value)||8,limit:Number($("limit").value)||150}
+      });
+      if(error) throw error;
+      if(data?.error) throw new Error(data.error);
+      total += (data.results||[]).reduce((n,r)=>n+(r.inserted||0),0);
+      setStatus("Completed "+startYear+"–"+endYear+" · "+total+" new memorials so far.","ok");
+    }
+    setStatus("Historical archive import complete. "+total+" new memorials were added unpublished for review.","ok");
+  }catch(e){
+    setStatus("Archive import stopped: "+(e.message||e),"bad");
+  }finally{
+    $("importAll").disabled=false;
+  }
+});
 
 $("import").addEventListener("click",async()=>{
   const selected=[...document.querySelectorAll(".pick:checked")].map(x=>candidates[Number(x.dataset.i)]);
