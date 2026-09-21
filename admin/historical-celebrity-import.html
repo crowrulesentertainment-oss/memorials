@@ -1,0 +1,139 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Historical Celebrity Import — CrowRules Memorials</title>
+<meta name="theme-color" content="#070707">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;600;700;800&family=Orbitron:wght@600;700;800&display=swap" rel="stylesheet">
+<style>
+:root{--bg:#070707;--panel:#101011;--line:rgba(255,255,255,.1);--text:#f3efe7;--muted:#9d9991;--gold:#d7bd7d;--ok:#b8d69b;--bad:#df8c8c}
+*{box-sizing:border-box}body{margin:0;background:radial-gradient(circle at 15% 0%,rgba(215,189,125,.09),transparent 30%),#070707;color:var(--text);font-family:Montserrat,Arial,sans-serif}.wrap{width:min(1400px,calc(100% - 32px));margin:auto}.top{padding:42px 0 24px;border-bottom:1px solid var(--line)}h1{font:800 clamp(28px,5vw,52px) Orbitron;margin:0 0 10px;text-transform:uppercase}h1 span{color:var(--gold)}p{color:var(--muted);line-height:1.7}.controls{display:grid;grid-template-columns:repeat(4,1fr) auto auto;gap:10px;padding:22px 0}.control{display:flex;flex-direction:column;gap:7px}.control label{font-size:9px;font-weight:800;letter-spacing:1px;text-transform:uppercase;color:#aaa69f}select,input,button{font:inherit}select,input{background:#0d0d0e;color:#eee;border:1px solid var(--line);border-radius:10px;padding:12px}button{border:1px solid var(--line);background:#111;color:#eee;border-radius:10px;padding:12px 15px;font-weight:800;cursor:pointer}button.primary{background:linear-gradient(135deg,#dfc98e,#b89350);color:#080706;border:0}.status{padding:13px 15px;border:1px solid var(--line);border-radius:10px;background:#0d0d0e;color:#9c988f;font-size:11px}.status.ok{color:var(--ok)}.status.bad{color:var(--bad)}.toolbar{display:flex;gap:10px;align-items:center;justify-content:space-between;margin:18px 0}.toolbar strong{font:700 12px Orbitron;letter-spacing:1px}.grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(260px,1fr));gap:14px;padding-bottom:60px}.card{border:1px solid var(--line);border-radius:15px;overflow:hidden;background:#0d0d0e}.card img{width:100%;height:260px;object-fit:cover;background:#080808}.card .body{padding:14px}.name{font-weight:800}.meta{font-size:10px;color:#77736c;margin-top:6px}.check{display:flex;gap:8px;align-items:center;margin-top:12px;font-size:10px;color:#aaa}.check input{width:auto}.empty{padding:50px;text-align:center;border:1px dashed var(--line);border-radius:15px;color:#777}.note{margin:18px 0;padding:14px;border-left:2px solid var(--gold);background:rgba(215,189,125,.04);font-size:10px;color:#8f8a82;line-height:1.7}@media(max-width:900px){.controls{grid-template-columns:1fr 1fr}.controls button{grid-column:span 1}}@media(max-width:600px){.controls{grid-template-columns:1fr}.controls button{grid-column:auto}}
+</style>
+</head>
+<body>
+<div class="wrap">
+<header class="top">
+<div style="color:var(--gold);font:700 10px Orbitron;letter-spacing:3px;text-transform:uppercase">CrowRules Memorials / Admin</div>
+<h1>Historical <span>Celebrity Import</span></h1>
+<p>Build the 2000–2019 historical archive from Wikidata records that have an English Wikipedia article and a portrait image. Review the results before importing them into the CrowRules Memorials database.</p>
+</header>
+
+<div class="note"><strong>Image policy:</strong> portrait URLs point to Wikimedia Commons through Wikidata's image property; CrowRules stores the URL rather than copying the image into this repository. Review licensing and attribution requirements for each image before publication.</div>
+
+<section class="controls">
+<div class="control"><label>Start year</label><select id="start"></select></div>
+<div class="control"><label>End year</label><select id="end"></select></div>
+<div class="control"><label>Minimum Wikipedia sitelinks</label><input id="minLinks" type="number" min="1" max="500" value="8"></div>
+<div class="control"><label>Batch size</label><select id="limit"><option>50</option><option>100</option><option>200</option></select></div>
+<button id="load" class="primary">Load Candidates</button>
+<button id="import">Import Selected</button>
+</section>
+
+<div id="status" class="status">Ready.</div>
+<div class="toolbar"><strong id="count">0 candidates</strong><label style="font-size:10px"><input id="selectAll" type="checkbox"> Select all loaded</label></div>
+<div id="grid" class="grid"><div class="empty">Choose a year range and load candidates.</div></div>
+</div>
+
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+<script>
+const SUPABASE_URL="https://cevylpnoexugwgygvtgu.supabase.co";
+const SUPABASE_KEY="sb_publishable_AdfM5y6RqvF3tbvEVzDZSg_JuGTQLD-";
+const db=window.supabase.createClient(SUPABASE_URL,SUPABASE_KEY);
+const $=id=>document.getElementById(id);
+for(let y=2000;y<=2019;y++){ $("start").add(new Option(y,y)); $("end").add(new Option(y,y)); }
+$("start").value=2000; $("end").value=2019;
+let candidates=[];
+
+function esc(v){return String(v??"").replace(/[&<>"]/g,m=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;"}[m]));}
+function slugify(v){return String(v||"").normalize("NFKD").replace(/[\u0300-\u036f]/g,"").toLowerCase().replace(/[^a-z0-9]+/g,"-").replace(/^-+|-+$/g,"").slice(0,140);}
+function imageUrl(v){return "https://commons.wikimedia.org/wiki/Special:FilePath/"+encodeURIComponent(v.replace(/^File:/i,""))+"?width=900";}
+function setStatus(t,kind=""){ $("status").textContent=t; $("status").className="status "+kind; }
+
+async function loadCandidates(){
+  const a=Number($("start").value), b=Number($("end").value), min=Number($("minLinks").value)||8, limit=Number($("limit").value)||50;
+  if(b<a){setStatus("End year must be the same as or later than the start year.","bad");return;}
+  setStatus("Querying Wikidata…");
+  $("grid").innerHTML='<div class="empty">Loading historical candidates…</div>';
+  const query=`
+SELECT ?item ?itemLabel ?death ?image (COUNT(DISTINCT ?article) AS ?links) WHERE {
+  ?item wdt:P31 wd:Q5;
+        wdt:P570 ?death;
+        wdt:P18 ?image.
+  FILTER(YEAR(?death)>=${a} && YEAR(?death)<=${b})
+  ?article schema:about ?item;
+           schema:isPartOf <https://en.wikipedia.org/>.
+  SERVICE wikibase:label { bd:serviceParam wikibase:language "en". }
+}
+GROUP BY ?item ?itemLabel ?death ?image
+HAVING(COUNT(DISTINCT ?article)>=${min})
+ORDER BY YEAR(?death) ?itemLabel
+LIMIT ${limit}`;
+  try{
+    const url="https://query.wikidata.org/sparql?format=json&query="+encodeURIComponent(query);
+    const res=await fetch(url,{headers:{Accept:"application/sparql-results+json"}});
+    if(!res.ok) throw new Error("Wikidata returned HTTP "+res.status);
+    const json=await res.json();
+    candidates=json.results.bindings.map((r,i)=>({
+      key:i,
+      qid:r.item.value.split("/").pop(),
+      full_name:r.itemLabel.value,
+      passing_date:r.death.value.slice(0,10),
+      portrait_url:imageUrl(r.image.value),
+      wikipedia_links:Number(r.links.value),
+      slug:slugify(r.itemLabel.value)
+    }));
+    render();
+    setStatus("Loaded "+candidates.length+" candidates. Review them before importing.","ok");
+  }catch(e){
+    console.error(e);
+    $("grid").innerHTML='<div class="empty">Could not load Wikidata candidates. Try a smaller year range or a lower batch size.</div>';
+    setStatus(e.message||"Wikidata query failed.","bad");
+  }
+}
+
+function render(){
+  $("count").textContent=candidates.length+" candidates";
+  $("selectAll").checked=false;
+  $("grid").innerHTML=candidates.length?candidates.map((c,i)=>`
+    <article class="card">
+      <img src="${esc(c.portrait_url)}" alt="${esc(c.full_name)}" loading="lazy" onerror="this.style.opacity=.25">
+      <div class="body">
+        <div class="name">${esc(c.full_name)}</div>
+        <div class="meta">Died ${esc(c.passing_date)} · ${c.wikipedia_links} Wikipedia article links · ${esc(c.qid)}</div>
+        <label class="check"><input type="checkbox" class="pick" data-i="${i}"> Import this memorial</label>
+      </div>
+    </article>`).join(""):'<div class="empty">No candidates matched the current filters.</div>';
+}
+
+$("selectAll").addEventListener("change",e=>document.querySelectorAll(".pick").forEach(x=>x.checked=e.target.checked));
+$("load").addEventListener("click",loadCandidates);
+
+$("import").addEventListener("click",async()=>{
+  const selected=[...document.querySelectorAll(".pick:checked")].map(x=>candidates[Number(x.dataset.i)]);
+  if(!selected.length){setStatus("Select at least one candidate first.","bad");return;}
+  setStatus("Checking existing memorials…");
+  const slugs=selected.map(x=>x.slug);
+  const {data:existing,error:checkError}=await db.from("memorials").select("slug").in("slug",slugs);
+  if(checkError){setStatus("Database check failed: "+checkError.message,"bad");return;}
+  const taken=new Set((existing||[]).map(x=>x.slug));
+  const rows=selected.filter(x=>!taken.has(x.slug)).map(x=>({
+    slug:x.slug,
+    full_name:x.full_name,
+    passing_date:x.passing_date,
+    portrait_url:x.portrait_url,
+    short_bio:"Historical memorial record imported from Wikidata. Please review and expand the biography before considering this memorial complete.",
+    featured:false,
+    published:false
+  }));
+  if(!rows.length){setStatus("All selected memorial slugs already exist.","ok");return;}
+  setStatus("Importing "+rows.length+" new memorials…");
+  const {error}=await db.from("memorials").insert(rows);
+  if(error){setStatus("Import failed: "+error.message,"bad");return;}
+  setStatus("Imported "+rows.length+" memorials. They were created unpublished for review.","ok");
+});
+</script>
+</body>
+</html>
