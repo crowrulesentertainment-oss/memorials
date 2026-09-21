@@ -92,7 +92,8 @@ LIMIT ${limit}`
       full_name:r.itemLabel.value,
       passing_date:r.death.value.slice(0,10),
       portrait_url:imageUrl(r.image.value),
-      wikipedia_links:Number(r.sitelinks.value),\n      birth_date:r.birth?.value?.slice(0,10)||null,\n      profession:r.occupationLabel?.value||null,
+      wikipedia_links:Number(r.sitelinks.value),
+      birth_date:r.birth?.value?.slice(0,10)||null,\n      profession:r.occupationLabel?.value||null,
       slug:slugify(r.itemLabel.value)
     }));
     render();
