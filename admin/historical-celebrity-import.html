@@ -57,18 +57,25 @@ async function loadCandidates(){
   if(b<a){setStatus("End year must be the same as or later than the start year.","bad");return;}
   setStatus("Querying Wikidata…");
   $("grid").innerHTML='<div class="empty">Loading historical candidates…</div>';
-  const query=`
-SELECT ?item ?itemLabel ?death ?image (COUNT(DISTINCT ?article) AS ?links) WHERE {
+  const query=`SELECT ?item ?itemLabel ?death ?image ?sitelinks WHERE {
   ?item wdt:P31 wd:Q5;
         wdt:P570 ?death;
-        wdt:P18 ?image.
+        wdt:P18 ?image;
+        wikibase:sitelinks ?sitelinks;
+        wdt:P106 ?occupation.
+  VALUES ?occupation {
+    wd:Q33999 wd:Q639669 wd:Q177220 wd:Q49757 wd:Q2526255
+    wd:Q245068 wd:Q2066131 wd:Q1930187 wd:Q947873 wd:Q3282637
+    wd:Q10800557 wd:Q3665646 wd:Q3455803 wd:Q483501 wd:Q482980
+    wd:Q4610556
+  }
   FILTER(YEAR(?death)>=${a} && YEAR(?death)<=${b})
+  FILTER(?sitelinks>=${min})
   ?article schema:about ?item;
            schema:isPartOf <https://en.wikipedia.org/>.
   SERVICE wikibase:label { bd:serviceParam wikibase:language "en". }
 }
-GROUP BY ?item ?itemLabel ?death ?image
-HAVING(COUNT(DISTINCT ?article)>=${min})
+GROUP BY ?item ?itemLabel ?death ?image ?sitelinks
 ORDER BY YEAR(?death) ?itemLabel
 LIMIT ${limit}`;
   try{
