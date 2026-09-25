@@ -2417,6 +2417,40 @@ footer a:hover{
 
 }
 
+
+/* =========================================================
+   TOTAL VISITOR COUNTER
+========================================================= */
+.visitor-counter{
+  margin:32px auto 0;
+  width:min(420px,100%);
+  padding:18px 22px;
+  display:flex;
+  align-items:center;
+  justify-content:space-between;
+  gap:18px;
+  border:1px solid rgba(201,168,106,.24);
+  border-radius:18px;
+  background:linear-gradient(135deg,rgba(201,168,106,.08),rgba(255,255,255,.02));
+  box-shadow:0 18px 55px rgba(0,0,0,.28);
+}
+.visitor-counter-label{
+  color:var(--muted);
+  font-size:9px;
+  font-weight:800;
+  letter-spacing:.18em;
+  text-transform:uppercase;
+}
+.visitor-counter-number{
+  color:var(--gold2);
+  font-family:Orbitron,Montserrat,sans-serif;
+  font-size:22px;
+  font-weight:800;
+  letter-spacing:.04em;
+  min-width:90px;
+  text-align:right;
+}
+
 </style>
 <link rel="stylesheet" href="./css/crowrules-cinematic.css">
 </head>
@@ -3367,6 +3401,12 @@ footer a:hover{
     </div>
 
   </div>
+
+
+<div class="visitor-counter" aria-live="polite" aria-label="Total CrowRules Memorials visitors">
+  <span class="visitor-counter-label">Total Visitors</span>
+  <strong id="totalVisitorCount" class="visitor-counter-number">—</strong>
+</div>
 
 </footer>
 
@@ -5483,9 +5523,31 @@ document.getElementById(
    INITIALIZE
 ========================================================= */
 
+
+/* =========================================================
+   TOTAL VISITOR COUNTER
+   Server-side lifetime count via Supabase RPC.
+========================================================= */
+async function loadTotalVisitorCounter(){
+  const element=document.getElementById("totalVisitorCount");
+  if(!element) return;
+
+  try{
+    const { data, error } = await db.rpc("increment_memorial_visitors");
+    if(error) throw error;
+
+    const total=Number(data)||0;
+    element.textContent=total.toLocaleString("en-US");
+  }catch(error){
+    console.error("CrowRules Memorials visitor counter error:",error);
+    element.textContent="—";
+  }
+}
+
 async function initializeCrowRulesMemorials(){
 
   loadDate();
+  loadTotalVisitorCounter();
 
   await Promise.all([
 
