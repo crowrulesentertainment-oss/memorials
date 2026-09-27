@@ -1945,16 +1945,71 @@ function countRows(rows){
 ========================================================= */
 
 async function loadTotal(){
-  totalMemorials = await window.CrowRulesMemorialData.count("memorials",[{op:"eq",column:"published",value:true}]);
-  document.getElementById("heroTotal").textContent=totalMemorials.toLocaleString();
+
+  const {count,error} =
+    await db
+      .from("memorials")
+      .select("*",{count:"exact",head:true})
+      .eq("published",true);
+
+  if(error){
+    throw error;
+  }
+
+  totalMemorials =
+    count || 0;
+
+  document.getElementById(
+    "heroTotal"
+  ).textContent =
+    totalMemorials.toLocaleString();
 }
 
+/* =========================================================
+   LOAD RECENT
+========================================================= */
+
 async function loadRecent(){
-  const result=await window.CrowRulesMemorialData.getRecent({page:currentPage,pageSize:PAGE_SIZE});
-  currentMemorials=result.rows||[];
-  document.getElementById("heroCount").textContent=currentMemorials.length;
+
+  const from =
+    (currentPage - 1) * PAGE_SIZE;
+
+  const to =
+    from + PAGE_SIZE - 1;
+
+  const {data,error} =
+    await db
+      .from("memorials")
+      .select(`
+        id,
+        slug,
+        full_name,
+        birth_date,
+        passing_date,
+        location,
+        short_bio,
+        portrait_url,
+        featured,
+        published,
+        created_at
+      `)
+      .eq("published",true)
+      .order("created_at",{ascending:false})
+      .range(from,to);
+
+  if(error){
+    throw error;
+  }
+
+  currentMemorials =
+    data || [];
+
+  document.getElementById(
+    "heroCount"
+  ).textContent =
+    currentMemorials.length;
+
   await loadChildCounts();
-  window.CrowRulesMemorialData.bindImageFallbacks();
 }
 
 /* =========================================================
