@@ -1580,6 +1580,20 @@ section{
 
 }
 
+.featured-rotation-badge{
+  display:inline-flex;
+  align-items:center;
+  min-height:24px;
+  padding:0 9px;
+  border:1px solid rgba(201,168,106,.28);
+  border-radius:999px;
+  background:rgba(201,168,106,.07);
+  color:var(--gold2);
+  font-size:7px;
+  font-weight:800;
+  letter-spacing:.12em;
+  text-transform:uppercase;
+}
 .empty-card{
 
   grid-column:1/-1;
@@ -3009,12 +3023,22 @@ footer a:hover{
 
       <div>
 
-        <h2>
-          Featured Memorials
-        </h2>
+        <div style="display:flex;align-items:center;gap:10px;flex-wrap:wrap">
+          <h2>
+            Featured Memorials
+          </h2>
+          <span
+            id="featuredRotationInfo"
+            class="featured-rotation-badge"
+            aria-live="polite"
+          >
+            DAILY ROTATION
+          </span>
+        </div>
 
         <p>
-          Stories selected for remembrance and reflection.
+          Today's featured lives rotate automatically each day.
+          Every published memorial marked Featured can enter the rotation.
         </p>
 
       </div>
@@ -4573,112 +4597,115 @@ async function loadMemorialStats(){
 
 async function loadFeaturedMemorials(){
 
-  const container =
-    document.getElementById(
-      "featuredMemorials"
-    );
+  const container=document.getElementById("featuredMemorials");
+  if(!container) return;
 
-
-  if(!container){
-
-    return;
-
-  }
-
-
+  /*
+   * DAILY FEATURED ROTATION
+   * -----------------------
+   * We intentionally do NOT use created_at ordering here.
+   * Every published record marked featured becomes part of a
+   * rotating pool. The UTC calendar day determines the starting
+   * position, so every visitor sees the same three memorials
+   * for that day, then a different set the next day.
+   *
+   * This is deterministic, requires no cron job, and does not
+   * modify the database.
+   */
   try{
 
-    const {
-      data,
-      error
-    } =
+    const {data,error}=await db
+      .from("memorials")
+      .select(`
+        id,
+        slug,
+        full_name,
+        birth_date,
+        passing_date,
+        location,
+        short_bio,
+        portrait_url,
+        featured,
+        created_at
+      `)
+      .eq("published",true)
+      .eq("featured",true)
+      .limit(5000);
 
-      await db
-        .from("memorials")
-        .select(`
-          id,
-          slug,
-          full_name,
-          birth_date,
-          passing_date,
-          location,
-          short_bio,
-          portrait_url,
-          featured,
-          created_at
-        `)
-        .eq(
-          "published",
-          true
-        )
-        .eq(
-          "featured",
-          true
-        )
-        .order(
-          "created_at",
-          {
-            ascending:false
-          }
-        )
-        .limit(3);
+    if(error) throw error;
 
+    const pool=(data||[])
+      .filter(m=>m && (m.id || m.slug))
+      .sort((a,b)=>{
+        const ak=String(a.id||a.slug||a.full_name||"");
+        const bk=String(b.id||b.slug||b.full_name||"");
+        return ak.localeCompare(bk);
+      });
 
-    if(error){
-
-      throw error;
-
-    }
-
-
-    if(
-      !data ||
-      !data.length
-    ){
-
-      container.innerHTML = `
-
+    if(!pool.length){
+      container.innerHTML=`
         <div class="empty-card">
-
-          No featured memorials are available yet.
-
-        </div>
-
-      `;
-
+          <h3>No featured memorials are available yet.</h3>
+          <p style="margin-top:8px">Published memorials marked Featured will rotate into this space automatically.</p>
+        </div>`;
       return;
-
     }
 
+    const now=new Date();
+    const dayKey=Date.UTC(
+      now.getUTCFullYear(),
+      now.getUTCMonth(),
+      now.getUTCDate()
+    )/86400000;
 
-    container.innerHTML =
-      data
-        .map(
-          renderMemorialCard
-        )
-        .join("");
+    const start=Math.floor(dayKey)%pool.length;
+    const count=Math.min(3,pool.length);
+    const selected=Array.from({length:count},(_,i)=>pool[(start+i)%pool.length]);
+
+    const dateLabel=now.toLocaleDateString("en-US",{
+      month:"long",
+      day:"numeric",
+      year:"numeric",
+      timeZone:"UTC"
+    });
+
+    const heading=document.querySelector("#featuredMemorials")?.closest("section")?.querySelector(".section-head p");
+    if(heading){
+      heading.innerHTML="Today's rotating selection • "+dateLabel+" • The selection changes automatically each day.";
+    }
+
+    container.innerHTML=selected.map(renderMemorialCard).join("");
+
+    const rotation=document.getElementById("featuredRotationInfo");
+    if(rotation){
+      rotation.textContent="DAILY ROTATION • "+dateLabel.toUpperCase();
+    }
+
+    /*
+     * Schedule a refresh at the next UTC midnight so an already-open
+     * page changes without requiring the visitor to reload it.
+     */
+    clearTimeout(window.__featuredRotationTimer);
+    const nextMidnight=Date.UTC(
+      now.getUTCFullYear(),
+      now.getUTCMonth(),
+      now.getUTCDate()+1
+    );
+    window.__featuredRotationTimer=setTimeout(
+      loadFeaturedMemorials,
+      Math.max(1000,nextMidnight-Date.now()+1000)
+    );
 
   }catch(error){
 
-    console.error(
-      "Featured memorials error:",
-      error
-    );
+    console.error("Featured memorials error:",error);
 
-
-    container.innerHTML = `
-
+    container.innerHTML=`
       <div class="empty-card">
-
-        Memorials could not be loaded right now.
-        Please refresh the page.
-
-      </div>
-
-    `;
-
+        <h3>Memorials could not be loaded right now.</h3>
+        <p style="margin-top:8px">Please refresh the page and try again.</p>
+      </div>`;
   }
-
 }
 
 
