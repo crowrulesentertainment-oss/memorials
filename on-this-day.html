@@ -2218,15 +2218,6 @@ function updateClock(){
 ========================================================= */
 
 async function loadMemorials(){
-  const data = await window.CrowRulesMemorialData.getAllPublished();
-  const today = getToday();
-  todayMemorials = (data || []).filter(item=>{
-    const birth=item.birth_date?new Date(item.birth_date+"T00:00:00"):null;
-    const passing=item.passing_date?new Date(item.passing_date+"T00:00:00"):null;
-    return (birth && birth.getMonth()+1===today.month && birth.getDate()===today.day) || (passing && passing.getMonth()+1===today.month && passing.getDate()===today.day);
-  });
-  window.CrowRulesMemorialData.bindImageFallbacks();
-  return;
 
   const {data,error} =
     await db
