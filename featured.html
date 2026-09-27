@@ -1657,10 +1657,6 @@ function countRows(rows){
 ============================================================ */
 
 async function loadMemorials(){
-  const result = await window.CrowRulesMemorialData.getFeatured({page:1,pageSize:1000});
-  state.memorials = result.rows;
-  window.CrowRulesMemorialData.bindImageFallbacks();
-  return;
 
   const {data,error} =
     await db
