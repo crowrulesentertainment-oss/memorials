@@ -93,13 +93,14 @@ const PAGE_SIZE=12;
 const esc=v=>{const d=document.createElement("div");d.textContent=v??"";return d.innerHTML};
 const iso=v=>v?String(v).slice(0,10):"";
 const fmt=v=>{if(!v)return "Date not available";const d=new Date(iso(v)+"T00:00:00");return Number.isNaN(d.getTime())?String(v):d.toLocaleDateString("en-US",{month:"long",day:"numeric",year:"numeric"})};
-const years=[...new Set(rows.map(x=>iso(x.passing_date).slice(0,4)).filter(x=>/^\d{4}$/.test(x)))];
 
 function memorialLink(m){return "memorial.html?slug="+encodeURIComponent(m.slug||m.id)}
-function tags(m){return [...new Set([m.category,m.memorial_type,m.is_celebrity===true?"Celebrity":null].filter(Boolean).map(String))]}
+function isCelebrity(m){return m?.is_celebrity===true||m?.is_celebrity==="true"||m?.is_celebrity===1||m?.is_celebrity==="1"}
+function isFeatured(m){return m?.featured===true||m?.featured==="true"||m?.featured===1||m?.featured==="1"}
+function tags(m){return [...new Set([m.category,m.memorial_type,isCelebrity(m)?"Celebrity":null].filter(Boolean).map(String))]}
 function portrait(m){return m.portrait_url?'<div class="portrait"><img src="'+esc(m.portrait_url)+'" alt="Portrait of '+esc(m.full_name||"Memorial")+'" loading="lazy" decoding="async"><span class="badge">'+(m.featured?"Featured":"Memorial")+'</span></div>':'<div class="portrait"><div class="placeholder">CR</div><span class="badge">'+(m.featured?"Featured":"Memorial")+'</span></div>'}
 function card(m){const t=tags(m);return '<article class="card">'+portrait(m)+'<div class="card-body"><h3>'+esc(m.full_name||"Unnamed Memorial")+'</h3><div class="dates">'+(m.birth_date?fmt(m.birth_date):"")+(m.birth_date&&m.passing_date?" — ":"")+(m.passing_date?fmt(m.passing_date):"")+'</div>'+(t.length?'<div class="meta">'+t.map(x=>'<span class="tag">'+esc(x)+'</span>').join("")+'</div>':"")+(m.short_bio?'<p class="bio">'+esc(m.short_bio)+'</p>':"")+'<div class="card-foot"><span>'+(m.location?esc(m.location):"Life Story")+'</span><a class="view" href="'+memorialLink(m)+'">View Memorial →</a></div></div></article>'}
-function mini(m){return '<a class="featured-mini" href="'+memorialLink(m)+'">'+(m.portrait_url?'<div class="mini-img"><img src="'+esc(m.portrait_url)+'" alt="" loading="lazy"></div>':'<div class="mini-img"><div class="placeholder">CR</div></div>')+'<div class="mini-body"><strong>'+esc(m.full_name||"Unnamed Memorial")+'</strong><span>'+(m.passing_date?fmt(m.passing_date):"Life remembered")+'</span></div></a>'}
+function mini(m){return '<a class="featured-mini" href="'+memorialLink(m)+'">'+(m.portrait_url?'<div class="mini-img"><img src="'+esc(m.portrait_url)+'" alt="" loading="lazy" decoding="async"></div>':'<div class="mini-img"><div class="placeholder">CR</div></div>')+'<div class="mini-body"><strong>'+esc(m.full_name||"Unnamed Memorial")+'</strong><span>'+(m.passing_date?fmt(m.passing_date):"Life remembered")+'</span></div></a>'}
 
 function sortData(a,mode){
 return a.sort((x,y)=>{
@@ -112,11 +113,11 @@ return iso(y.passing_date).localeCompare(iso(x.passing_date)) || String(y.create
 function isRecent(m){if(!m.passing_date)return false;const d=new Date(iso(m.passing_date)+"T00:00:00"),n=new Date();const days=(n-d)/86400000;return days>=0&&days<=30}
 
 function renderFeatured(){
-  if(!rows.length){
-    $("featuredRow").innerHTML='<div class="empty"><h3>No memorials available</h3><p>Daily spotlight stories will appear here.</p></div>';
+  const pool=rows.filter(isFeatured);
+  if(!pool.length){
+    $("featuredRow").innerHTML='<div class="empty"><h3>No featured memorials yet</h3><p>Published memorials marked Featured will appear here.</p></div>';
     return;
   }
-  const pool=rows.filter(x=>x.published!==false);
   const day=Math.floor(Date.now()/86400000);
   const ranked=pool.slice().sort((a,b)=>{
     const ak=String(a.slug||a.id||a.full_name||"");
@@ -139,8 +140,8 @@ if(reset)page=1;
 $("yearRail")?.querySelectorAll(".year-btn").forEach(btn=>btn.classList.toggle("active",btn.dataset.year===$("yearSelect").value));
 const q=$("searchInput").value.trim().toLowerCase(),type=$("typeSelect").value,year=$("yearSelect").value;
 filtered=rows.filter(m=>{
-if(type==="celebrity"&&m.is_celebrity!==true)return false;
-if(type==="non-celebrity"&&m.is_celebrity===true)return false;
+if(type==="celebrity"&&!isCelebrity(m))return false;
+if(type==="non-celebrity"&&isCelebrity(m))return false;
 if(year!=="all"&&iso(m.passing_date).slice(0,4)!==year)return false;
 if(q){
 const hay=[m.full_name,m.short_bio,m.biography,m.location,m.category,m.memorial_type,m.slug].filter(Boolean).join(" ").toLowerCase();
@@ -187,26 +188,92 @@ const p=new URLSearchParams(location.search);$("searchInput").value=p.get("q")||
 
 async function load(){
 try{
-const {data,error}=await db.from("memorials").select("*").eq("published",true).limit(5000);
-if(error)throw error;
-const source=data||[];
-const seen=new Set();
-rows=source.filter(m=>{
-  const key=String(m.slug||((m.full_name||"").trim().toLowerCase()+"|"+iso(m.passing_date)));
-  if(seen.has(key)) return false;
-  seen.add(key);
-  return true;
-});
-populateYears();readUrl();
-$("totalCount").textContent=rows.length.toLocaleString();$("recentCount").textContent=rows.filter(isRecent).length.toLocaleString();$("celebrityCount").textContent=rows.filter(x=>x.is_celebrity===true).length.toLocaleString();$("featuredCount").textContent=rows.filter(x=>x.featured===true).length.toLocaleString();
-renderFeatured();applyFilters(false);
-}catch(e){console.error("CrowRules Memorial archive:",e);$("featuredRow").innerHTML='<div class="empty"><h3>Archive unavailable</h3><p>Please refresh the page.</p></div>';$("archiveGrid").innerHTML='<div class="empty"><h3>The archive could not be loaded</h3><p>Please refresh the page and try again.</p></div>';$("resultText").textContent="Archive unavailable";}
+  $("resultText").textContent="Loading archive…";
+  let source=[];
+  const batchSize=1000;
+  for(let from=0;from<10000;from+=batchSize){
+    const {data,error}=await db.from("memorials").select("*").eq("published",true).range(from,from+batchSize-1);
+    if(error)throw error;
+    const batch=data||[];
+    source.push(...batch);
+    if(batch.length<batchSize)break;
+  }
+
+  const seen=new Set();
+  rows=source.filter(m=>{
+    const name=String(m.full_name||"").trim().toLowerCase();
+    const key=String(m.id||m.slug||((name||"unnamed")+"|"+iso(m.passing_date)));
+    if(seen.has(key)) return false;
+    seen.add(key);
+    return true;
+  });
+
+  populateYears();
+  readUrl();
+
+  const requestedYear=$("yearSelect").value;
+  if(requestedYear!=="all"&&!rows.some(m=>iso(m.passing_date).slice(0,4)===requestedYear)){
+    $("yearSelect").value="all";
+  }
+
+  $("totalCount").textContent=rows.length.toLocaleString();
+  $("recentCount").textContent=rows.filter(isRecent).length.toLocaleString();
+  $("celebrityCount").textContent=rows.filter(isCelebrity).length.toLocaleString();
+  $("featuredCount").textContent=rows.filter(isFeatured).length.toLocaleString();
+
+  renderFeatured();
+  applyFilters(false);
+}catch(e){
+  console.error("CrowRules Memorial archive:",e);
+  $("featuredRow").innerHTML='<div class="empty"><h3>Archive unavailable</h3><p>We could not connect to the Memorials archive. Please refresh and try again.</p></div>';
+  $("archiveGrid").innerHTML='<div class="empty"><h3>The archive could not be loaded</h3><p>Check your connection and refresh the page. If the problem continues, the archive service may be temporarily unavailable.</p></div>';
+  $("pagination").innerHTML="";
+  $("resultText").textContent="Archive unavailable";
 }
+}
+
+function bindImageFallbacks(){
+  document.querySelectorAll("img").forEach(img=>{
+    if(img.dataset.fallbackBound==="1")return;
+    img.dataset.fallbackBound="1";
+    img.addEventListener("error",()=>{
+      const parent=img.parentElement;
+      img.remove();
+      if(parent&&!parent.querySelector(".placeholder")){
+        const fallback=document.createElement("div");
+        fallback.className="placeholder";
+        fallback.textContent="CR";
+        parent.appendChild(fallback);
+      }
+    },{once:true});
+  });
+}
+
+const originalRender=render;
+render=function(){
+  originalRender();
+  bindImageFallbacks();
+};
 
 ["searchInput","sortSelect","typeSelect","yearSelect"].forEach(id=>$(id).addEventListener(id==="searchInput"?"input":"change",()=>applyFilters()));
 $("clearBtn").addEventListener("click",()=>{$("searchInput").value="";$("sortSelect").value="recent";$("typeSelect").value="all";$("yearSelect").value="all";applyFilters()});
 $("menuButton").addEventListener("click",()=>{const n=$("mobileNav"),open=n.classList.toggle("open");$("menuButton").setAttribute("aria-expanded",String(open))});
 $("mobileNav").querySelectorAll("a").forEach(a=>a.addEventListener("click",()=>{$("mobileNav").classList.remove("open");$("menuButton").setAttribute("aria-expanded","false")}));
+document.addEventListener("click",event=>{
+  const target=event.target;
+  if(target.closest(".mobile-nav")||target.closest("#menuButton"))return;
+  if($("mobileNav").classList.contains("open")){
+    $("mobileNav").classList.remove("open");
+    $("menuButton").setAttribute("aria-expanded","false");
+  }
+});
+document.addEventListener("keydown",event=>{
+  if(event.key==="Escape"&&$("mobileNav").classList.contains("open")){
+    $("mobileNav").classList.remove("open");
+    $("menuButton").setAttribute("aria-expanded","false");
+    $("menuButton").focus();
+  }
+});
 $("year").textContent=new Date().getFullYear();
 $("candleTop").addEventListener("click",()=>{location.href="candles.html"});
 load();
