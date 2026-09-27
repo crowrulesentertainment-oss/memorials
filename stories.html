@@ -1815,16 +1815,7 @@ async function loadData(){
       .eq("published",true)
       .order("created_at",{ascending:false}),
 
-    db
-      .from("memorials")
-      .select(`
-        id,
-        slug,
-        full_name,
-        portrait_url,
-        published
-      `)
-      .eq("published",true)
+    window.CrowRulesMemorialData.db.from("memorials").select(`
 
   ]);
 
