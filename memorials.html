@@ -189,16 +189,7 @@ const p=new URLSearchParams(location.search);$("searchInput").value=p.get("q")||
 async function load(){
 try{
   $("resultText").textContent="Loading archive…";
-  let source=[];
-  const batchSize=1000;
-  for(let from=0;from<10000;from+=batchSize){
-    const {data,error}=await db.from("memorials").select("*").eq("published",true).range(from,from+batchSize-1);
-    if(error)throw error;
-    const batch=data||[];
-    source.push(...batch);
-    if(batch.length<batchSize)break;
-  }
-
+  const source=await window.CrowRulesMemorialData.getAllPublished();
   const seen=new Set();
   rows=source.filter(m=>{
     const name=String(m.full_name||"").trim().toLowerCase();
