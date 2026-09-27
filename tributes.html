@@ -1079,7 +1079,7 @@ footer{
   }
 }
 </style>
-<script defer src="assets/memorial-nav.js?v=20260913.7"></script>
+<script defer src="assets/memorial-nav.js?v=20260927.2"></script>
   <link rel="stylesheet" href="assets/css/crowrules-membership.css">
   <script src="assets/js/crowrules-membership.js"></script>
 </head>
@@ -1417,15 +1417,10 @@ footer{
 <div class="toast" id="toast"></div>
 
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+<script src="assets/memorial-data.js?v=20260927.1"></script>
 
 <script>
-const SUPABASE_URL = "https://cevylpnoexugwgygvtgu.supabase.co";
-const SUPABASE_KEY = "sb_publishable_AdfM5y6RqvF3tbvEVzDZSg_JuGTQLD-";
-
-const db = window.supabase.createClient(
-  SUPABASE_URL,
-  SUPABASE_KEY
-);
+const db = window.CrowRulesMemorialData.db;
 
 const PAGE_SIZE = 12;
 
