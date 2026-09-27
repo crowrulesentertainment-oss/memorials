@@ -1540,11 +1540,6 @@ function readUrlState(){
 /* LOAD MEMORIALS */
 
 async function loadMemorials(){
-  allMemorials = await window.CrowRulesMemorialData.getMemorials({orderBy:"full_name",ascending:true,page:1,pageSize:1000});
-  populateMemorialSelects();
-  renderMemoryList();
-  window.CrowRulesMemorialData.bindImageFallbacks();
-  return;
 
   const {data,error} = await db
     .from("memorials")
