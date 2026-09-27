@@ -1795,24 +1795,64 @@ function memorialName(id){
 ========================================================= */
 
 async function loadData(){
-  const [storyResult, memorialResult] = await Promise.all([
-    db.from("memorial_stories").select(`
-      id,
-      memorial_id,
-      title,
-      story,
-      author_name,
-      published,
-      created_at
-    `).eq("published",true).order("created_at",{ascending:false}),
-    window.CrowRulesMemorialData.getMemorials({select:"id,slug,full_name,portrait_url,published",orderBy:"full_name",ascending:true,page:1,pageSize:1000})
+
+  const [
+    storyResult,
+    memorialResult
+  ] = await Promise.all([
+
+    db
+      .from("memorial_stories")
+      .select(`
+        id,
+        memorial_id,
+        title,
+        story,
+        author_name,
+        published,
+        created_at
+      `)
+      .eq("published",true)
+      .order("created_at",{ascending:false}),
+
+    db
+      .from("memorials")
+      .select(`
+        id,
+        slug,
+        full_name,
+        portrait_url,
+        published
+      `)
+      .eq("published",true)
+
   ]);
-  if(storyResult.error)throw storyResult.error;
-  memorialMap={};
-  (memorialResult||[]).forEach(item=>{memorialMap[item.id]=item;});
-  stories=(storyResult.data||[]).filter(item=>memorialMap[item.memorial_id]);
-  window.CrowRulesMemorialData.bindImageFallbacks();
+
+  if(storyResult.error){
+    throw storyResult.error;
+  }
+
+  if(memorialResult.error){
+    throw memorialResult.error;
+  }
+
+  memorialMap = {};
+
+  (memorialResult.data || [])
+    .forEach(item=>{
+      memorialMap[item.id] = item;
+    });
+
+  stories =
+    (storyResult.data || [])
+      .filter(item=>{
+
+        return memorialMap[item.memorial_id];
+
+      });
+
 }
+
 /* =========================================================
    STATS
 ========================================================= */
