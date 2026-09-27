@@ -1382,6 +1382,19 @@ section{
 
 }
 
+.memorial-portrait-image{
+
+  position:absolute;
+  inset:0;
+  width:100%;
+  height:100%;
+  object-fit:cover;
+  object-position:center;
+  display:block;
+  z-index:1;
+
+}
+
 .portrait.has-image{
 
   background-size:cover;
@@ -4753,11 +4766,20 @@ function renderMemorialCard(
     : "portrait";
 
 
-  const portraitStyle =
+  const portraitMarkup =
     image
-    ? `style="background-image:url('${image}')"`
+    ? `
+        <img
+          class="memorial-portrait-image"
+          src="${image}"
+          alt="Portrait of ${name}"
+          loading="lazy"
+          decoding="async"
+          referrerpolicy="no-referrer"
+          onerror="this.style.display='none';this.parentElement.classList.remove('has-image');"
+        >
+      `
     : "";
-
 
   return `
 
@@ -4765,8 +4787,9 @@ function renderMemorialCard(
 
       <div
         class="${portraitClass}"
-        ${portraitStyle}
       >
+
+        ${portraitMarkup}
 
         <span class="badge">
           Featured
