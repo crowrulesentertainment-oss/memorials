@@ -1,0 +1,55 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><meta name="theme-color" content="#050505">
+<title>Celebrate a Life — CrowRules Memorials</title>
+<link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;500;600;700;800&family=Orbitron:wght@500;600;700;800&display=swap" rel="stylesheet">
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script><script defer src="assets/memorial-nav.js?v=20260927.2"></script>
+<style>
+:root{--bg:#050505;--panel:#0d0d0f;--line:rgba(255,255,255,.1);--text:#f5f5f5;--muted:#9999a1;--gold:#c9a86a;--gold2:#ead5a2}*{box-sizing:border-box}body{margin:0;min-height:100vh;background:radial-gradient(circle at 75% 0,rgba(201,168,106,.15),transparent 32rem),#050505;color:var(--text);font:13px/1.65 Montserrat,Arial,sans-serif}a{color:inherit;text-decoration:none}.container{width:min(760px,calc(100% - 28px));margin:auto}.top{border-bottom:1px solid var(--line);padding:20px 0}.brand{font:800 14px Orbitron;letter-spacing:.08em}.brand span{color:var(--gold2)}.hero{text-align:center;padding:65px 0 30px}.eyebrow{color:var(--gold2);font-size:9px;font-weight:800;letter-spacing:.28em;text-transform:uppercase}.hero h1{font:800 clamp(35px,7vw,58px)/1.05 Orbitron;margin:14px 0}.hero p{color:var(--muted);max-width:650px;margin:auto}.form{padding:20px 0 80px}.panel{padding:25px;border:1px solid var(--line);border-radius:20px;background:rgba(255,255,255,.025)}label{display:block;color:#ddd;font-size:9px;font-weight:800;letter-spacing:.1em;text-transform:uppercase;margin:0 0 7px}.field{width:100%;min-height:45px;margin-bottom:17px;padding:11px 13px;border:1px solid var(--line);border-radius:10px;background:#0b0b0d;color:#eee;outline:0;font:inherit}.field:focus{border-color:rgba(201,168,106,.55)}textarea.field{min-height:120px;resize:vertical}.row{display:grid;grid-template-columns:1fr 1fr;gap:12px}.note{padding:12px;border:1px solid rgba(201,168,106,.2);border-radius:10px;color:#999;font-size:9px;margin-bottom:18px}.actions{display:flex;gap:9px;justify-content:flex-end;flex-wrap:wrap}.btn{min-height:42px;padding:0 17px;border:1px solid var(--line);border-radius:999px;background:#111113;color:#eee;font-size:9px;font-weight:800;cursor:pointer}.btn.gold{background:var(--gold);border-color:var(--gold);color:#090806}.status{margin-top:16px;font-size:10px;text-align:center}.success{color:#d8c58f}.error{color:#e8a0a0}@media(max-width:600px){.row{grid-template-columns:1fr}.panel{padding:18px}.actions>*{width:100%}}
+</style>
+</head>
+<body>
+<header class="top"><div class="container"><a class="brand" href="memorials.html">CROWRULES <span>MEMORIALS</span></a></div></header>
+<section class="hero"><div class="container"><div class="eyebrow">Celebrate a Life</div><h1>Remember. Honor. <span>Preserve.</span></h1><p>Submit a person's memorial directly to the CrowRules Memorials archive. Once submitted, the record is added to Supabase and included in the live death count.</p></div></section>
+<main class="form"><div class="container"><form id="form" class="panel">
+<div class="note">Community submissions are added as published, non-featured memorials. Featured placement remains controlled by the Memorials archive.</div>
+<label for="full_name">Full name *</label><input class="field" id="full_name" required maxlength="160" autocomplete="name" placeholder="Full name">
+<div class="row"><div><label for="birth_date">Birth date</label><input class="field" id="birth_date" type="date"></div><div><label for="passing_date">Passing date *</label><input class="field" id="passing_date" type="date" required></div></div>
+<label for="location">Location</label><input class="field" id="location" maxlength="200" placeholder="City, State / Country">
+<label for="short_bio">Short biography</label><textarea class="field" id="short_bio" maxlength="1200" placeholder="A brief remembrance or biography"></textarea>
+<label for="portrait_url">Portrait URL</label><input class="field" id="portrait_url" type="url" maxlength="1000" placeholder="https://…">
+<label for="source_url">Source URL</label><input class="field" id="source_url" type="url" maxlength="1000" placeholder="Optional obituary or source">
+<label for="source_name">Source name</label><input class="field" id="source_name" maxlength="200" placeholder="Optional source publication">
+<div class="actions"><a class="btn" href="memorials.html">Cancel</a><button class="btn gold" id="submit" type="submit">Add to Memorials</button></div>
+<div id="status" class="status" aria-live="polite"></div>
+</form></div></main>
+<script>
+"use strict";
+const db=supabase.createClient("https://cevylpnoexugwgygvtgu.supabase.co","sb_publishable_AdfM5y6RqvF3tbvEVzDZSg_JuGTQLD-");
+const $=id=>document.getElementById(id);
+const slugify=v=>{let s=v.normalize("NFKD").replace(/[\u0300-\u036f]/g,"").toLowerCase().replace(/[^a-z0-9]+/g,"-").replace(/^-+|-+$/g,"").slice(0,100);return s||"memorial"};
+const uniqueSlug=async base=>{let slug=base,attempt=0;while(true){const {data,error}=await db.from("memorials").select("id").eq("slug",slug).maybeSingle();if(error)throw error;if(!data)return slug;attempt++;slug=base+"-"+attempt}};
+$("passing_date").max=new Date().toISOString().slice(0,10);
+$("form").addEventListener("submit",async event=>{
+ event.preventDefault();
+ const button=$("submit");const status=$("status");button.disabled=true;button.textContent="Adding…";status.className="status";status.textContent="";
+ try{
+  const name=$("full_name").value.trim(),passing=$("passing_date").value;
+  if(!name||!passing)throw new Error("Full name and passing date are required.");
+  if(passing>new Date().toISOString().slice(0,10))throw new Error("Passing date cannot be in the future.");
+  const slug=await uniqueSlug(slugify(name)+"-"+passing.slice(0,4));
+  const payload={slug,full_name:name,birth_date:$("birth_date").value||null,passing_date:passing,location:$("location").value.trim()||null,short_bio:$("short_bio").value.trim()||null,portrait_url:$("portrait_url").value.trim()||null,featured:false,published:true,memorial_type:"person",is_celebrity:false,source_url:$("source_url").value.trim()||null,source_name:$("source_name").value.trim()||null};
+  const {data,error}=await db.from("memorials").insert(payload).select("id,slug,full_name").single();
+  if(error)throw error;
+  status.className="status success";status.textContent="Memorial added. Opening the memorial…";
+  setTimeout(()=>location.href="memorial.html?slug="+encodeURIComponent(data.slug),500);
+ }catch(error){
+  console.error(error);status.className="status error";status.textContent=error.message||"The memorial could not be added.";
+  button.disabled=false;button.textContent="Add to Memorials";
+ }
+});
+</script>
+</body>
+</html>
