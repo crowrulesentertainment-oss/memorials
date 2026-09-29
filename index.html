@@ -1307,312 +1307,6 @@ section{
 }
 
 /* =========================================================
-   FEATURED
-========================================================= */
-
-.cards{
-
-  display:grid;
-
-  grid-template-columns:
-    repeat(3,1fr);
-
-  gap:18px;
-
-}
-
-.card{
-
-  overflow:hidden;
-
-  background:
-    linear-gradient(
-      145deg,
-      #111113,
-      #080809
-    );
-
-  border:
-    1px solid
-    var(--line);
-
-  border-radius:var(--radius);
-
-  box-shadow:var(--shadow);
-
-  transition:.25s ease;
-
-}
-
-.card:hover{
-
-  transform:
-    translateY(-4px);
-
-  border-color:
-    rgba(201,168,106,.3);
-
-}
-
-.portrait{
-
-  position:relative;
-
-  height:275px;
-
-  display:grid;
-
-  place-items:center;
-
-  overflow:hidden;
-
-  background:
-
-    radial-gradient(
-      circle at 50% 37%,
-      rgba(201,168,106,.19),
-      transparent 95px
-    ),
-
-    linear-gradient(
-      135deg,
-      #151517,
-      #080809
-    );
-
-}
-
-.memorial-portrait-image{
-
-  position:absolute;
-  inset:0;
-  width:100%;
-  height:100%;
-  object-fit:cover;
-  object-position:center;
-  display:block;
-  z-index:1;
-
-}
-
-.portrait.has-image{
-
-  background-size:cover;
-
-  background-position:center;
-
-}
-
-.portrait.has-image:before{
-
-  display:none;
-
-}
-
-.portrait.has-image:after{
-
-  background:
-    linear-gradient(
-      to top,
-      rgba(0,0,0,.55),
-      transparent
-    );
-
-  width:100%;
-
-  height:100%;
-
-  border:0;
-
-  border-radius:0;
-
-}
-
-.portrait:before{
-
-  content:"";
-
-  width:120px;
-
-  height:150px;
-
-  border-radius:
-    52% 52% 45% 45%;
-
-  border:
-    1px solid
-    rgba(234,213,162,.23);
-
-  box-shadow:
-    0 0 65px
-    rgba(201,168,106,.08);
-
-}
-
-.portrait:after{
-
-  content:"";
-
-  position:absolute;
-
-  width:250px;
-
-  height:250px;
-
-  border:
-    1px solid
-    rgba(201,168,106,.07);
-
-  border-radius:50%;
-
-}
-
-.badge{
-
-  position:absolute;
-
-  top:16px;
-
-  right:16px;
-
-  z-index:3;
-
-  padding:
-    7px 10px;
-
-  border:
-    1px solid
-    var(--line);
-
-  border-radius:99px;
-
-  background:
-    rgba(5,5,5,.7);
-
-  color:var(--gold2);
-
-  font-size:8px;
-
-  letter-spacing:.13em;
-
-  text-transform:uppercase;
-
-}
-
-.candle-mark{
-
-  position:absolute;
-
-  bottom:17px;
-
-  left:18px;
-
-  z-index:3;
-
-  color:var(--gold2);
-
-  font-size:19px;
-
-}
-
-.card-body{
-
-  padding:21px;
-
-}
-
-.card h3{
-
-  margin-bottom:5px;
-
-  font-family:
-    Orbitron,
-    Montserrat,
-    sans-serif;
-
-  font-size:16px;
-
-}
-
-.dates{
-
-  color:var(--gold2);
-
-  font-size:9px;
-
-  letter-spacing:.1em;
-
-}
-
-.card p{
-
-  margin:14px 0 18px;
-
-  color:var(--muted);
-
-  font-size:11px;
-
-}
-
-.card-foot{
-
-  display:flex;
-
-  align-items:center;
-
-  justify-content:space-between;
-
-  gap:15px;
-
-  padding-top:15px;
-
-  border-top:
-    1px solid
-    var(--line);
-
-}
-
-.card-foot span{
-
-  color:#77777e;
-
-  font-size:9px;
-
-}
-
-.featured-rotation-badge{
-  display:inline-flex;
-  align-items:center;
-  min-height:24px;
-  padding:0 9px;
-  border:1px solid rgba(201,168,106,.28);
-  border-radius:999px;
-  background:rgba(201,168,106,.07);
-  color:var(--gold2);
-  font-size:7px;
-  font-weight:800;
-  letter-spacing:.12em;
-  text-transform:uppercase;
-}
-.empty-card{
-
-  grid-column:1/-1;
-
-  padding:50px;
-
-  text-align:center;
-
-  color:var(--muted);
-
-  border:
-    1px dashed
-    var(--line);
-
-  border-radius:var(--radius);
-
-}
-
-/* =========================================================
    ON THIS DAY
 ========================================================= */
 
@@ -2252,7 +1946,15 @@ footer a:hover{
 
   }
 
-  .cards{
+  .archive-fallback{
+  width:100%;
+  height:100%;
+  display:grid;
+  place-items:center;
+  color:var(--gold2);
+  font:700 42px Orbitron,Montserrat,sans-serif;
+}
+.cards{
 
     grid-template-columns:
       1fr 1fr;
@@ -2477,6 +2179,86 @@ footer a:hover{
   min-width:90px;
   text-align:right;
 }
+
+
+/* =========================================================
+   ARCHIVE HOME
+========================================================= */
+.archive-hero{
+  position:relative;
+  min-height:600px;
+  display:flex;
+  align-items:center;
+  overflow:hidden;
+  background:
+    radial-gradient(circle at 78% 40%,rgba(201,168,106,.12),transparent 25rem);
+}
+.archive-hero:after{
+  content:"";
+  position:absolute;
+  inset:0;
+  pointer-events:none;
+  background:
+    linear-gradient(90deg,#050505 0%,rgba(5,5,5,.75) 55%,#050505 100%);
+}
+.archive-hero .container{position:relative;z-index:1}
+.archive-hero h1{
+  max-width:850px;
+  margin:15px 0 24px;
+  font-family:Orbitron,Montserrat,sans-serif;
+  font-size:clamp(43px,7vw,82px);
+  line-height:1.02;
+  letter-spacing:-.045em;
+}
+.archive-hero h1 span{color:var(--gold2)}
+.archive-hero p{
+  max-width:680px;
+  color:#b9b9c0;
+  font-size:15px;
+}
+.archive-actions{
+  display:flex;
+  flex-wrap:wrap;
+  gap:11px;
+  margin-top:30px;
+}
+.archive-section{padding:78px 0 55px}
+.archive-toolbar{
+  padding:18px;
+  margin-bottom:18px;
+  border:1px solid var(--line);
+  border-radius:18px;
+  background:rgba(255,255,255,.025);
+}
+.archive-search{
+  display:flex;
+  gap:8px;
+}
+.archive-search input{
+  min-width:0;
+  flex:1;
+  height:44px;
+  padding:0 18px;
+  border:1px solid var(--line);
+  border-radius:999px;
+  outline:none;
+  background:#050506;
+  color:#fff;
+}
+.archive-search input:focus{border-color:rgba(201,168,106,.55)}
+.archive-status{
+  margin:0 0 18px;
+  color:var(--muted);
+  font-size:10px;
+  letter-spacing:.04em;
+}
+.archive-more{
+  display:flex;
+  justify-content:center;
+  margin-top:28px;
+}
+.archive-note{padding:20px 0 90px}
+.archive-note .explore-box{min-height:auto}
 
 </style>
 <link rel="stylesheet" href="./css/crowrules-cinematic.css">
@@ -2916,379 +2698,99 @@ footer a:hover{
      MAIN
 ======================================================== -->
 
+
 <main>
 
-<section class="hero">
+<section class="archive-hero">
+  <div class="container">
+    <div class="eyebrow">CrowRules Memorials • Archive</div>
+    <h1>THE MEMORIAL<br><span>ARCHIVE.</span></h1>
+    <p>
+      A living archive of published memorials preserving names, lives,
+      stories, photographs, and legacies. Browse the collection or search
+      for someone you remember.
+    </p>
 
-  <div
-    class="hero-art"
-    aria-hidden="true">
+    <div class="archive-actions">
+      <a class="btn gold" href="memorials.html">Open Full Archive →</a>
+      <a class="btn" href="create.html">Create a Memorial</a>
+    </div>
+
+    <div class="hero-meta">
+      <div class="meta">
+        <strong id="memorialCount">0</strong>
+        <span>Published Memorials</span>
+      </div>
+      <div class="meta">
+        <strong id="tributeCount">0</strong>
+        <span>Tributes</span>
+      </div>
+      <div class="meta">
+        <strong id="candleCount">0</strong>
+        <span>Candles Lit</span>
+      </div>
+    </div>
   </div>
+</section>
 
+<section class="archive-section" id="archive">
   <div class="container">
 
-    <div class="hero-content">
-
-      <div class="eyebrow">
-        CrowRules Entertainment • A Place of Remembrance
+    <div class="section-head">
+      <div>
+        <div class="eyebrow">Published Collection</div>
+        <h2>Memorial Archive</h2>
+        <p>Only published memorials are shown. No featured rotation or daily spotlight.</p>
       </div>
+      <a class="section-link" href="memorials.html">FULL ARCHIVE →</a>
+    </div>
 
-      <h1>
-        EVERY LIFE<br>
-        LEAVES A STORY.
-      </h1>
+    <div class="archive-toolbar">
+      <form class="archive-search" id="archiveSearchForm">
+        <input
+          id="archiveSearch"
+          type="search"
+          placeholder="Search memorial names..."
+          aria-label="Search memorial archive"
+          autocomplete="off"
+        >
+        <button class="btn gold" type="submit">Search</button>
+        <button class="btn" type="button" id="clearArchiveSearch">Clear</button>
+      </form>
+    </div>
 
+    <div class="archive-status" id="archiveStatus" aria-live="polite">
+      Loading the memorial archive…
+    </div>
+
+    <div class="cards" id="archiveMemorials">
+      <div class="loading">
+        <div class="spinner"></div>
+      </div>
+    </div>
+
+    <div class="archive-more">
+      <a class="btn" href="memorials.html">Browse the Complete Archive →</a>
+    </div>
+
+  </div>
+</section>
+
+<section class="archive-note">
+  <div class="container">
+    <div class="explore-box">
+      <div class="eyebrow">Preserve a Legacy</div>
+      <h3>Every life leaves a story.</h3>
       <p>
-        CrowRules Memorials is a quiet, cinematic place to remember
-        the people who shaped our lives, celebrate their stories,
-        preserve their memories, and keep their names alive.
+        Create a memorial with a life story, timeline, photographs, videos,
+        tributes, and a guestbook.
       </p>
-
-      <div class="hero-buttons">
-
-        <a
-          class="btn gold"
-          href="memorials.html"
-        >
-          Explore Memorials
-        </a>
-
-        <a
-          class="btn"
-          href="create.html"
-        >
-          Create a Memorial
-        </a>
-
+      <div style="margin-top:25px">
+        <a class="btn gold" href="create.html">Create a Memorial →</a>
       </div>
-
-      <div class="hero-meta">
-
-        <div class="meta">
-
-          <strong id="memorialCount">
-            0
-          </strong>
-
-          <span>
-            Memorials
-          </span>
-
-        </div>
-
-
-        <div class="meta">
-
-          <strong id="tributeCount">
-            0
-          </strong>
-
-          <span>
-            Tributes
-          </span>
-
-        </div>
-
-
-        <div class="meta">
-
-          <strong id="candleCount">
-            0
-          </strong>
-
-          <span>
-            Candles Lit
-          </span>
-
-        </div>
-
-      </div>
-
     </div>
-
   </div>
-
 </section>
-
-
-<!-- =======================================================
-     FEATURED MEMORIALS
-======================================================== -->
-
-<section>
-
-  <div class="container">
-
-    <div class="section-head">
-
-      <div>
-
-        <div style="display:flex;align-items:center;gap:10px;flex-wrap:wrap">
-          <h2>
-            Featured Memorials
-          </h2>
-          <span
-            id="featuredRotationInfo"
-            class="featured-rotation-badge"
-            aria-live="polite"
-          >
-            DAILY ROTATION
-          </span>
-        </div>
-
-        <p>
-          Today's featured lives rotate automatically each day.
-          Every published memorial marked Featured can enter the rotation.
-        </p>
-
-      </div>
-
-      <a
-        class="section-link"
-        href="featured.html"
-      >
-        VIEW ALL →
-      </a>
-
-    </div>
-
-
-    <div
-      class="cards"
-      id="featuredMemorials"
-    >
-
-      <div class="loading">
-
-        <div class="spinner"></div>
-
-      </div>
-
-    </div>
-
-  </div>
-
-</section>
-
-
-<!-- =======================================================
-     ON THIS DAY
-======================================================== -->
-
-<section>
-
-  <div class="container">
-
-    <div class="on-this-day">
-
-      <div class="otd-grid">
-
-        <div>
-
-          <div
-            class="otd-date"
-            id="todayDate"
-          >
-            ON THIS DAY
-          </div>
-
-          <h2>
-            Remembering, today and always.
-          </h2>
-
-          <p>
-            Discover memorials connected to today's date, including
-            anniversaries, birthdays, stories, and community remembrances.
-          </p>
-
-          <div style="margin-top:22px">
-
-            <a
-              class="btn small"
-              href="on-this-day.html"
-            >
-              See Today's Memorials
-            </a>
-
-          </div>
-
-        </div>
-
-
-        <div
-          class="candle"
-          aria-hidden="true"
-        >
-          🕯️
-        </div>
-
-      </div>
-
-    </div>
-
-  </div>
-
-</section>
-
-
-<!-- =======================================================
-     RECENT TRIBUTES
-======================================================== -->
-
-<section>
-
-  <div class="container">
-
-    <div class="section-head">
-
-      <div>
-
-        <h2>
-          Recent Tributes
-        </h2>
-
-        <p>
-          Words left by people remembering someone special.
-        </p>
-
-      </div>
-
-      <a
-        class="section-link"
-        href="tributes.html"
-      >
-        ALL TRIBUTES →
-      </a>
-
-    </div>
-
-
-    <div
-      class="wall"
-      id="recentTributes"
-    >
-
-      <div class="loading">
-
-        <div class="spinner"></div>
-
-      </div>
-
-    </div>
-
-  </div>
-
-</section>
-
-
-<!-- =======================================================
-     EXPLORE
-======================================================== -->
-
-<section>
-
-  <div class="container">
-
-    <div class="explore">
-
-      <div class="explore-box">
-
-        <div class="eyebrow">
-          Find a Memorial
-        </div>
-
-        <h3>
-          Search the archive.
-        </h3>
-
-        <p>
-          Find a person by name, year, location, category,
-          or memorial ID.
-        </p>
-
-        <form
-          class="search"
-          onsubmit="searchMemorial(event)"
-        >
-
-          <input
-            id="searchInput"
-            type="search"
-            placeholder="Search a name..."
-            aria-label="Search memorials"
-            autocomplete="off"
-          >
-
-          <button
-            class="btn gold"
-            type="submit"
-          >
-            Search
-          </button>
-
-        </form>
-
-      </div>
-
-
-      <div class="explore-box">
-
-        <div class="eyebrow">
-          Preserve a Legacy
-        </div>
-
-        <h3>
-          Tell their story.
-        </h3>
-
-        <p>
-          Create a permanent memorial with a life story, timeline,
-          photographs, videos, tributes, and a guestbook.
-        </p>
-
-        <div style="margin-top:25px">
-
-          <a
-            class="btn"
-            href="create.html"
-          >
-            Create a Memorial →
-          </a>
-
-        </div>
-
-      </div>
-
-    </div>
-
-  </div>
-
-</section>
-
-
-<!-- =======================================================
-     FINAL CTA
-======================================================== -->
-
-<div class="footer-cta">
-
-  <h2>
-    REMEMBER. HONOR. CELEBRATE.
-  </h2>
-
-  <p>
-    A life may end, but the memories, stories, love, and influence
-    can continue.
-  </p>
-
-  <a
-    class="btn gold"
-    href="memorials.html"
-  >
-    Enter CrowRules Memorials
-  </a>
-
-</div>
 
 </main>
 
@@ -4591,285 +4093,115 @@ async function loadMemorialStats(){
 }
 
 
+
 /* =========================================================
-   FEATURED MEMORIALS
+   ARCHIVE HOME
 ========================================================= */
 
-async function loadFeaturedMemorials(){
+let archiveRecords = [];
 
-  const container=document.getElementById("featuredMemorials");
+async function loadArchiveHome(){
+  const container=document.getElementById("archiveMemorials");
+  const status=document.getElementById("archiveStatus");
   if(!container) return;
 
-  /*
-   * DAILY FEATURED ROTATION
-   * -----------------------
-   * We intentionally do NOT use created_at ordering here.
-   * Every published record marked featured becomes part of a
-   * rotating pool. The UTC calendar day determines the starting
-   * position, so every visitor sees the same three memorials
-   * for that day, then a different set the next day.
-   *
-   * This is deterministic, requires no cron job, and does not
-   * modify the database.
-   */
   try{
-
     const {data,error}=await db
       .from("memorials")
-      .select(`
-        id,
-        slug,
-        full_name,
-        birth_date,
-        passing_date,
-        location,
-        short_bio,
-        portrait_url,
-        featured,
-        created_at
-      `)
+      .select("id,slug,full_name,birth_date,passing_date,location,short_bio,portrait_url,created_at")
       .eq("published",true)
-      .eq("featured",true)
-      .limit(5000);
+      .order("passing_date",{ascending:false})
+      .order("full_name",{ascending:true})
+      .limit(120);
 
     if(error) throw error;
 
-    const pool=(data||[])
-      .filter(m=>m && (m.id || m.slug))
-      .sort((a,b)=>{
-        const ak=String(a.id||a.slug||a.full_name||"");
-        const bk=String(b.id||b.slug||b.full_name||"");
-        return ak.localeCompare(bk);
-      });
-
-    if(!pool.length){
-      container.innerHTML=`
-        <div class="empty-card">
-          <h3>No featured memorials are available yet.</h3>
-          <p style="margin-top:8px">Published memorials marked Featured will rotate into this space automatically.</p>
-        </div>`;
-      return;
-    }
-
-    const now=new Date();
-    const dayKey=Date.UTC(
-      now.getUTCFullYear(),
-      now.getUTCMonth(),
-      now.getUTCDate()
-    )/86400000;
-
-    const start=Math.floor(dayKey)%pool.length;
-    const count=Math.min(3,pool.length);
-    const selected=Array.from({length:count},(_,i)=>pool[(start+i)%pool.length]);
-
-    const dateLabel=now.toLocaleDateString("en-US",{
-      month:"long",
-      day:"numeric",
-      year:"numeric",
-      timeZone:"UTC"
-    });
-
-    const heading=document.querySelector("#featuredMemorials")?.closest("section")?.querySelector(".section-head p");
-    if(heading){
-      heading.innerHTML="Today's rotating selection • "+dateLabel+" • The selection changes automatically each day.";
-    }
-
-    container.innerHTML=selected.map(renderMemorialCard).join("");
-
-    const rotation=document.getElementById("featuredRotationInfo");
-    if(rotation){
-      rotation.textContent="DAILY ROTATION • "+dateLabel.toUpperCase();
-    }
-
-    /*
-     * Schedule a refresh at the next UTC midnight so an already-open
-     * page changes without requiring the visitor to reload it.
-     */
-    clearTimeout(window.__featuredRotationTimer);
-    const nextMidnight=Date.UTC(
-      now.getUTCFullYear(),
-      now.getUTCMonth(),
-      now.getUTCDate()+1
-    );
-    window.__featuredRotationTimer=setTimeout(
-      loadFeaturedMemorials,
-      Math.max(1000,nextMidnight-Date.now()+1000)
-    );
-
+    archiveRecords=(data||[]).filter(Boolean);
+    renderArchiveHome("");
   }catch(error){
-
-    console.error("Featured memorials error:",error);
-
-    container.innerHTML=`
-      <div class="empty-card">
-        <h3>Memorials could not be loaded right now.</h3>
-        <p style="margin-top:8px">Please refresh the page and try again.</p>
-      </div>`;
+    console.error("Memorial archive error:",error);
+    if(status) status.textContent="The archive could not be loaded right now.";
+    container.innerHTML='<div class="empty-card"><h3>Archive unavailable</h3><p style="margin-top:8px">Please refresh the page and try again.</p></div>';
   }
 }
 
+function renderArchiveHome(query){
+  const container=document.getElementById("archiveMemorials");
+  const status=document.getElementById("archiveStatus");
+  if(!container) return;
 
-/* =========================================================
-   MEMORIAL CARD
-========================================================= */
+  const q=String(query||"").trim().toLowerCase();
+  const filtered=q
+    ? archiveRecords.filter(m=>String(m.full_name||"").toLowerCase().includes(q))
+    : archiveRecords;
 
-function renderMemorialCard(
-  memorial
-){
+  const shown=filtered.slice(0,24);
 
-  const name =
-    escapeHtml(
-      memorial.full_name
-    );
-
-
-  const slug =
-    encodeURIComponent(
-      memorial.slug ||
-      memorial.id
-    );
-
-
-  const bio =
-    escapeHtml(
-      memorial.short_bio ||
-      "Remembering a life, preserving a story, and honoring a legacy."
-    );
-
-
-  const birth =
-    memorial.birth_date
-    ? formatDate(
-        memorial.birth_date
-      )
-    : "";
-
-
-  const passing =
-    memorial.passing_date
-    ? formatDate(
-        memorial.passing_date
-      )
-    : "";
-
-
-  let dateLine =
-    "A LIFE REMEMBERED";
-
-
-  if(
-    birth ||
-    passing
-  ){
-
-    dateLine =
-      escapeHtml(
-
-        [
-          birth,
-          passing
-        ]
-
-        .filter(Boolean)
-
-        .join(" — ")
-
-      );
-
+  if(status){
+    status.textContent =
+      q
+      ? `${filtered.length.toLocaleString()} matching memorial${filtered.length===1?"":"s"} for "${query}"`
+      : `${archiveRecords.length.toLocaleString()} published memorials available in this archive preview`;
   }
 
+  if(!shown.length){
+    container.innerHTML='<div class="empty-card"><h3>No memorials found</h3><p style="margin-top:8px">Try another name or browse the complete archive.</p></div>';
+    return;
+  }
 
-  const image =
-    memorial.portrait_url
-    ? escapeHtml(
-        memorial.portrait_url
-      )
-    : "";
+  container.innerHTML=shown.map(renderArchiveCard).join("");
+}
 
-
-  const portraitClass =
-    image
-    ? "portrait has-image"
-    : "portrait";
-
-
-  const portraitMarkup =
-    image
-    ? `
-        <img
-          class="memorial-portrait-image"
-          src="${image}"
-          alt="Portrait of ${name}"
-          loading="lazy"
-          decoding="async"
-          referrerpolicy="no-referrer"
-          onerror="this.style.display='none';this.parentElement.classList.remove('has-image');"
-        >
-      `
-    : "";
+function renderArchiveCard(memorial){
+  const name=escapeHtml(memorial.full_name||"Unnamed Memorial");
+  const slug=encodeURIComponent(memorial.slug||memorial.id||"");
+  const birth=memorial.birth_date?formatDate(memorial.birth_date):"";
+  const passing=memorial.passing_date?formatDate(memorial.passing_date):"";
+  const dateLine=[birth,passing].filter(Boolean).join(" — ")||"A LIFE REMEMBERED";
+  const bio=escapeHtml(memorial.short_bio||"Remembering a life, preserving a story, and honoring a legacy.");
+  const image=memorial.portrait_url?escapeHtml(memorial.portrait_url):"";
 
   return `
-
     <article class="card">
-
-      <div
-        class="${portraitClass}"
-      >
-
-        ${portraitMarkup}
-
-        <span class="badge">
-          Featured
-        </span>
-
-        <span class="candle-mark">
-          🕯
-        </span>
-
+      <div class="portrait">
+        ${image
+          ? `<img class="memorial-portrait-image" src="${image}" alt="Portrait of ${name}" loading="lazy" decoding="async" referrerpolicy="no-referrer" onerror="this.style.display='none'">`
+          : '<div class="archive-fallback">CR</div>'}
       </div>
-
-
       <div class="card-body">
-
-        <h3>
-          ${name}
-        </h3>
-
-        <div class="dates">
-          ${dateLine}
-        </div>
-
-        <p>
-          ${bio}
-        </p>
-
+        <h3>${name}</h3>
+        <div class="dates">${escapeHtml(dateLine)}</div>
+        <p>${bio}</p>
         <div class="card-foot">
-
-          <span>
-            ${
-              memorial.location
-              ? escapeHtml(
-                  memorial.location
-                )
-              : "Life Story"
-            }
-          </span>
-
-          <a
-            class="section-link"
-            href="memorial.html?slug=${slug}"
-          >
-            VIEW MEMORIAL →
-          </a>
-
+          <span>${memorial.location?escapeHtml(memorial.location):"Life Story"}</span>
+          <a class="section-link" href="memorial.html?slug=${slug}">VIEW MEMORIAL →</a>
         </div>
-
       </div>
+    </article>`;
+}
 
-    </article>
+function bindArchiveSearch(){
+  const form=document.getElementById("archiveSearchForm");
+  const input=document.getElementById("archiveSearch");
+  const clear=document.getElementById("clearArchiveSearch");
+  if(!form || !input) return;
 
-  `;
+  form.addEventListener("submit",event=>{
+    event.preventDefault();
+    renderArchiveHome(input.value);
+  });
 
+  input.addEventListener("input",()=>{
+    if(!input.value.trim()) renderArchiveHome("");
+  });
+
+  if(clear){
+    clear.addEventListener("click",()=>{
+      input.value="";
+      renderArchiveHome("");
+      input.focus();
+    });
+  }
 }
 
 
@@ -5598,13 +4930,11 @@ async function initializeCrowRulesMemorials(){
 
   loadDate();
   loadTotalVisitorCounter();
+  bindArchiveSearch();
 
   await Promise.all([
 
     loadMemorialStats(),
-
-    loadFeaturedMemorials(),
-
     loadRecentTributes(),
 
     loadUniversalMembership()
