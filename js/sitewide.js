@@ -6,7 +6,7 @@ const links=[
 ["Celebrations",root+"celebrations.html"],
 ["Archives",root+"archives.html"],
 ["On This Day",root+"on-this-day.html"],
-["Stories",root+"#stories"],
+["Stories",root+"stories.html"],
 ["Tributes",root+"tributes.html"],
 ["Family Spaces",root+"family.html"],
 ["My Memorials",root+"manager.html"]
