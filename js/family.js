@@ -1,4 +1,33 @@
 const sb=supabase.createClient(window.CROW_MEMORIALS.url,window.CROW_MEMORIALS.key);const qs=new URLSearchParams(location.search);const esc=s=>String(s??"").replace(/[&<>"']/g,m=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#039;"}[m]));async function boot(){const {data:{user}}=await sb.auth.getUser();if(!user){authBox.innerHTML='<article class="archive-card"><h3>Sign in to your CrowRules account</h3><p>Family Memorial Spaces are private to authenticated members.</p><a class="btn primary" href="https://crowrulesentertainment-oss.github.io/crowspace/login.html?return=memorial-family">Sign In</a></article>';return}authBox.innerHTML='<article class="family-account"><span class="tag">CONNECTED</span><div><h3>CrowRules account connected</h3><p>Your Family Memorial Space access is securely tied to your signed-in account.</p></div><span class="account-mark" aria-hidden="true">✓</span></article>';if(qs.get("invite"))await acceptInvite(qs.get("invite"));await loadSpaces(user.id)}async function acceptInvite(token){acceptBox.innerHTML='<article class="archive-card"><h3>Accepting family invitation…</h3></article>';const {data,error}=await sb.rpc("accept_memorial_invite",{p_token:token});acceptBox.innerHTML=error?'<article class="archive-card"><h3>Invitation could not be accepted</h3><p>'+esc(error.message)+'</p></article>':'<article class="archive-card"><span>INVITATION ACCEPTED</span><h3>Welcome to the Memorial Space</h3><p>Your family access is now active.</p></article>'}async function loadSpaces(uid){const [{data:owned,error:ownedError},{data:contrib,error:contribError}]=await Promise.all([sb.from("memorial_managers").select("memorial_id,role,status,memorials(id,slug,full_name,portrait_url)").eq("user_id",uid).eq("status","active"),sb.from("memorial_contributors").select("memorial_id,role,status,memorials(id,slug,full_name,portrait_url)").eq("user_id",uid).eq("status","active")]);if(ownedError||contribError){console.error("Family spaces load:",ownedError||contribError);spacesBox.innerHTML='<article class="archive-card"><h3>Family spaces could not be loaded</h3><p>Please refresh and try again.</p></article>';return}const rows=[...(owned||[]).map(x=>({...x,access:x.role==="owner"?"FAMILY OWNER":"FAMILY MANAGER"})),...(contrib||[]).map(x=>({...x,access:x.role==="moderator"?"FAMILY MODERATOR":"FAMILY CONTRIBUTOR"}))];spacesBox.innerHTML=rows.map(x=>{const m=x.memorials||{};const owner=x.role==="owner";return '<article class="archive-card"><span>'+esc(x.access)+'</span><h3>'+esc(m.full_name||"Memorial")+'</h3><p>Family Memorial Space</p><div class="actions"><a class="btn" href="celebration.html?slug='+encodeURIComponent(m.slug||"")+'">View Celebration</a>'+(owner?'<a class="btn" href="family-manage.html?memorial_id='+encodeURIComponent(m.id)+'">Family Settings</a>':'')+'</div></article>'}).join("")||'<article class="archive-card"><h3>No Family Memorial Spaces yet</h3><p>When a family owner invites you, the Memorial Space will appear here.</p></article>'}boot();
 
 const authBox=document.getElementById("auth"),acceptBox=document.getElementById("accept"),spacesBox=document.getElementById("spaces");
-const contactForm=document.getElementById("familyContactForm");const contactStatus=document.getElementById("contactStatus");contactForm?.addEventListener("submit",async e=>{e.preventDefault();if(!contactForm.reportValidity())return;contactStatus.textContent="Sending…";const {data:{user}}=await sb.auth.getUser();const payload={name:document.getElementById("contactName").value.trim(),email:document.getElementById("contactEmail").value.trim(),memorial:document.getElementById("contactMemorial").value.trim(),topic:document.getElementById("contactTopic").value,message:document.getElementById("contactMessage").value.trim(),user_id:user?.id||null,created_at:new Date().toISOString()};const {error}=await sb.from("memorial_contact_messages").insert(payload);if(error){console.error("Family contact form:",error);contactStatus.textContent="We couldn't send your message right now. Please try again.";return}contactForm.reset();contactStatus.textContent="Message sent. Thank you — the Memorials team will review it.";});
+const contactForm=document.getElementById("familyContactForm");
+const contactStatus=document.getElementById("contactStatus");
+
+contactForm?.addEventListener("submit",async e=>{
+ e.preventDefault();
+ if(!contactForm.reportValidity())return;
+ contactStatus.textContent="Sending…";
+ const {data:{user}}=await sb.auth.getUser();
+ const payload={
+  name:document.getElementById("contactName").value.trim(),
+  email:document.getElementById("contactEmail").value.trim(),
+  memorial:document.getElementById("contactMemorial").value.trim(),
+  topic:document.getElementById("contactTopic").value,
+  message:document.getElementById("contactMessage").value.trim(),
+  user_id:user?.id||null
+ };
+ try{
+  const {data,error}=await sb.functions.invoke("notify-crowrules-contact",{body:payload});
+  if(error)throw error;
+  if(!data?.ok){
+   contactStatus.textContent=data?.error||"We couldn't send your message right now. Please try again.";
+   return;
+  }
+  contactForm.reset();
+  contactStatus.textContent="Support request sent. The Memorials team will review it.";
+ }catch(error){
+  console.error("Family support email:",error);
+  contactStatus.textContent="We couldn't send your message right now. Please try again.";
+ }
+});
