@@ -1,69 +1,64 @@
-name: Integrate Universal CrowRules Membership
+name: Memorials Site Validation
 
 on:
   push:
-    branches: [main]
+    branches:
+      - main
   workflow_dispatch:
 
 permissions:
-  contents: write
+  contents: read
 
 jobs:
-  integrate-membership:
+  validate-memorials:
+    name: Validate Memorials site
     runs-on: ubuntu-latest
     steps:
-      - name: Checkout Memorials
+      - name: Checkout repository
         uses: actions/checkout@v4
-        with:
-          fetch-depth: 1
 
-      - name: Normalize Universal CrowRules Membership + Navigation on every HTML page
+      - name: Validate HTML integration
         shell: bash
         run: |
           set -euo pipefail
+          failed=0
 
-          while IFS= read -r file; do
-            [ -f "$file" ] || continue
+          while IFS= read -r -d '' file; do
+            echo "Checking $file"
 
-            python3 - "$file" <<'PY'
-import re, sys
-from pathlib import Path
+            if ! grep -qi 'assets/memorial-nav.js' "$file"; then
+              echo "::error file=$file::Missing shared Memorials navigation"
+              failed=1
+            fi
 
-path = Path(sys.argv[1])
-text = path.read_text(encoding="utf-8")
+            if ! grep -qi 'assets/js/crowrules-membership.js' "$file"; then
+              echo "::error file=$file::Missing Universal CrowRules Membership"
+              failed=1
+            fi
+          done < <(find . -type f -name '*.html' -not -path './.git/*' -print0)
 
-if "</head>" not in text.lower():
-    raise SystemExit(f"No closing </head> found in {path}")
-
-# Remove every previous copy of the shared membership/navigation assets.
-patterns = [
-    r'\s*<link\s+[^>]*href=["\'][^"\']*assets/css/crowrules-membership\.css[^"\']*["\'][^>]*>',
-    r'\s*<link\s+[^>]*href=["\'][^"\']*assets/css/memorial-universal\.css[^"\']*["\'][^>]*>',
-    r'\s*<script\s+[^>]*src=["\'][^"\']*assets/memorial-nav\.js[^"\']*["\'][^>]*>\s*</script>',
-    r'\s*<script\s+[^>]*src=["\'][^"\']*assets/js/crowrules-membership\.js[^"\']*["\'][^>]*>\s*</script>',
-]
-for pattern in patterns:
-    text = re.sub(pattern, "", text, flags=re.I)
-
-injection = """\n  <link rel="stylesheet" href="assets/css/crowrules-membership.css?v=20260917.2">\n  <link rel="stylesheet" href="assets/css/memorial-universal.css?v=20260917.2">\n  <script defer src="assets/memorial-nav.js?v=20260917.2"></script>\n  <script defer src="assets/js/crowrules-membership.js?v=20260917.2"></script>\n"""
-
-idx = text.lower().rfind("</head>")
-text = text[:idx] + injection + text[idx:]
-path.write_text(text, encoding="utf-8")
-PY
-          done < <(find . -type f -name '*.html' -not -path './.git/*' -print)
-
-      - name: Commit integrated pages
-        run: |
-          git config user.name "CrowRules Membership Bot"
-          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
-
-          git add '*.html'
-
-          if git diff --cached --quiet; then
-            echo "All Memorials HTML pages already contain Universal CrowRules Membership and navigation."
-            exit 0
+          if [ "$failed" -ne 0 ]; then
+            echo "One or more HTML pages are missing required shared assets."
+            exit 1
           fi
 
-          git commit -m "Add universal membership navigation to all Memorials pages"
-          git push
+          echo "All Memorials HTML pages contain shared navigation and membership integration."
+
+      - name: Validate required shared assets
+        shell: bash
+        run: |
+          set -euo pipefail
+          test -f assets/memorial-nav.js
+          test -f assets/js/crowrules-membership.js
+          test -f assets/memorials.css
+          test -f assets/memorials.js
+          echo "Shared Memorials assets are present."
+
+      - name: Validate JavaScript syntax
+        shell: bash
+        run: |
+          set -euo pipefail
+          node --check assets/memorial-nav.js
+          node --check assets/js/crowrules-membership.js
+          node --check assets/memorials.js
+          echo "Shared JavaScript syntax is valid."
