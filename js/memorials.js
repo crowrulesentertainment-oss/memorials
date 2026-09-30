@@ -10,10 +10,18 @@ document.getElementById('candleBtn')?.addEventListener('click',()=>{candles++;se
 const esc=s=>String(s??'').replace(/[&<>"']/g,m=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#039;'}[m]));
 async function memorialImages(){return new Map()}
 async function loadFeatured(){
- const {data,error}=await sb.from('memorials').select('id,slug,full_name,birth_date,passing_date,short_bio,is_celebrity,profession,portrait_url').eq('published',true).eq('featured',true).order('created_at',{ascending:false}).limit(6);
- const grid=document.querySelector('.cards'); if(!grid||error)return;
- const images=new Map();
- if(data?.length) grid.innerHTML=data.map(m=>{const fallback=m.portrait_url||'';return `<article class="card"><div class="photo${fallback?'':' photo-empty'}">${fallback?'<img src="'+esc(fallback)+'" alt="'+esc(m.full_name)+'" loading="lazy" decoding="async" onerror="this.onerror=null;this.parentElement.classList.add(\\'photo-empty\\');this.remove();">':''}</div><div><span class="tag">${m.is_celebrity?'PUBLIC LIFE':'CELEBRATION'}</span><h3>${esc(m.full_name)}</h3><p>${esc(m.short_bio||m.profession||'A life remembered and a story preserved.')}</p><a class="text-btn" href="celebration.html?slug=${encodeURIComponent(m.slug)}">Open celebration →</a></div></article>`}).join('');
+ const grid=document.querySelector('.cards');if(!grid)return;
+ const {data,error}=await sb.from('memorials').select('id,slug,full_name,birth_date,passing_date,short_bio,is_celebrity,profession,portrait_url,created_at').eq('published',true).order('created_at',{ascending:true}).limit(3000);
+ if(error||!data?.length){if(error)console.error('Memorial featured load:',error);return}
+ const dayStart=new Date();dayStart.setHours(0,0,0,0);
+ const dayNumber=Math.floor(dayStart.getTime()/86400000);
+ const offset=(dayNumber*3)%data.length;
+ const featured=[0,1,2].map(i=>data[(offset+i)%data.length]);
+ const render=rows=>rows.map(m=>{const fallback=m.portrait_url||'';return `<article class="card"><div class="photo${fallback?'':' photo-empty'}">${fallback?'<img src="'+esc(fallback)+'" alt="'+esc(m.full_name)+'" loading="lazy" decoding="async" onerror="this.onerror=null;this.parentElement.classList.add(\\'photo-empty\\');this.remove();">':''}</div><div><span class="tag">FEATURED CELEBRATION</span><h3>${esc(m.full_name)}</h3><p>${esc(m.short_bio||m.profession||'A life remembered and a story preserved.')}</p><a class="text-btn" href="celebration.html?slug=${encodeURIComponent(m.slug)}">Open celebration →</a></div></article>`}).join('');
+ grid.innerHTML=render(featured);
+ grid.classList.add('daily-featured-grid');
+ const scheduleNext=()=>{const now=new Date(),next=new Date(now);next.setHours(24,0,0,0);setTimeout(()=>location.reload(),Math.max(1000,next-now+100))};
+ scheduleNext();
 }
 async function searchArchive(q){
  const term=q.trim();if(!term){showToast('Enter a name, story, or year to search.');return}
