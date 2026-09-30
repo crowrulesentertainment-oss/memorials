@@ -13,8 +13,24 @@ async function celebrations(){
  const {data,error}=await q;if(error){status.textContent=error.message;return}await renderCards(data,grid);status.textContent=(data?.length||0)+' lives currently in the public archive.';
 }
 async function archives(){
- const grid=document.getElementById('pageGrid'),input=document.getElementById('archiveSearch'),status=document.getElementById('status'),countEl=document.getElementById('archiveCount');if(!grid)return;
- const run=async()=>{const term=input.value.trim();let q=sb.from('memorials').select('id,slug,full_name,birth_date,passing_date,short_bio,profession,is_celebrity,known_for,portrait_url').eq('published',true).order('full_name').limit(60);if(term)q=q.or('full_name.ilike.%'+term+'%,short_bio.ilike.%'+term+'%,known_for.ilike.%'+term+'%,profession.ilike.%'+term+'%');const {data,error}=await q;if(error){status.textContent='The archive could not be loaded. Please try again.';grid.innerHTML='<div class="empty"><h2>Archive unavailable</h2><p>'+esc(error.message)+'</p><button class="toolbar button" onclick="location.reload()">Retry</button></div>';if(countEl)countEl.textContent='Unable to load';return}await renderCards(data,grid);const total=data?.length||0;status.textContent=term?'Showing published memorials matching “'+esc(term)+'”.':'Showing published memorials in the CrowRules archive.';if(countEl)countEl.textContent=total.toLocaleString()+' memorials shown.'};document.getElementById('searchBtn')?.addEventListener('click',run);input?.addEventListener('keydown',e=>e.key==='Enter'&&run());run();
+ const grid=document.getElementById('pageGrid'),input=document.getElementById('archiveSearch'),status=document.getElementById('status'),countEl=document.getElementById('archiveCount'),yearPicker=document.getElementById('yearPicker'),yearSelect=document.getElementById('archiveYear');if(!grid)return;
+ const filters=[...document.querySelectorAll('.archive-filter')];
+ let view='recent';
+ const loadYears=async()=>{const {data}=await sb.from('memorials').select('passing_date').eq('published',true).not('passing_date','is',null).order('passing_date',{ascending:false}).limit(3000);const years=[...new Set((data||[]).map(x=>String(x.passing_date).slice(0,4)).filter(y=>/^\\d{4}$/.test(y)))];if(yearSelect)yearSelect.innerHTML='<option value="">Select a year…</option>'+years.map(y=>'<option value="'+y+'">'+y+'</option>').join('')};
+ const run=async()=>{const term=input.value.trim();let q=sb.from('memorials').select('id,slug,full_name,birth_date,passing_date,short_bio,profession,is_celebrity,known_for,portrait_url,created_at').eq('published',true).limit(60);
+ if(view==='recent')q=q.order('created_at',{ascending:false});
+ else if(view==='year'){const y=yearSelect?.value;if(!y){grid.innerHTML='<div class="empty"><h2>Pick a year</h2><p>Choose a year above to explore lives remembered from that year.</p></div>';status.textContent='Choose a year to begin.';if(countEl)countEl.textContent='Year archive';return}q=q.gte('passing_date',y+'-01-01').lt('passing_date',(Number(y)+1)+'-01-01').order('passing_date',{ascending:false})}
+ else if(view==='public')q=q.eq('is_celebrity',true).order('full_name');
+ else if(view==='family')q=q.eq('is_celebrity',false).order('full_name');
+ else q=q.order('full_name');
+ if(term)q=q.or('full_name.ilike.%'+term+'%,short_bio.ilike.%'+term+'%,known_for.ilike.%'+term+'%,profession.ilike.%'+term+'%');
+ const {data,error}=await q;if(error){status.textContent='The archive could not be loaded.';grid.innerHTML='<div class="empty"><h2>Archive unavailable</h2><p>'+esc(error.message)+'</p><button class="text-btn" onclick="location.reload()">Retry</button></div>';if(countEl)countEl.textContent='Unable to load';return}
+ await renderCards(data,grid);const total=data?.length||0;const labels={recent:'Recently added',year:'Year archive',public:'Public lives',family:'Family lives',all:'All archives'};status.textContent=(labels[view]||'Archive')+(term?' matching “'+esc(term)+'”.':'.');if(countEl)countEl.textContent=total.toLocaleString()+' memorials shown.';
+ };
+ filters.forEach(btn=>btn.addEventListener('click',()=>{filters.forEach(x=>x.classList.remove('active'));btn.classList.add('active');view=btn.dataset.view;yearPicker.hidden=view!=='year';run()}));
+ yearSelect?.addEventListener('change',run);
+ document.getElementById('searchBtn')?.addEventListener('click',run);input?.addEventListener('keydown',e=>e.key==='Enter'&&run());
+ await loadYears();run();
 }
 async function onThisDay(){
  const grid=document.getElementById('pageGrid');if(!grid)return;const now=new Date(),md=String(now.getMonth()+1).padStart(2,'0')+'-'+String(now.getDate()).padStart(2,'0');const {data,error}=await sb.from('memorials').select('id,slug,full_name,birth_date,passing_date,short_bio,profession,is_celebrity,portrait_url').eq('published',true).like('passing_date','%-'+md).order('passing_date',{ascending:false}).limit(60);if(error){grid.innerHTML='<div class="empty">'+esc(error.message)+'</div>';return}await renderCards(data,grid);document.getElementById('todayLabel').textContent=new Intl.DateTimeFormat(undefined,{month:'long',day:'numeric'}).format(now);
