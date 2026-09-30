@@ -14,7 +14,7 @@
   <div class="intro-scene"><div class="intro-mark">CROWRULES</div>
     <div class="intro-candle cinematic-candle"></div>
     <div class="intro-copy"><span class="intro-line line-one">EVERY LIFE LEAVES A STORY.</span><span class="intro-line line-two">SOME ARE KNOWN BY MILLIONS.</span><span class="intro-line line-three">OTHERS ARE KNOWN BY A FEW.</span><strong class="intro-title">EVERY LIFE<br><em>MATTERS.</em></strong><small class="intro-brand">MEMORIALS · EVERY LIFE HAS A STORY</small></div>
-    <button id="enterBtn" class="intro-enter">ENTER MEMORIALS <span>→</span></button>
+    <button id="enterBtn" class="intro-enter" type="button" onclick="window.enterMemorials()">ENTER MEMORIALS <span>→</span></button>
   </div>
 </div>
 <header>
@@ -57,5 +57,27 @@
 </main>
 <footer><strong>CrowRules Memorials</strong><span>Every life has a story.</span><span>Part of the CrowRules universe.</span></footer>
 <div id="toast" class="toast"></div>
+
+<script>
+window.enterMemorials=function(){
+  var intro=document.getElementById("intro");
+  if(!intro)return;
+  try{sessionStorage.setItem("memorialIntroSeen","1")}catch(e){}
+  document.body.classList.remove("intro-playing");
+  intro.classList.add("hide");
+  intro.setAttribute("aria-hidden","true");
+  var btn=document.getElementById("enterBtn");
+  if(btn)btn.disabled=true;
+  window.setTimeout(function(){intro.style.display="none";document.body.style.overflow=""},1050);
+};
+(function(){
+  try{
+    if(sessionStorage.getItem("memorialIntroSeen")){
+      var intro=document.getElementById("intro");
+      if(intro){intro.classList.add("hide");intro.style.display="none";intro.setAttribute("aria-hidden","true")}
+    }
+  }catch(e){}
+})();
+</script>
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script><script src="js/supabase.js"></script><script src="js/memorials.js"></script>
 <script src="js/sitewide.js"></script></body></html>
