@@ -8,10 +8,12 @@ today.textContent=new Intl.DateTimeFormat(undefined,{month:'long',day:'numeric',
 function render(){count.textContent=candles+' candle'+(candles===1?'':'s')+' lit in this session'}render();
 document.getElementById('candleBtn')?.addEventListener('click',()=>{candles++;sessionStorage.setItem('memorialCandles',candles);render();showToast('🕯️ A candle has been lit in remembrance.')});
 const esc=s=>String(s??'').replace(/[&<>"']/g,m=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#039;'}[m]));
+async function memorialImages(ids){const map=new Map();if(!ids.length)return map;const {data}=await sb.from('memorial_photos').select('memorial_id,image_url,storage_path,alt_text,sort_order').in('memorial_id',ids).eq('published',true).eq('review_status','approved').order('sort_order',{ascending:true});for(const x of data||[]){if(map.has(x.memorial_id))continue;let url=x.image_url||'';if(x.storage_path){const r=await sb.storage.from('memorials').createSignedUrl(x.storage_path,3600);url=r.data?.signedUrl||''}if(url)map.set(x.memorial_id,{url,alt:x.alt_text||''})}return map}
 async function loadFeatured(){
- const {data,error}=await sb.from('memorials').select('id,slug,full_name,birth_date,passing_date,portrait_url,short_bio,is_celebrity,profession').eq('published',true).eq('featured',true).order('created_at',{ascending:false}).limit(6);
+ const {data,error}=await sb.from('memorials').select('id,slug,full_name,birth_date,passing_date,short_bio,is_celebrity,profession').eq('published',true).eq('featured',true).order('created_at',{ascending:false}).limit(6);
  const grid=document.querySelector('.cards'); if(!grid||error)return;
- if(data?.length) grid.innerHTML=data.map(m=>`<article class="card"><div class="photo" style="background-image:url('${esc(m.portrait_url||'')}')"></div><div><span class="tag">${m.is_celebrity?'PUBLIC LIFE':'CELEBRATION'}</span><h3>${esc(m.full_name)}</h3><p>${esc(m.short_bio||m.profession||'A life remembered and a story preserved.')}</p><a class="text-btn" href="celebration.html?slug=${encodeURIComponent(m.slug)}">Open celebration →</a></div></article>`).join('');
+ const images=await memorialImages((data||[]).map(m=>m.id));
+ if(data?.length) grid.innerHTML=data.map(m=>{const im=images.get(m.id);return `<article class="card">${im?'<div class="photo" style="background-image:url(\''+esc(im.url)+'\')" role="img" aria-label="'+esc(im.alt||m.full_name)+'"></div>':'<div class="photo photo-empty" aria-hidden="true"></div>'}<div><span class="tag">${m.is_celebrity?'PUBLIC LIFE':'CELEBRATION'}</span><h3>${esc(m.full_name)}</h3><p>${esc(m.short_bio||m.profession||'A life remembered and a story preserved.')}</p><a class="text-btn" href="celebration.html?slug=${encodeURIComponent(m.slug)}">Open celebration →</a></div></article>`}).join('');
 }
 async function searchArchive(q){
  const term=q.trim();if(!term){showToast('Enter a name, story, or year to search.');return}
