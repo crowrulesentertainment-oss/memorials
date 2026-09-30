@@ -4,7 +4,7 @@ let candles=Number(sessionStorage.getItem('memorialCandles')||0);
 function showToast(msg){toast.textContent=msg;toast.classList.add('show');setTimeout(()=>toast.classList.remove('show'),2600)}
 if(sessionStorage.getItem('memorialIntroSeen'))intro?.classList.add('hide');
 if(intro&&!sessionStorage.getItem('memorialIntroSeen'))document.body.classList.add('intro-playing');
-enter?.addEventListener('click',()=>{if(!intro)return;sessionStorage.setItem('memorialIntroSeen','1');document.body.classList.remove('intro-playing');enter.disabled=true;intro.classList.add('hide');intro.setAttribute('aria-hidden','true');setTimeout(()=>{intro.style.display='none';document.body.style.overflow='';window.scrollTo({top:0,left:0,behavior:'instant'})},1100)});
+enter?.addEventListener('click',()=>{window.enterMemorials?.()});
 today.textContent=new Intl.DateTimeFormat(undefined,{month:'long',day:'numeric',year:'numeric'}).format(new Date());
 function render(){count.textContent=candles+' candle'+(candles===1?'':'s')+' lit in this session'}render();
 document.getElementById('candleBtn')?.addEventListener('click',()=>{candles++;sessionStorage.setItem('memorialCandles',candles);render();showToast('🕯️ A candle has been lit in remembrance.')});
