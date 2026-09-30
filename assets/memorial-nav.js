@@ -32,7 +32,11 @@ function updateMembershipBar(payload){
  const bar=document.getElementById(MEMBERSHIP_BAR_ID);if(!bar)return;
  const statusEl=bar.querySelector("[data-cr-membership-status]"),action=bar.querySelector("[data-cr-membership-action]");if(!statusEl||!action)return;
  if(!payload?.authenticated){statusEl.textContent="Not signed in";action.textContent="SIGN IN / JOIN";action.href="membership.html";return;}
- const m=payload.membership||{};statusEl.textContent="Member · "+(m.plan_name||m.display_name||m.plan_key||"Crow Membership");action.textContent="ACCOUNT";action.href="membership.html";
+ const m=payload.membership||{};
+ const email=payload.user?.email||"";
+ const identity=email?"Signed in · "+email:"Signed in";
+ statusEl.textContent=(m.plan_name||m.display_name||m.plan_key)?identity+" · "+(m.plan_name||m.display_name||m.plan_key):identity;
+ action.textContent="ACCOUNT";action.href="membership.html";
 }
 function watchMembership(){
  const run=async()=>{try{if(window.CrowRulesMembership?.status)updateMembershipBar(await window.CrowRulesMembership.status());else updateMembershipBar({authenticated:false});}catch(e){console.warn("CrowRules membership bar:",e);updateMembershipBar({authenticated:false});}};
