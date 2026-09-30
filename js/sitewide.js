@@ -3,11 +3,11 @@ const root="https://crowrulesentertainment-oss.github.io/memorials/";
 const membership="https://crowrulesentertainment-oss.github.io/crowspace/login.html";
 const links=[
 ["Home",root],
-["Celebrations",root+"#celebrations"],
-["Archives",root+"#archives"],
-["On This Day",root+"#onthisday"],
+["Celebrations",root+"celebrations.html"],
+["Archives",root+"archives.html"],
+["On This Day",root+"on-this-day.html"],
 ["Stories",root+"#stories"],
-["Tributes",root+"#tributes"],
+["Tributes",root+"tributes.html"],
 ["Family Spaces",root+"family.html"],
 ["My Memorials",root+"manager.html"]
 ];
