@@ -17,7 +17,9 @@ async function loadFeatured(){
 }
 async function searchArchive(q){
  const term=q.trim();if(!term){showToast('Enter a name, story, or year to search.');return}
- const {data,error}=await sb.from('memorials').select('id,slug,full_name,birth_date,passing_date,short_bio,portrait_url').eq('published',true).or(`full_name.ilike.%${term}%,short_bio.ilike.%${term}%,known_for.ilike.%${term}%`).limit(12);
+ if(/^\\d{4}$/.test(term)){location.href='archives.html?deathYear='+encodeURIComponent(term);return}
+ const safe=term.replace(/[(),.]/g,' ').replace(/\\s+/g,' ').trim();
+ const {data,error}=await sb.from('memorials').select('id,slug,full_name,birth_date,passing_date,short_bio,portrait_url').eq('published',true).or(`full_name.ilike.%${safe}%,short_bio.ilike.%${safe}%,known_for.ilike.%${safe}%`).limit(12);
  const results=document.getElementById('results');if(error){showToast(error.message);return}
  results.innerHTML=data?.length?data.map(m=>`<article class="archive-card"><span>MEMORIAL</span><h3>${esc(m.full_name)}</h3><p>${esc([m.birth_date,m.passing_date].filter(Boolean).join(' — '))}</p><a class="text-btn" href="celebration.html?slug=${encodeURIComponent(m.slug)}">Remember →</a></article>`).join(''):'<article class="archive-card"><h3>No memorials found</h3><p>Try another name or phrase.</p></article>';
 }
