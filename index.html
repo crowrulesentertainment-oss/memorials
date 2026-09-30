@@ -1,15 +1,80 @@
 <!doctype html>
 <html lang="en">
-<head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>CrowRules Memorials — Every Life Has a Story</title><meta name="description" content="Remember, honor and celebrate lives through CrowRules Memorials."><link rel="stylesheet" href="css/memorials.css"><link rel="stylesheet" href="css/sitewide.css"><link rel="stylesheet" href="css/memorial-pages.css"></head>
+<head>
+<meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>CrowRules Memorials — Every Life Has a Story</title>
+<meta name="description" content="Remember, honor and celebrate lives through CrowRules Memorials. Explore celebrations, stories, tributes and a growing archive.">
+<meta name="theme-color" content="#0b0a09">
+<link rel="stylesheet" href="css/memorials.css"><link rel="stylesheet" href="css/sitewide.css"><link rel="stylesheet" href="css/memorial-pages.css">
+</head>
 <body>
-<header><a class="brand" href="index.html"><span>🕯️</span> CrowRules Memorials</a><nav><a href="celebrations.html">Celebrations</a><a href="archives.html">Archives</a><a href="on-this-day.html">On This Day</a><a href="tributes.html">Tributes</a><a href="stories.html">Stories</a></nav><a class="member" href="https://crowrulesentertainment-oss.github.io/crowspace/login.html">Universal Membership</a></header>
-<main>
-<section class="hero"><div class="hero-inner"><p class="eyebrow">A PLACE TO REMEMBER</p><h1>Every life<br><em>has a story.</em></h1><p class="lead">A lasting place to remember the people we have lost — celebrity or not — and preserve the stories, photographs, memories and love that remain.</p><div class="actions"><a class="btn primary" href="celebrations.html">Explore Celebrations</a><a class="btn" href="add-celebration.html">＋ Add a Celebration</a><a class="btn" href="#remember">Light a Candle</a></div><div class="hero-note"><span>CELEBRITY &amp; NON-CELEBRITY</span><span>EVERY LIFE HAS A PLACE</span></div></div></section>
-<section id="statistics" class="section dark"><div class="section-head"><div><p class="eyebrow">THE MEMORIALS UNIVERSE</p><h2>Lives remembered.</h2></div><p>Live figures from the published <strong>public.memorials</strong> archive.</p></div><div class="stats-grid"><article><strong id="statMemorials">—</strong><span>Lives remembered</span></article><article><strong id="statCelebrities">—</strong><span>Public lives</span></article><article><strong id="statFamily">—</strong><span>Family lives</span></article><article><strong id="statPortraits">—</strong><span>Portraits preserved</span></article><article><strong id="statYears">—</strong><span>Years represented</span></article></div></section>
-<section id="celebrations" class="section"><div class="section-head"><div><p class="eyebrow">TODAY'S FEATURED</p><h2>Three lives, remembered.</h2></div><p>Three published memorials rotate automatically each day, giving the archive a new window into lives worth remembering.</p></div><div class="cards" id="featuredCelebrations"><article class="card featured loading-card"><div class="photo photo-empty"></div><div><span class="tag">FEATURED CELEBRATION</span><h3>Loading today's celebrations…</h3><p>Preparing today's three featured lives from the Memorials archive.</p></div></article></div><div class="section-cta"><a class="text-btn" href="celebrations.html">View all celebrations →</a></div></section>
-<section id="archives" class="section dark"><div class="section-head"><div><p class="eyebrow">SEARCH THE ARCHIVE</p><h2>Find a life.</h2></div><p>Search by name, story, or year of death. Every result leads back to its celebration.</p></div><div class="search"><input id="search" type="search" autocomplete="off" placeholder="Search a name, story, or year of death…"><button id="searchBtn" type="button">Search</button></div><div class="quick-years"><span>Explore a year:</span><a href="archives.html?deathYear=2026">2026</a><a href="archives.html?deathYear=2025">2025</a><a href="archives.html?deathYear=2020">2020</a><a href="archives.html#yearPicker">All years →</a></div><div id="results" class="archive-grid"><div class="archive-card"><span>ARCHIVE</span><h3>Memorial collection</h3><p>Search the growing CrowRules Memorials archive.</p></div></div></section>
-<section id="onthisday" class="section"><div class="today"><div><p class="eyebrow">TODAY WE REMEMBER</p><h2>On This Day</h2><p>Each day, discover lives connected to today's date and take a quiet moment to remember.</p><a class="text-btn" href="on-this-day.html">Open On This Day →</a></div><div class="date" id="today"></div></div></section>
-<section class="section rose"><div class="memory-path"><div><p class="eyebrow">PRESERVE A LIFE</p><h2>Turn memories into a celebration.</h2><p>Build a lasting Memorial Celebration with photographs, stories, family voices, tributes and moments that tell the whole person — not just the dates.</p><div class="actions"><a class="btn primary" href="add-celebration.html">Create a Celebration</a><a class="btn" href="stories.html">Explore Stories</a></div></div><div class="memory-points"><span>01 <b>Photos</b></span><span>02 <b>Stories</b></span><span>03 <b>Tributes</b></span><span>04 <b>Legacy</b></span></div></div></section>
-<section id="remember" class="candle-section"><div class="candle-art">🕯️</div><p class="eyebrow">A MOMENT OF REMEMBRANCE</p><h2>Light a candle.</h2><p>For someone you miss. For someone whose name should never be forgotten. For a life that mattered — and still matters.</p><button id="candleBtn" class="btn primary" type="button">Light a Candle</button><div id="candleCount" class="candle-count">0 candles lit in this session</div></section>
-</main><footer><strong>CrowRules Memorials</strong><span>Every life has a story.</span><span>Part of the CrowRules universe.</span></footer><div id="toast" class="toast"></div>
-<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script><script src="js/supabase.js"></script><script src="js/memorials.js"></script><script src="js/sitewide.js"></script></body></html>
+<header>
+  <a class="brand" href="index.html" aria-label="CrowRules Memorials home"><span aria-hidden="true">🕯️</span> CrowRules Memorials</a>
+  <nav aria-label="Primary navigation"><a href="celebrations.html">Celebrations</a><a href="archives.html">Archives</a><a href="on-this-day.html">On This Day</a><a href="tributes.html">Tributes</a><a href="stories.html">Stories</a></nav>
+  <a class="member" href="https://crowrulesentertainment-oss.github.io/crowspace/login.html">Universal Membership</a>
+</header>
+<main id="main-content">
+<section class="hero home-hero">
+  <div class="hero-inner">
+    <div class="hero-copy">
+      <p class="eyebrow">A PLACE TO REMEMBER</p>
+      <h1>Every life<br><em>has a story.</em></h1>
+      <p class="lead">A lasting place to remember the people we have lost — celebrity or not — and preserve the stories, photographs, memories and love that remain.</p>
+      <div class="actions"><a class="btn primary" href="celebrations.html">Explore Celebrations</a><a class="btn" href="add-celebration.html">＋ Add a Celebration</a><a class="btn" href="#remember">Light a Candle</a></div>
+      <div class="hero-note"><span>CELEBRITY &amp; NON-CELEBRITY</span><span>EVERY LIFE HAS A PLACE</span><span>ONE ACCOUNT. ONE UNIVERSE.</span></div>
+    </div>
+    <aside class="hero-panel" aria-label="Memorials overview">
+      <span class="hero-panel-kicker">MEMORIALS • LIVE ARCHIVE</span>
+      <strong id="heroMemorialCount">—</strong>
+      <span>published lives remembered</span>
+      <a href="archives.html">Enter the archive →</a>
+    </aside>
+  </div>
+</section>
+
+<section id="statistics" class="section dark home-stats">
+  <div class="section-head"><div><p class="eyebrow">THE MEMORIALS UNIVERSE</p><h2>Lives remembered.</h2></div><p>Live figures from the published <strong>public.memorials</strong> archive.</p></div>
+  <div class="stats-grid" aria-live="polite">
+    <article><strong id="statMemorials">—</strong><span>Lives remembered</span></article>
+    <article><strong id="statCelebrities">—</strong><span>Public lives</span></article>
+    <article><strong id="statFamily">—</strong><span>Family lives</span></article>
+    <article><strong id="statPortraits">—</strong><span>Portraits preserved</span></article>
+    <article><strong id="statYears">—</strong><span>Years represented</span></article>
+  </div>
+  <div class="data-status" id="memorialDataStatus" role="status" aria-live="polite"><span class="status-dot"></span><span>Connecting to the Memorials archive…</span></div>
+</section>
+
+<section id="celebrations" class="section home-featured">
+  <div class="section-head"><div><p class="eyebrow">TODAY'S FEATURED</p><h2>Three lives, remembered.</h2></div><p>Three published memorials rotate automatically each day, giving the archive a new window into lives worth remembering.</p></div>
+  <div class="cards" id="featuredCelebrations">
+    <article class="card featured-loading"><div class="photo photo-empty"></div><div class="featured-loading-copy"><span class="tag">FEATURED CELEBRATION</span><h3>Loading today's celebrations…</h3><p>Preparing three lives from the Memorials archive.</p></div></article>
+  </div>
+  <div class="section-cta"><a class="text-btn" href="celebrations.html">View all celebrations →</a></div>
+</section>
+
+<section id="archives" class="section dark home-search">
+  <div class="section-head"><div><p class="eyebrow">SEARCH THE ARCHIVE</p><h2>Find a life.</h2></div><p>Search by name, story, profession, or year of death. Every result leads back to its celebration.</p></div>
+  <form class="search" id="archiveSearchForm" role="search">
+    <label class="sr-only" for="search">Search the memorial archive</label><input id="search" type="search" autocomplete="off" maxlength="120" placeholder="Search a name, story, or year of death…"><button id="searchBtn" type="submit">Search</button>
+  </form>
+  <div class="quick-years"><span>Explore a year:</span><a href="archives.html?deathYear=2026">2026</a><a href="archives.html?deathYear=2025">2025</a><a href="archives.html?deathYear=2020">2020</a><a href="archives.html#yearPicker">All years →</a></div>
+  <div id="searchStatus" class="search-status" aria-live="polite"></div>
+  <div id="results" class="archive-grid"><article class="archive-card archive-empty-state"><span>ARCHIVE</span><h3>Memorial collection</h3><p>Search the growing CrowRules Memorials archive.</p></article></div>
+</section>
+
+<section id="onthisday" class="section home-onthisday">
+  <div class="today"><div><p class="eyebrow">TODAY WE REMEMBER</p><h2>On This Day</h2><p>Each day, discover lives connected to today's date and take a quiet moment to remember.</p><div id="onThisDayPreview" class="on-this-day-preview"><span>Checking today's archive…</span></div><a class="text-btn" href="on-this-day.html">Open On This Day →</a></div><div class="date" id="today"></div></div>
+</section>
+
+<section class="section rose home-preserve">
+  <div class="memory-path"><div><p class="eyebrow">PRESERVE A LIFE</p><h2>Turn memories into a celebration.</h2><p>Build a lasting Memorial Celebration with photographs, stories, family voices, tributes and moments that tell the whole person — not just the dates.</p><div class="actions"><a class="btn primary" href="add-celebration.html">Create a Celebration</a><a class="btn" href="family.html">Family Memorial Spaces</a><a class="btn" href="stories.html">Explore Stories</a></div></div><div class="memory-points"><span>01 <b>Photos</b></span><span>02 <b>Stories</b></span><span>03 <b>Tributes</b></span><span>04 <b>Legacy</b></span></div></div>
+</section>
+
+<section id="remember" class="candle-section">
+  <div class="candle-art" aria-hidden="true">🕯️</div><p class="eyebrow">A MOMENT OF REMEMBRANCE</p><h2>Light a candle.</h2><p>For someone you miss. For someone whose name should never be forgotten. For a life that mattered — and still matters.</p><button id="candleBtn" class="btn primary" type="button">Light a Candle</button><div id="candleCount" class="candle-count">0 candles lit in this session</div>
+</section>
+</main>
+<footer><strong>CrowRules Memorials</strong><span>Every life has a story.</span><span>Part of the CrowRules universe.</span></footer>
+<div id="toast" class="toast" role="status" aria-live="polite"></div>
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script><script src="js/supabase.js"></script><script src="js/memorials.js"></script><script src="js/sitewide.js"></script>
+</body></html>
