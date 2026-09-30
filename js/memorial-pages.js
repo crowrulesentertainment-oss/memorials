@@ -7,10 +7,23 @@ async function renderCards(data,grid){
  grid.innerHTML=data?.length?data.map(m=>{const fallback=m.portrait_url||'';return '<article class="page-card">'+(fallback?'<div class="photo" style="background-image:url(\''+esc(fallback)+'\')" role="img" aria-label="'+esc(m.full_name)+'"></div>':'<div class="photo photo-empty" aria-hidden="true"></div>')+'<div class="body"><span class="meta">'+(m.is_celebrity?'PUBLIC LIFE':'CELEBRATION')+'</span><h2>'+esc(m.full_name)+'</h2><p>'+esc([fmt(m.birth_date),fmt(m.passing_date)].filter(Boolean).join(' — '))+'</p><p>'+esc(m.short_bio||m.profession||m.memorial_message||'A life remembered and a story preserved.')+'</p><a class="text-btn" href="celebration.html?slug='+encodeURIComponent(m.slug)+'">Open celebration →</a></div></article>'}).join(''):'<div class="empty">No memorials are available yet.</div>';
 }
 async function celebrations(){
- const grid=document.getElementById('pageGrid'),status=document.getElementById('status');if(!grid)return;
- let q=sb.from('memorials').select('id,slug,full_name,birth_date,passing_date,short_bio,memorial_message,is_celebrity,profession,portrait_url').eq('published',true).order('created_at',{ascending:false}).limit(60);
- const type=document.getElementById('typeFilter')?.value;if(type==='celebrations')q=q.eq('is_celebrity',false);if(type==='public')q=q.eq('is_celebrity',true);
- const {data,error}=await q;if(error){status.textContent=error.message;return}await renderCards(data,grid);status.textContent=(data?.length||0)+' lives currently in the public archive.';
+ const grid=document.getElementById('pageGrid'),status=document.getElementById('status'),daily=document.getElementById('dailyFeatured');if(!grid)return;
+ const run=async()=>{
+  let q=sb.from('memorials').select('id,slug,full_name,birth_date,passing_date,short_bio,memorial_message,is_celebrity,profession,portrait_url,created_at').eq('published',true).order('created_at',{ascending:true}).limit(3000);
+  const type=document.getElementById('typeFilter')?.value;if(type==='celebrations')q=q.eq('is_celebrity',false);if(type==='public')q=q.eq('is_celebrity',true);
+  const {data,error}=await q;if(error){status.textContent='The celebrations could not be loaded.';grid.innerHTML='<div class="empty"><h2>Celebrations unavailable</h2><p>'+esc(error.message)+'</p><button class="text-btn" onclick="location.reload()">Retry</button></div>';return}
+  const all=data||[];if(!all.length){grid.innerHTML='<div class="empty">No celebrations are available yet.</div>';status.textContent='No published celebrations found.';return}
+  const now=new Date(),dayStart=new Date(now.getFullYear(),now.getMonth(),now.getDate()),dayNumber=Math.floor(dayStart.getTime()/86400000);
+  const offset=(dayNumber*3)%all.length,featured=[0,1,2].map(i=>all[(offset+i)%all.length]);
+  await renderCards(featured,grid);
+  const label=type==='public'?'public lives':type==='celebrations'?'community & family lives':'lives';
+  status.textContent='Today’s 3 featured '+label+' — refreshed automatically each day.';
+  if(daily)daily.textContent='New featured lives every day · '+all.length.toLocaleString()+' published lives in rotation';
+ };
+ document.getElementById('typeFilter')?.addEventListener('change',run);
+ run();
+ const tick=()=>{const now=new Date(),next=new Date(now.getFullYear(),now.getMonth(),now.getDate()+1),ms=next-now;if(ms<=1000)run();else setTimeout(()=>{run();tick()},ms+500)};
+ tick();
 }
 async function archives(){
  const grid=document.getElementById('pageGrid'),input=document.getElementById('archiveSearch'),status=document.getElementById('status'),countEl=document.getElementById('archiveCount'),yearPicker=document.getElementById('yearPicker'),yearSelect=document.getElementById('archiveYear');if(!grid)return;
