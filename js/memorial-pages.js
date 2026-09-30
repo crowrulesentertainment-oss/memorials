@@ -37,7 +37,14 @@ deathYearInput?.addEventListener('keydown',e=>e.key==='Enter'&&deathYearBtn?.cli
 sortEl?.addEventListener('change',()=>run(true));sizeEl?.addEventListener('change',()=>run(true));more?.addEventListener('click',()=>run(false));
  document.getElementById('searchBtn')?.addEventListener('click',()=>run(true));input?.addEventListener('keydown',e=>e.key==='Enter'&&run(true));
  let timer;input?.addEventListener('input',()=>{clearTimeout(timer);timer=setTimeout(()=>run(true),350)});
- await loadYears();run(true);
+ await loadYears();
+ const requestedYear=new URLSearchParams(location.search).get('deathYear');
+ if(requestedYear&&/^\\d{4}$/.test(requestedYear)&&deathYearInput&&yearSelect){
+   deathYearInput.value=requestedYear;yearSelect.value=requestedYear;view='year';yearPicker.hidden=false;
+   filters.forEach(x=>x.classList.toggle('active',x.dataset.view==='year'));
+   document.querySelectorAll('.year-chip').forEach(x=>x.classList.toggle('active',x.dataset.year===requestedYear));
+ }
+ run(true);
 }
 async function onThisDay(){
  const grid=document.getElementById('pageGrid');if(!grid)return;
