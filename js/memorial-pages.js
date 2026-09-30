@@ -46,7 +46,26 @@ async function archives(){
  await loadYears();run();
 }
 async function onThisDay(){
- const grid=document.getElementById('pageGrid');if(!grid)return;const now=new Date(),md=String(now.getMonth()+1).padStart(2,'0')+'-'+String(now.getDate()).padStart(2,'0');const {data,error}=await sb.from('memorials').select('id,slug,full_name,birth_date,passing_date,short_bio,profession,is_celebrity,portrait_url').eq('published',true).like('passing_date','%-'+md).order('passing_date',{ascending:false}).limit(60);if(error){grid.innerHTML='<div class="empty">'+esc(error.message)+'</div>';return}await renderCards(data,grid);document.getElementById('todayLabel').textContent=new Intl.DateTimeFormat(undefined,{month:'long',day:'numeric'}).format(now);
+ const grid=document.getElementById('pageGrid');if(!grid)return;
+ let selected=new Date();selected.setHours(12,0,0,0);
+ const pad=n=>String(n).padStart(2,'0');
+ const formatDate=d=>new Intl.DateTimeFormat(undefined,{month:'long',day:'numeric',year:'numeric'}).format(d);
+ const load=async()=>{
+  const md=pad(selected.getMonth()+1)+'-'+pad(selected.getDate());
+  const {data,error}=await sb.from('memorials').select('id,slug,full_name,birth_date,passing_date,short_bio,profession,is_celebrity,portrait_url').eq('published',true).not('passing_date','is',null).order('passing_date',{ascending:false}).limit(5000);
+  if(error){grid.innerHTML='<div class="empty"><h2>On This Day is temporarily unavailable</h2><p>'+esc(error.message)+'</p><button class="text-btn" onclick="location.reload()">Retry</button></div>';return}
+  const rows=(data||[]).filter(m=>{const d=String(m.passing_date);return d.length>=10&&d.slice(5,10)===md});
+  await renderCards(rows,grid);
+  const label=document.getElementById('todayLabel'),title=document.getElementById('dateTitle'),count=document.getElementById('otdCount');
+  if(label)label.textContent=formatDate(selected);
+  if(title)title.textContent='On This Day · '+formatDate(selected);
+  if(count)count.textContent=rows.length?(rows.length+' '+(rows.length===1?'life':'lives')+' remembered on this date.'):'No published memorials currently match this date.';
+  document.title='On This Day · '+formatDate(selected)+' | CrowRules Memorials';
+ };
+ document.getElementById('prevDay')?.addEventListener('click',()=>{selected.setDate(selected.getDate()-1);load()});
+ document.getElementById('nextDay')?.addEventListener('click',()=>{selected.setDate(selected.getDate()+1);load()});
+ document.getElementById('todayBtn')?.addEventListener('click',()=>{selected=new Date();selected.setHours(12,0,0,0);load()});
+ load();
 }
 async function tributes(){
  const grid=document.getElementById('tributeGrid');if(!grid)return;const {data,error}=await sb.from('memorial_tributes').select('id,memorial_id,author_name,message,created_at').eq('published',true).order('created_at',{ascending:false}).limit(80);if(error){grid.innerHTML='<div class="empty">'+esc(error.message)+'</div>';return}
