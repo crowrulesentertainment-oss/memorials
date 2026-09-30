@@ -12,3 +12,4 @@
  .cr-global-nav.open{display:flex}
  .cr-global-nav a{width:100%;justify-content:flex-start}
 }
+.cr-membership.is-signed-in{border-color:#8f7450!important;color:#f0d5a8!important;background:rgba(196,154,97,.08)}
