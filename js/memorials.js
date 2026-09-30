@@ -2,9 +2,6 @@ const sb=supabase.createClient(window.CROW_MEMORIALS.url,window.CROW_MEMORIALS.k
 const intro=document.getElementById('intro'),enter=document.getElementById('enterBtn'),toast=document.getElementById('toast'),today=document.getElementById('today'),count=document.getElementById('candleCount');
 let candles=Number(sessionStorage.getItem('memorialCandles')||0);
 function showToast(msg){toast.textContent=msg;toast.classList.add('show');setTimeout(()=>toast.classList.remove('show'),2600)}
-if(sessionStorage.getItem('memorialIntroSeen'))intro?.classList.add('hide');
-if(intro&&!sessionStorage.getItem('memorialIntroSeen'))document.body.classList.add('intro-playing');
-enter?.addEventListener('click',()=>{window.enterMemorials?.()});
 today.textContent=new Intl.DateTimeFormat(undefined,{month:'long',day:'numeric',year:'numeric'}).format(new Date());
 function render(){count.textContent=candles+' candle'+(candles===1?'':'s')+' lit in this session'}render();
 document.getElementById('candleBtn')?.addEventListener('click',()=>{candles++;sessionStorage.setItem('memorialCandles',candles);render();showToast('🕯️ A candle has been lit in remembrance.')});
