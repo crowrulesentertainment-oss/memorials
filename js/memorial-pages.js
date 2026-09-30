@@ -26,24 +26,16 @@ async function celebrations(){
  tick();
 }
 async function archives(){
- const grid=document.getElementById('pageGrid'),input=document.getElementById('archiveSearch'),status=document.getElementById('status'),countEl=document.getElementById('archiveCount'),yearPicker=document.getElementById('yearPicker'),yearSelect=document.getElementById('archiveYear');if(!grid)return;
- const filters=[...document.querySelectorAll('.archive-filter')];
- let view='recent';
+ const grid=document.getElementById('pageGrid'),input=document.getElementById('archiveSearch'),status=document.getElementById('status'),countEl=document.getElementById('archiveCount'),yearPicker=document.getElementById('yearPicker'),yearSelect=document.getElementById('archiveYear'),sortEl=document.getElementById('archiveSort'),sizeEl=document.getElementById('archivePageSize'),more=document.getElementById('loadMore');if(!grid)return;
+ const filters=[...document.querySelectorAll('.archive-filter')];let view='recent',offset=0,total=0,loading=false;
  const loadYears=async()=>{const {data}=await sb.from('memorials').select('passing_date').eq('published',true).not('passing_date','is',null).order('passing_date',{ascending:false}).limit(3000);const years=[...new Set((data||[]).map(x=>String(x.passing_date).slice(0,4)).filter(y=>/^\\d{4}$/.test(y)))];if(yearSelect)yearSelect.innerHTML='<option value="">Select a year…</option>'+years.map(y=>'<option value="'+y+'">'+y+'</option>').join('')};
- const run=async()=>{const term=input.value.trim();let q=sb.from('memorials').select('id,slug,full_name,birth_date,passing_date,short_bio,profession,is_celebrity,known_for,portrait_url,created_at').eq('published',true).limit(60);
- if(view==='recent')q=q.order('created_at',{ascending:false});
- else if(view==='year'){const y=yearSelect?.value;if(!y){grid.innerHTML='<div class="empty"><h2>Pick a year</h2><p>Choose a year above to explore lives remembered from that year.</p></div>';status.textContent='Choose a year to begin.';if(countEl)countEl.textContent='Year archive';return}q=q.gte('passing_date',y+'-01-01').lt('passing_date',(Number(y)+1)+'-01-01').order('passing_date',{ascending:false})}
- else if(view==='public')q=q.eq('is_celebrity',true).order('full_name');
- else if(view==='family')q=q.eq('is_celebrity',false).order('full_name');
- else q=q.order('full_name');
- if(term)q=q.or('full_name.ilike.%'+term+'%,short_bio.ilike.%'+term+'%,known_for.ilike.%'+term+'%,profession.ilike.%'+term+'%');
- const {data,error}=await q;if(error){status.textContent='The archive could not be loaded.';grid.innerHTML='<div class="empty"><h2>Archive unavailable</h2><p>'+esc(error.message)+'</p><button class="text-btn" onclick="location.reload()">Retry</button></div>';if(countEl)countEl.textContent='Unable to load';return}
- await renderCards(data,grid);const total=data?.length||0;const labels={recent:'Recently added',year:'Year archive',public:'Public lives',family:'Family lives',all:'All archives'};status.textContent=(labels[view]||'Archive')+(term?' matching “'+esc(term)+'”.':'.');if(countEl)countEl.textContent=total.toLocaleString()+' memorials shown.';
- };
- filters.forEach(btn=>btn.addEventListener('click',()=>{filters.forEach(x=>x.classList.remove('active'));btn.classList.add('active');view=btn.dataset.view;yearPicker.hidden=view!=='year';run()}));
- yearSelect?.addEventListener('change',run);
- document.getElementById('searchBtn')?.addEventListener('click',run);input?.addEventListener('keydown',e=>e.key==='Enter'&&run());
- await loadYears();run();
+ const baseQuery=()=>{let q=sb.from('memorials').select('id,slug,full_name,birth_date,passing_date,short_bio,profession,is_celebrity,known_for,portrait_url,created_at',{count:'exact'}).eq('published',true);const term=input.value.trim();if(view==='year'){const y=yearSelect?.value;if(y)q=q.gte('passing_date',y+'-01-01').lt('passing_date',(Number(y)+1)+'-01-01');else return null}if(view==='public')q=q.eq('is_celebrity',true);if(view==='family')q=q.eq('is_celebrity',false);if(term)q=q.or('full_name.ilike.%'+term+'%,short_bio.ilike.%'+term+'%,known_for.ilike.%'+term+'%,profession.ilike.%'+term+'%');const sort=sortEl?.value||'recent';if(sort==='name')q=q.order('full_name',{ascending:true});else if(sort==='name-desc')q=q.order('full_name',{ascending:false});else if(sort==='passing')q=q.order('passing_date',{ascending:false,nullsFirst:false});else if(sort==='passing-old')q=q.order('passing_date',{ascending:true,nullsFirst:false});else q=q.order('created_at',{ascending:false});return q};
+ const run=async(reset=true)=>{if(loading)return;if(reset){offset=0;grid.innerHTML='<div class="archive-loading">Loading memorials…</div>'}const q=baseQuery();if(!q){grid.innerHTML='<div class="empty"><h2>Pick a year</h2><p>Choose a year above to explore the archive.</p></div>';status.textContent='Choose a year to begin.';if(more)more.hidden=true;return}loading=true;const size=Number(sizeEl?.value||48);const {data,error,count}=await q.range(offset,offset+size-1);loading=false;if(error){status.textContent='The archive could not be loaded.';if(!offset)grid.innerHTML='<div class="empty"><h2>Archive unavailable</h2><p>'+esc(error.message)+'</p><button class="text-btn" onclick="location.reload()">Retry</button></div>';return}total=count||0;if(reset)grid.innerHTML='';const temp=document.createElement('div');await renderCards(data,temp);grid.insertAdjacentHTML('beforeend',temp.innerHTML);offset+=data?.length||0;const labels={recent:'Recently added',year:'Year archive',public:'Public lives',family:'Family lives',all:'All archives'};const term=input.value.trim();status.textContent=(labels[view]||'Archive')+(term?' matching “'+esc(term)+'”.':'.');if(countEl)countEl.textContent=total.toLocaleString()+' memorials';if(more)more.hidden=offset>=total||!data?.length;};
+ filters.forEach(btn=>btn.addEventListener('click',()=>{filters.forEach(x=>x.classList.remove('active'));btn.classList.add('active');view=btn.dataset.view;yearPicker.hidden=view!=='year';run(true)}));
+ yearSelect?.addEventListener('change',()=>run(true));sortEl?.addEventListener('change',()=>run(true));sizeEl?.addEventListener('change',()=>run(true));more?.addEventListener('click',()=>run(false));
+ document.getElementById('searchBtn')?.addEventListener('click',()=>run(true));input?.addEventListener('keydown',e=>e.key==='Enter'&&run(true));
+ let timer;input?.addEventListener('input',()=>{clearTimeout(timer);timer=setTimeout(()=>run(true),350)});
+ await loadYears();run(true);
 }
 async function onThisDay(){
  const grid=document.getElementById('pageGrid');if(!grid)return;
