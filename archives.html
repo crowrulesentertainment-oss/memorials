@@ -64,6 +64,33 @@
     <select id="archiveYear" aria-label="Choose archive year"><option value="">Select a year…</option></select>
   </div>
 
+  <div class="archive-discovery-tools" aria-label="Archive discovery filters">
+    <div class="discovery-heading">
+      <span class="eyebrow">DISCOVERY</span>
+      <strong>Go deeper into the archive</strong>
+      <small>Filter by the life, work, identity, and era represented in the collection.</small>
+    </div>
+    <div class="discovery-grid">
+      <label>Profession
+        <select id="professionFilter" aria-label="Filter by profession"><option value="">All professions</option></select>
+      </label>
+      <label>Category
+        <select id="categoryFilter" aria-label="Filter by category"><option value="">All categories</option></select>
+      </label>
+      <label>Nationality
+        <select id="nationalityFilter" aria-label="Filter by nationality"><option value="">All nationalities</option></select>
+      </label>
+      <label>Memorial Type
+        <select id="memorialTypeFilter" aria-label="Filter by memorial type"><option value="">All memorial types</option></select>
+      </label>
+    </div>
+    <div class="discovery-actions">
+      <button id="clearDiscovery" class="discovery-clear" type="button">Clear filters</button>
+      <button id="surpriseMe" class="surprise-btn" type="button">✦ Surprise Me</button>
+    </div>
+    <div id="activeDiscovery" class="active-discovery" aria-live="polite"></div>
+  </div>
+
   <div class="archive-options">
     <label>Sort
       <select id="archiveSort" aria-label="Sort memorials">
@@ -79,6 +106,7 @@
         <option value="editorial" selected>Editorial</option>
         <option value="grid">Classic Grid</option>
         <option value="compact">Compact List</option>
+        <option value="portraits">Portrait Gallery</option>
       </select>
     </label>
   </div>
