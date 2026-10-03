@@ -48,11 +48,18 @@ async function archives(){
  const sortEl=document.getElementById('archiveSort');
  const sizeEl=document.getElementById('archivePageSize');
  const layoutEl=document.getElementById('archiveLayout');
+ const professionEl=document.getElementById('professionFilter');
+ const categoryEl=document.getElementById('categoryFilter');
+ const nationalityEl=document.getElementById('nationalityFilter');
+ const memorialTypeEl=document.getElementById('memorialTypeFilter');
+ const clearDiscovery=document.getElementById('clearDiscovery');
+ const surpriseMe=document.getElementById('surpriseMe');
+ const activeDiscovery=document.getElementById('activeDiscovery');
  const more=document.getElementById('loadMore');
  const filters=[...document.querySelectorAll('.archive-filter')];
  const saveLayout=()=>{try{localStorage.setItem('crowrules-memorials-layout',layoutEl?.value||'editorial')}catch(e){}};
- const applyLayout=()=>{const layout=layoutEl?.value||'editorial';grid.classList.remove('archive-layout-editorial','archive-layout-grid','archive-layout-compact');grid.classList.add('archive-layout-'+layout);};
- const renderArchiveCards=(rows,target)=>{target.innerHTML=rows.length?rows.map(m=>{const photo=m.portrait_url||'';const year=String(m.passing_date||'').slice(0,4);const story=m.short_bio||m.profession||m.known_for||m.memorial_message||'A life remembered and a story preserved.';return '<article class="archive-card">'+(photo?'<div class="archive-card-photo" style="background-image:url(\''+esc(photo)+'\')" role="img" aria-label="'+esc(m.full_name)+'"></div>':'<div class="archive-card-photo empty" aria-hidden="true"></div>')+'<div class="archive-card-body"><div class="archive-card-meta"><span>'+(m.is_celebrity?'PUBLIC LIFE':'FAMILY LIFE')+'</span><span class="archive-card-year">'+esc(year)+'</span></div><h2>'+esc(m.full_name)+'</h2><p class="archive-card-dates">'+esc([fmt(m.birth_date),fmt(m.passing_date)].filter(Boolean).join(' — '))+'</p><p class="archive-card-story">'+esc(story)+'</p><a class="archive-card-link" href="celebration.html?slug='+encodeURIComponent(m.slug)+'">Open celebration →</a></div></article>'}).join(''):'<div class="empty">No memorials are available yet.</div>';};
+ const applyLayout=()=>{const layout=layoutEl?.value||'editorial';grid.classList.remove('archive-layout-editorial','archive-layout-grid','archive-layout-compact','archive-layout-portraits');grid.classList.add('archive-layout-'+layout);};
+ const renderArchiveCards=(rows,target)=>{target.innerHTML=rows.length?rows.map(m=>{const photo=m.portrait_url||'';const year=String(m.passing_date||'').slice(0,4);const story=m.short_bio||m.profession||m.known_for||m.memorial_message||'A life remembered and a story preserved.';const profession=m.profession||'';const category=m.category||'';return '<article class="archive-card">'+(photo?'<div class="archive-card-photo" style="background-image:url(\''+esc(photo)+'\')" role="img" aria-label="'+esc(m.full_name)+'"></div>':'<div class="archive-card-photo empty" aria-hidden="true"></div>')+'<div class="archive-card-body"><div class="archive-card-meta"><span>'+(m.is_celebrity?'PUBLIC LIFE':'FAMILY LIFE')+'</span><span class="archive-card-year">'+esc(year)+'</span></div><h2>'+esc(m.full_name)+'</h2><p class="archive-card-dates">'+esc([fmt(m.birth_date),fmt(m.passing_date)].filter(Boolean).join(' — '))+'</p>'+(profession?'<p class="archive-card-profession">'+esc(profession)+'</p>':'')+(category?'<span class="archive-card-category">'+esc(category)+'</span>':'')+'<p class="archive-card-story">'+esc(story)+'</p><a class="archive-card-link" href="celebration.html?slug='+encodeURIComponent(m.slug)+'">Open celebration →</a></div></article>'}).join(''):'<div class="empty">No memorials are available yet.</div>';};
  const deathYearInput=document.getElementById('deathYearSearch');
  const deathYearBtn=document.getElementById('deathYearBtn');
  if(!grid)return;
@@ -66,6 +73,9 @@ async function archives(){
    document.getElementById('archiveRetry')?.addEventListener('click',()=>run(true));
  };
 
+ const populateFacet=(el,values,label)=>{if(!el)return;const current=el.value;el.innerHTML='<option value="">All '+label+'</option>'+values.map(v=>'<option value="'+esc(v)+'">'+esc(v)+'</option>').join('');if(values.includes(current))el.value=current;};
+ const updateDiscovery=()=>{const pairs=[['Profession',professionEl?.value],['Category',categoryEl?.value],['Nationality',nationalityEl?.value],['Memorial type',memorialTypeEl?.value]].filter(([,v])=>v);if(activeDiscovery)activeDiscovery.innerHTML=pairs.length?pairs.map(([k,v])=>'<span class="discovery-chip">'+esc(k)+': '+esc(v)+'</span>').join(''):'<span>No discovery filters active.</span>';};
+ const loadFacets=async()=>{try{const {data,error}=await sb.from('memorials').select('profession,category,nationality,memorial_type').eq('published',true).limit(5000);if(error)throw error;const rows=data||[];const vals=key=>[...new Set(rows.map(r=>String(r[key]||'').trim()).filter(Boolean))].sort((a,b)=>a.localeCompare(b,undefined,{sensitivity:'base'}));populateFacet(professionEl,vals('profession'),'professions');populateFacet(categoryEl,vals('category'),'categories');populateFacet(nationalityEl,vals('nationality'),'nationalities');populateFacet(memorialTypeEl,vals('memorial_type'),'memorial types');updateDiscovery();}catch(error){console.error('Memorial archive facet load:',error);if(activeDiscovery)activeDiscovery.textContent='Discovery filters are temporarily unavailable.';}};
  const loadYears=async()=>{
    try{
      const {data,error}=await sb.from('memorials').select('passing_date').eq('published',true).not('passing_date','is',null).order('passing_date',{ascending:false}).limit(5000);
@@ -121,6 +131,10 @@ async function archives(){
    if(view==='year'&&yearSelect?.value)p.set('deathYear',yearSelect.value);
    if(view!=='recent')p.set('view',view);
    if(sortEl?.value&&sortEl.value!=='recent')p.set('sort',sortEl.value);
+   if(professionEl?.value)p.set('profession',professionEl.value);
+   if(categoryEl?.value)p.set('category',categoryEl.value);
+   if(nationalityEl?.value)p.set('nationality',nationalityEl.value);
+   if(memorialTypeEl?.value)p.set('memorialType',memorialTypeEl.value);
    if(sizeEl?.value&&sizeEl.value!=='48')p.set('size',sizeEl.value);
    if(layoutEl?.value&&layoutEl.value!=='editorial')p.set('layout',layoutEl.value);
    history.replaceState(null,'',location.pathname+(p.toString()?'?'+p.toString():''));
@@ -242,6 +256,9 @@ async function archives(){
  sortEl?.addEventListener('change',()=>{syncUrl();run(true)});
  sizeEl?.addEventListener('change',()=>{syncUrl();run(true)});
  layoutEl?.addEventListener('change',()=>{applyLayout();saveLayout();syncUrl();});
+ [professionEl,categoryEl,nationalityEl,memorialTypeEl].forEach(el=>el?.addEventListener('change',()=>{updateDiscovery();syncUrl();run(true)}));
+ clearDiscovery?.addEventListener('click',()=>{[professionEl,categoryEl,nationalityEl,memorialTypeEl].forEach(el=>{if(el)el.value=''});updateDiscovery();syncUrl();run(true)});
+ surpriseMe?.addEventListener('click',async()=>{if(surpriseMe.disabled)return;surpriseMe.disabled=true;const old=surpriseMe.textContent;surpriseMe.textContent='Finding a life…';try{const {count,error}=await sb.from('memorials').select('id',{count:'exact',head:true}).eq('published',true);if(error)throw error;if(!count)throw new Error('No published memorials are available.');const offset=Math.floor(Math.random()*count);const {data,error:pickError}=await sb.from('memorials').select('slug').eq('published',true).order('created_at',{ascending:true}).range(offset,offset);if(pickError)throw pickError;const slug=data?.[0]?.slug;if(!slug)throw new Error('A memorial could not be selected.');location.href='celebration.html?slug='+encodeURIComponent(slug);}catch(error){console.error('Surprise Me:',error);if(status)status.textContent=error?.message||'Surprise Me is temporarily unavailable.';}finally{surpriseMe.disabled=false;surpriseMe.textContent=old}});
  more?.addEventListener('click',()=>run(false));
  searchForm?.addEventListener('submit',e=>{e.preventDefault();run(true)});
  searchClear?.addEventListener('click',()=>{if(input){input.value='';input.focus();run(true)}});
@@ -255,12 +272,16 @@ async function archives(){
    timer=setTimeout(()=>run(true),400);
  });
 
- await loadYears();
+ await Promise.all([loadYears(),loadFacets()]);
 
  const params=new URLSearchParams(location.search);
  if(input)input.value=params.get('q')||'';
  if(params.get('view')&&['recent','year','public','family','all'].includes(params.get('view')))view=params.get('view');
  if(sortEl&&['recent','name','name-desc','passing','passing-old'].includes(params.get('sort')))sortEl.value=params.get('sort');
+ if(professionEl)professionEl.value=params.get('profession')||'';
+ if(categoryEl)categoryEl.value=params.get('category')||'';
+ if(nationalityEl)nationalityEl.value=params.get('nationality')||'';
+ if(memorialTypeEl)memorialTypeEl.value=params.get('memorialType')||'';
  if(sizeEl&&['24','48','96'].includes(params.get('size')))sizeEl.value=params.get('size');
  if(layoutEl&&['editorial','grid','compact'].includes(params.get('layout')))layoutEl.value=params.get('layout');
  else {try{const saved=localStorage.getItem('crowrules-memorials-layout');if(['editorial','grid','compact'].includes(saved))layoutEl.value=saved}catch(e){}}
@@ -277,6 +298,7 @@ async function archives(){
  }
  filters.forEach(x=>x.classList.toggle('active',x.dataset.view===view));
  if(searchClear)searchClear.hidden=!(input?.value.trim());
+ updateDiscovery();
  applyLayout();
  run(true);
 }
