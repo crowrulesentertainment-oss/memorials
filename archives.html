@@ -12,7 +12,6 @@
 </head>
 <body data-page="archives">
 <header></header>
-
 <main>
 <section class="archive-hero" aria-labelledby="archiveHeroTitle">
   <div class="archive-hero-copy">
@@ -25,26 +24,15 @@
 
 <section class="archive-discovery" aria-labelledby="archiveSearchTitle">
   <h2 id="archiveSearchTitle" class="sr-only">Search the memorial archive</h2>
-
   <form id="archiveSearchForm" class="archive-search" role="search">
     <span class="search-icon" aria-hidden="true">⌕</span>
-    <input
-      id="archiveSearch"
-      type="search"
-      aria-label="Search the memorial archive"
-      placeholder="Search a name, profession, story, or what they were known for…"
-      autocomplete="off"
-      enterkeyhint="search"
-    >
+    <input id="archiveSearch" type="search" aria-label="Search the memorial archive" placeholder="Search a name, profession, story, or what they were known for…" autocomplete="off" enterkeyhint="search">
     <button id="searchClear" class="search-clear" type="button" hidden aria-label="Clear archive search">Clear</button>
     <button id="searchBtn" class="search-submit" type="submit">Search</button>
   </form>
 
   <div class="death-year-search" aria-label="Search by year of death">
-    <div>
-      <span class="eyebrow">YEAR OF DEATH</span>
-      <strong>Find lives remembered in a specific year</strong>
-    </div>
+    <div><span class="eyebrow">YEAR OF DEATH</span><strong>Find lives remembered in a specific year</strong></div>
     <div class="death-year-controls">
       <input id="deathYearSearch" type="number" inputmode="numeric" min="1800" max="2100" placeholder="e.g. 2026" aria-label="Year of death">
       <button id="deathYearBtn" type="button">Search Year</button>
@@ -73,9 +61,7 @@
     <div id="yearSummary" class="year-summary" aria-live="polite"></div>
     <div id="decadeRail" class="decade-rail" aria-label="Browse death years by decade"></div>
     <label class="sr-only" for="archiveYear">Choose archive year</label>
-    <select id="archiveYear" aria-label="Choose archive year">
-      <option value="">Select a year…</option>
-    </select>
+    <select id="archiveYear" aria-label="Choose archive year"><option value="">Select a year…</option></select>
   </div>
 
   <div class="archive-options">
@@ -88,11 +74,11 @@
         <option value="passing-old">Passing date — oldest</option>
       </select>
     </label>
-    <label>Cards
-      <select id="archivePageSize" aria-label="Memorials per page">
-        <option value="24">24</option>
-        <option value="48" selected>48</option>
-        <option value="96">96</option>
+    <label>Layout
+      <select id="archiveLayout" aria-label="Choose archive layout">
+        <option value="editorial" selected>Editorial</option>
+        <option value="grid">Classic Grid</option>
+        <option value="compact">Compact List</option>
       </select>
     </label>
   </div>
@@ -105,20 +91,15 @@
       <span id="archiveCount" class="archive-count">Loading…</span>
     </div>
     <div id="status" class="status">Connecting to the archive…</div>
-    <div id="searchStatus" class="search-status-line" hidden>
-      <span class="dot" aria-hidden="true"></span>
-      <span id="searchStatusText"></span>
-    </div>
+    <div id="searchStatus" class="search-status-line" hidden><span class="dot" aria-hidden="true"></span><span id="searchStatusText"></span></div>
   </div>
 </section>
 
-<section id="pageGrid" class="page-grid" aria-live="polite" aria-busy="true">
+<section id="pageGrid" class="page-grid archive-results archive-layout-editorial" aria-live="polite" aria-busy="true">
   <div class="archive-loading">Opening the archive…</div>
 </section>
 
-<div class="archive-load">
-  <button id="loadMore" class="text-btn" type="button" hidden>Load More Memorials</button>
-</div>
+<div class="archive-load"><button id="loadMore" class="text-btn" type="button" hidden>Load More Memorials</button></div>
 </main>
 
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
