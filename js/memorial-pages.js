@@ -45,8 +45,11 @@ async function archives(){
  const yearSelect=document.getElementById('archiveYear');
  const sortEl=document.getElementById('archiveSort');
  const sizeEl=document.getElementById('archivePageSize');
+ const layoutEl=document.getElementById('archiveLayout');
  const more=document.getElementById('loadMore');
  const filters=[...document.querySelectorAll('.archive-filter')];
+ const applyLayout=()=>{const layout=layoutEl?.value||'editorial';grid.classList.remove('archive-layout-editorial','archive-layout-grid','archive-layout-compact');grid.classList.add('archive-layout-'+layout);};
+ const renderArchiveCards=(rows,target)=>{target.innerHTML=rows.length?rows.map(m=>{const photo=m.portrait_url||'';const year=String(m.passing_date||'').slice(0,4);const story=m.short_bio||m.profession||m.known_for||m.memorial_message||'A life remembered and a story preserved.';return '<article class="archive-card">'+(photo?'<div class="archive-card-photo" style="background-image:url(\''+esc(photo)+'\')" role="img" aria-label="'+esc(m.full_name)+'"></div>':'<div class="archive-card-photo empty" aria-hidden="true"></div>')+'<div class="archive-card-body"><div class="archive-card-meta"><span>'+(m.is_celebrity?'PUBLIC LIFE':'FAMILY LIFE')+'</span><span class="archive-card-year">'+esc(year)+'</span></div><h2>'+esc(m.full_name)+'</h2><p class="archive-card-dates">'+esc([fmt(m.birth_date),fmt(m.passing_date)].filter(Boolean).join(' — '))+'</p><p class="archive-card-story">'+esc(story)+'</p><a class="archive-card-link" href="celebration.html?slug='+encodeURIComponent(m.slug)+'">Open celebration →</a></div></article>'}).join(''):'<div class="empty">No memorials are available yet.</div>';};
  const deathYearInput=document.getElementById('deathYearSearch');
  const deathYearBtn=document.getElementById('deathYearBtn');
  if(!grid)return;
@@ -116,6 +119,7 @@ async function archives(){
    if(view!=='recent')p.set('view',view);
    if(sortEl?.value&&sortEl.value!=='recent')p.set('sort',sortEl.value);
    if(sizeEl?.value&&sizeEl.value!=='48')p.set('size',sizeEl.value);
+   if(layoutEl?.value&&layoutEl.value!=='editorial')p.set('layout',layoutEl.value);
    history.replaceState(null,'',location.pathname+(p.toString()?'?'+p.toString():''));
  };
 
@@ -183,7 +187,7 @@ async function archives(){
      total=Number(count||0);
      if(reset)grid.innerHTML='';
      const temp=document.createElement('div');
-     await renderCards(rows,temp);
+     renderArchiveCards(rows,temp);
      if(rows.length)grid.insertAdjacentHTML('beforeend',temp.innerHTML);
      offset+=rows.length;
      setBusy(false);
@@ -231,8 +235,9 @@ async function archives(){
    setYear(y);
  });
  deathYearInput?.addEventListener('keydown',e=>{if(e.key==='Enter')deathYearBtn?.click()});
- sortEl?.addEventListener('change',()=>run(true));
- sizeEl?.addEventListener('change',()=>run(true));
+ sortEl?.addEventListener('change',()=>{syncUrl();run(true)});
+ sizeEl?.addEventListener('change',()=>{syncUrl();run(true)});
+ layoutEl?.addEventListener('change',()=>{applyLayout();syncUrl();});
  more?.addEventListener('click',()=>run(false));
  searchForm?.addEventListener('submit',e=>{e.preventDefault();run(true)});
  searchClear?.addEventListener('click',()=>{if(input){input.value='';input.focus();run(true)}});
@@ -253,6 +258,7 @@ async function archives(){
  if(params.get('view')&&['recent','year','public','family','all'].includes(params.get('view')))view=params.get('view');
  if(sortEl&&['recent','name','name-desc','passing','passing-old'].includes(params.get('sort')))sortEl.value=params.get('sort');
  if(sizeEl&&['24','48','96'].includes(params.get('size')))sizeEl.value=params.get('size');
+ if(layoutEl&&['editorial','grid','compact'].includes(params.get('layout')))layoutEl.value=params.get('layout');
 
  const requestedYear=params.get('deathYear');
  if(requestedYear&&/^\\d{4}$/.test(requestedYear)){
@@ -266,6 +272,7 @@ async function archives(){
  }
  filters.forEach(x=>x.classList.toggle('active',x.dataset.view===view));
  if(searchClear)searchClear.hidden=!(input?.value.trim());
+ applyLayout();
  run(true);
 }
 async function onThisDay(){
