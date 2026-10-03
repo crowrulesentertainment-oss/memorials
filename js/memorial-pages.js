@@ -155,11 +155,30 @@ async function archives(){
    if(view==='public')q=q.eq('is_celebrity',true);
    if(view==='family')q=q.eq('is_celebrity',false);
 
+   // Discovery filters are applied server-side so they work together with
+   // search, year, public/family views, sorting, and pagination.
+   if(professionEl?.value)q=q.eq('profession',professionEl.value);
+   if(categoryEl?.value)q=q.eq('category',categoryEl.value);
+   if(nationalityEl?.value)q=q.eq('nationality',nationalityEl.value);
+   if(memorialTypeEl?.value)q=q.eq('memorial_type',memorialTypeEl.value);
+
    if(term){
+     // Every search word must appear somewhere in the memorial record,
+     // while each word may match any of the searchable fields.
      const tokens=[...new Set(term.split(/\s+/).filter(Boolean))].slice(0,8);
      tokens.forEach(token=>{
        const pattern='%'+escapeLike(token)+'%';
-       q=q.or('full_name.ilike.'+pattern+',short_bio.ilike.'+pattern+',known_for.ilike.'+pattern+',profession.ilike.'+pattern+',memorial_message.ilike.'+pattern+',slug.ilike.'+pattern);
+       q=q.or(
+         'full_name.ilike.'+pattern+
+         ',short_bio.ilike.'+pattern+
+         ',known_for.ilike.'+pattern+
+         ',profession.ilike.'+pattern+
+         ',category.ilike.'+pattern+
+         ',nationality.ilike.'+pattern+
+         ',memorial_type.ilike.'+pattern+
+         ',memorial_message.ilike.'+pattern+
+         ',slug.ilike.'+pattern
+       );
      });
    }
 
