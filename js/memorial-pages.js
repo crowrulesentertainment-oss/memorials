@@ -194,7 +194,6 @@ async function archives(){
 
  const run=async(reset=true)=>{
    const myRequest=++requestId;
-   if(loading)return;
    if(reset){
      offset=0;
      if(more)more.hidden=true;
@@ -257,9 +256,10 @@ async function archives(){
    btn.classList.add('active');
    view=btn.dataset.view;
    yearPicker.hidden=view!=='year';
+   syncUrl();
    run(true);
  }));
- yearSelect?.addEventListener('change',()=>yearSelect.value&&setYear(yearSelect.value));
+ yearSelect?.addEventListener('change',()=>{if(yearSelect.value){setYear(yearSelect.value);syncUrl();}});
  document.getElementById('prevYear')?.addEventListener('click',()=>{
    const y=Number(yearSelect?.value||deathYearInput?.value);if(y)setYear(y-1);
  });
@@ -270,6 +270,7 @@ async function archives(){
    const y=String(deathYearInput?.value||'').trim();
    if(!/^\\d{4}$/.test(y)){if(status)status.textContent='Enter a four-digit year of death.';deathYearInput?.focus();return;}
    setYear(y);
+   syncUrl();
  });
  deathYearInput?.addEventListener('keydown',e=>{if(e.key==='Enter')deathYearBtn?.click()});
  sortEl?.addEventListener('change',()=>{syncUrl();run(true)});
@@ -279,16 +280,16 @@ async function archives(){
  clearDiscovery?.addEventListener('click',()=>{[professionEl,categoryEl,nationalityEl,memorialTypeEl].forEach(el=>{if(el)el.value=''});updateDiscovery();syncUrl();run(true)});
  surpriseMe?.addEventListener('click',async()=>{if(surpriseMe.disabled)return;surpriseMe.disabled=true;const old=surpriseMe.textContent;surpriseMe.textContent='Finding a life…';try{const {count,error}=await sb.from('memorials').select('id',{count:'exact',head:true}).eq('published',true);if(error)throw error;if(!count)throw new Error('No published memorials are available.');const offset=Math.floor(Math.random()*count);const {data,error:pickError}=await sb.from('memorials').select('slug').eq('published',true).order('created_at',{ascending:true}).range(offset,offset);if(pickError)throw pickError;const slug=data?.[0]?.slug;if(!slug)throw new Error('A memorial could not be selected.');location.href='celebration.html?slug='+encodeURIComponent(slug);}catch(error){console.error('Surprise Me:',error);if(status)status.textContent=error?.message||'Surprise Me is temporarily unavailable.';}finally{surpriseMe.disabled=false;surpriseMe.textContent=old}});
  more?.addEventListener('click',()=>run(false));
- searchForm?.addEventListener('submit',e=>{e.preventDefault();run(true)});
- searchClear?.addEventListener('click',()=>{if(input){input.value='';input.focus();run(true)}});
+ searchForm?.addEventListener('submit',e=>{e.preventDefault();syncUrl();run(true)});
+ searchClear?.addEventListener('click',()=>{if(input){input.value='';input.focus();syncUrl();run(true)}});
  input?.addEventListener('keydown',e=>{
-   if(e.key==='Escape'&&input.value){e.preventDefault();input.value='';run(true);}
+   if(e.key==='Escape'&&input.value){e.preventDefault();input.value='';syncUrl();run(true);}
  });
  let timer;
  input?.addEventListener('input',()=>{
    if(searchClear)searchClear.hidden=!input.value.trim();
    clearTimeout(timer);
-   timer=setTimeout(()=>run(true),400);
+   timer=setTimeout(()=>{syncUrl();run(true)},400);
  });
 
  await Promise.all([loadYears(),loadFacets()]);
