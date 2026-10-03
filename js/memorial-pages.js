@@ -143,7 +143,7 @@ async function archives(){
  const escapeLike=value=>String(value||'').replace(/[\\%_]/g,' ');
  const baseQuery=()=>{
    let q=sb.from('memorials')
-     .select('id,slug,full_name,birth_date,passing_date,short_bio,profession,is_celebrity,known_for,memorial_message,portrait_url,created_at',{count:'exact'})
+     .select('id,slug,full_name,birth_date,passing_date,short_bio,profession,category,nationality,memorial_type,is_celebrity,known_for,memorial_message,portrait_url,created_at',{count:'exact'})
      .eq('published',true);
 
    const term=(input?.value||'').trim().replace(/[\\%,.*()]/g,' ').replace(/\s+/g,' ').trim().slice(0,120);
@@ -283,8 +283,8 @@ async function archives(){
  if(nationalityEl)nationalityEl.value=params.get('nationality')||'';
  if(memorialTypeEl)memorialTypeEl.value=params.get('memorialType')||'';
  if(sizeEl&&['24','48','96'].includes(params.get('size')))sizeEl.value=params.get('size');
- if(layoutEl&&['editorial','grid','compact'].includes(params.get('layout')))layoutEl.value=params.get('layout');
- else {try{const saved=localStorage.getItem('crowrules-memorials-layout');if(['editorial','grid','compact'].includes(saved))layoutEl.value=saved}catch(e){}}
+ if(layoutEl&&['editorial','grid','compact','portraits'].includes(params.get('layout')))layoutEl.value=params.get('layout');
+ else {try{const saved=localStorage.getItem('crowrules-memorials-layout');if(['editorial','grid','compact','portraits'].includes(saved))layoutEl.value=saved}catch(e){}}
 
  const requestedYear=params.get('deathYear');
  if(requestedYear&&/^\\d{4}$/.test(requestedYear)){
