@@ -37,6 +37,8 @@ async function archives(){
  const input=document.getElementById('archiveSearch');
  const searchForm=document.getElementById('archiveSearchForm');
  const searchClear=document.getElementById('searchClear');
+ const filterBar=document.querySelector('.archive-filters');
+ const searchSuggestions=document.getElementById('searchSuggestions');
  const searchStatus=document.getElementById('searchStatus');
  const searchStatusText=document.getElementById('searchStatusText');
  const status=document.getElementById('status');
@@ -48,6 +50,7 @@ async function archives(){
  const layoutEl=document.getElementById('archiveLayout');
  const more=document.getElementById('loadMore');
  const filters=[...document.querySelectorAll('.archive-filter')];
+ const saveLayout=()=>{try{localStorage.setItem('crowrules-memorials-layout',layoutEl?.value||'editorial')}catch(e){}};
  const applyLayout=()=>{const layout=layoutEl?.value||'editorial';grid.classList.remove('archive-layout-editorial','archive-layout-grid','archive-layout-compact');grid.classList.add('archive-layout-'+layout);};
  const renderArchiveCards=(rows,target)=>{target.innerHTML=rows.length?rows.map(m=>{const photo=m.portrait_url||'';const year=String(m.passing_date||'').slice(0,4);const story=m.short_bio||m.profession||m.known_for||m.memorial_message||'A life remembered and a story preserved.';return '<article class="archive-card">'+(photo?'<div class="archive-card-photo" style="background-image:url(\''+esc(photo)+'\')" role="img" aria-label="'+esc(m.full_name)+'"></div>':'<div class="archive-card-photo empty" aria-hidden="true"></div>')+'<div class="archive-card-body"><div class="archive-card-meta"><span>'+(m.is_celebrity?'PUBLIC LIFE':'FAMILY LIFE')+'</span><span class="archive-card-year">'+esc(year)+'</span></div><h2>'+esc(m.full_name)+'</h2><p class="archive-card-dates">'+esc([fmt(m.birth_date),fmt(m.passing_date)].filter(Boolean).join(' — '))+'</p><p class="archive-card-story">'+esc(story)+'</p><a class="archive-card-link" href="celebration.html?slug='+encodeURIComponent(m.slug)+'">Open celebration →</a></div></article>'}).join(''):'<div class="empty">No memorials are available yet.</div>';};
  const deathYearInput=document.getElementById('deathYearSearch');
@@ -123,6 +126,7 @@ async function archives(){
    history.replaceState(null,'',location.pathname+(p.toString()?'?'+p.toString():''));
  };
 
+ const escapeLike=value=>String(value||'').replace(/[\\%_]/g,' ');
  const baseQuery=()=>{
    let q=sb.from('memorials')
      .select('id,slug,full_name,birth_date,passing_date,short_bio,profession,is_celebrity,known_for,memorial_message,portrait_url,created_at',{count:'exact'})
@@ -140,7 +144,7 @@ async function archives(){
    if(term){
      const tokens=[...new Set(term.split(/\s+/).filter(Boolean))].slice(0,8);
      tokens.forEach(token=>{
-       const pattern='%'+token+'%';
+       const pattern='%'+escapeLike(token)+'%';
        q=q.or('full_name.ilike.'+pattern+',short_bio.ilike.'+pattern+',known_for.ilike.'+pattern+',profession.ilike.'+pattern+',memorial_message.ilike.'+pattern+',slug.ilike.'+pattern);
      });
    }
@@ -237,7 +241,7 @@ async function archives(){
  deathYearInput?.addEventListener('keydown',e=>{if(e.key==='Enter')deathYearBtn?.click()});
  sortEl?.addEventListener('change',()=>{syncUrl();run(true)});
  sizeEl?.addEventListener('change',()=>{syncUrl();run(true)});
- layoutEl?.addEventListener('change',()=>{applyLayout();syncUrl();});
+ layoutEl?.addEventListener('change',()=>{applyLayout();saveLayout();syncUrl();});
  more?.addEventListener('click',()=>run(false));
  searchForm?.addEventListener('submit',e=>{e.preventDefault();run(true)});
  searchClear?.addEventListener('click',()=>{if(input){input.value='';input.focus();run(true)}});
@@ -259,6 +263,7 @@ async function archives(){
  if(sortEl&&['recent','name','name-desc','passing','passing-old'].includes(params.get('sort')))sortEl.value=params.get('sort');
  if(sizeEl&&['24','48','96'].includes(params.get('size')))sizeEl.value=params.get('size');
  if(layoutEl&&['editorial','grid','compact'].includes(params.get('layout')))layoutEl.value=params.get('layout');
+ else {try{const saved=localStorage.getItem('crowrules-memorials-layout');if(['editorial','grid','compact'].includes(saved))layoutEl.value=saved}catch(e){}}
 
  const requestedYear=params.get('deathYear');
  if(requestedYear&&/^\\d{4}$/.test(requestedYear)){
