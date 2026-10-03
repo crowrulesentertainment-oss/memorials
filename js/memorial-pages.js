@@ -241,7 +241,7 @@ async function archives(){
      if(searchClear)searchClear.hidden=!term;
      if(countEl)countEl.textContent=total.toLocaleString()+' memorials';
      if(more)more.hidden=offset>=total||rows.length===0;
-     if(!rows.length&&reset)grid.innerHTML='<div class="empty"><h2>No memorials found</h2><p>Try another name, keyword, or year.</p></div>';
+     if(!rows.length&&reset){grid.innerHTML='<div class="archive-no-results"><span class="eyebrow">ARCHIVE SEARCH</span><h2>No memorials matched.</h2><p>Try a broader search or remove one of the active filters.</p><div class="no-results-actions"><button type="button" id="noResultClearSearch">Clear search</button><button type="button" id="noResultBrowse">Browse all memorials</button></div></div>';document.getElementById('noResultClearSearch')?.addEventListener('click',()=>{input.value='';syncUrl();run(true)});document.getElementById('noResultBrowse')?.addEventListener('click',()=>{view='all';syncUrl();run(true)})}
    }catch(error){
      if(myRequest!==requestId)return;
      console.error('Memorial archive query:',error);
@@ -285,6 +285,8 @@ async function archives(){
  more?.addEventListener('click',()=>run(false));
  searchForm?.addEventListener('submit',e=>{e.preventDefault();syncUrl();run(true)});
  searchClear?.addEventListener('click',()=>{if(input){input.value='';input.focus();syncUrl();run(true)}});
+ input?.addEventListener('focus',()=>updateSuggestions());
+ document.addEventListener('click',e=>{if(searchSuggestions&&!searchSuggestions.contains(e.target)&&e.target!==input)searchSuggestions.hidden=true;});
  input?.addEventListener('keydown',e=>{
    if(e.key==='Escape'&&input.value){e.preventDefault();input.value='';syncUrl();run(true);}
  });
@@ -292,7 +294,7 @@ async function archives(){
  input?.addEventListener('input',()=>{
    if(searchClear)searchClear.hidden=!input.value.trim();
    clearTimeout(timer);
-   timer=setTimeout(()=>{syncUrl();run(true)},400);
+   timer=setTimeout(()=>{syncUrl();run(true);updateSuggestions()},400);
  });
 
  await Promise.all([loadYears(),loadFacets()]);
