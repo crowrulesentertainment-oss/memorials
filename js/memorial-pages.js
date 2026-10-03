@@ -1,5 +1,13 @@
 (() => {
-const sb=supabase.createClient(window.CROW_MEMORIALS.url,window.CROW_MEMORIALS.key);
+const config=window.CROW_MEMORIALS||{};
+if(!window.supabase||!config.url||!config.key){
+  document.addEventListener('DOMContentLoaded',()=>{
+    const grid=document.getElementById('pageGrid');
+    if(grid)grid.innerHTML='<div class="empty"><h2>Archive connection unavailable</h2><p>The Memorials database configuration could not be loaded.</p></div>';
+  });
+  return;
+}
+const sb=supabase.createClient(config.url,config.key,{auth:{persistSession:false,autoRefreshToken:false}});
 const esc=s=>String(s??'').replace(/[&<>"']/g,m=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#039;'}[m]));
 const fmt=d=>d?new Intl.DateTimeFormat(undefined,{year:'numeric',month:'long',day:'numeric'}).format(new Date(d+'T00:00:00')):'';
 async function renderCards(data,grid){
@@ -25,31 +33,239 @@ async function celebrations(){
  tick();
 }
 async function archives(){
- const grid=document.getElementById('pageGrid'),input=document.getElementById('archiveSearch'),searchForm=document.getElementById('archiveSearchForm'),searchClear=document.getElementById('searchClear'),searchStatus=document.getElementById('searchStatus'),searchStatusText=document.getElementById('searchStatusText'),status=document.getElementById('status'),countEl=document.getElementById('archiveCount'),yearPicker=document.getElementById('yearPicker'),yearSelect=document.getElementById('archiveYear'),sortEl=document.getElementById('archiveSort'),sizeEl=document.getElementById('archivePageSize'),more=document.getElementById('loadMore');if(!grid)return;
- const filters=[...document.querySelectorAll('.archive-filter')];const deathYearInput=document.getElementById('deathYearSearch'),deathYearBtn=document.getElementById('deathYearBtn');let view='recent',offset=0,total=0,loading=false;
- const loadYears=async()=>{try{const {data,error}=await sb.from('memorials').select('passing_date').eq('published',true).not('passing_date','is',null).order('passing_date',{ascending:false}).limit(5000);if(error){console.error('Memorial archive year load:',error);return}}catch(error){console.error('Memorial archive year load:',error);return}const counts={};(data||[]).forEach(x=>{const y=String(x.passing_date).slice(0,4);if(/^\d{4}$/.test(y))counts[y]=(counts[y]||0)+1});const years=Object.keys(counts).sort((a,b)=>Number(b)-Number(a));if(yearSelect)yearSelect.innerHTML='<option value="">Select a year…</option>'+years.map(y=>'<option value="'+y+'">'+y+' · '+counts[y]+'</option>').join('');const chips=document.getElementById('yearChips');if(chips)chips.innerHTML=years.map(y=>'<button class="year-chip" data-year="'+y+'" title="'+counts[y]+' memorials">'+y+' <span>'+counts[y]+'</span></button>').join('');const summary=document.getElementById('yearSummary');if(summary)summary.textContent=years.length?years[0]+'–'+years[years.length-1]+' · '+Object.values(counts).reduce((a,b)=>a+b,0).toLocaleString()+' published lives with a recorded passing year.':'';const rail=document.getElementById('decadeRail');if(rail){const decades=[...new Set(years.map(y=>Math.floor(Number(y)/10)*10))].sort((a,b)=>b-a);rail.innerHTML=decades.map(d=>'<button type="button" class="decade-btn" data-decade="'+d+'">'+d+'s</button>').join('');rail.querySelectorAll('.decade-btn').forEach(btn=>btn.addEventListener('click',()=>setDecade(btn.dataset.decade)))}document.querySelectorAll('.year-chip').forEach(ch=>ch.addEventListener('click',()=>setYear(ch.dataset.year)));};
- const setDecade=decade=>{const years=[...yearSelect.options].map(o=>o.value).filter(y=>/^\d{4}$/.test(y)&&Math.floor(Number(y)/10)*10===Number(decade));if(!years.length){setYear(Number(decade));return}setYear(years[0])};
- const setYear=year=>{const y=String(year||'').trim();if(!/^\d{4}$/.test(y))return;view='year';if(deathYearInput)deathYearInput.value=y;if(yearSelect&&!([...yearSelect.options].some(o=>o.value===y)))yearSelect.add(new Option(y+' · search',y));if(yearSelect)yearSelect.value=y;yearPicker.hidden=false;filters.forEach(x=>x.classList.toggle('active',x.dataset.view==='year'));document.querySelectorAll('.year-chip').forEach(x=>x.classList.toggle('active',x.dataset.year===y));run(true)};
- const syncUrl=()=>{const p=new URLSearchParams();const term=input?.value.trim();if(term)p.set('q',term);if(view==='year'&&yearSelect?.value)p.set('deathYear',yearSelect.value);if(view!=='recent')p.set('view',view);if(sortEl?.value&&sortEl.value!=='recent')p.set('sort',sortEl.value);if(sizeEl?.value&&sizeEl.value!=='48')p.set('size',sizeEl.value);const qs=p.toString();history.replaceState(null,'',location.pathname+(qs?'?'+qs:''))};
- const baseQuery=()=>{let q=sb.from('memorials').select('id,slug,full_name,birth_date,passing_date,short_bio,profession,is_celebrity,known_for,memorial_message,portrait_url,created_at',{count:'exact'}).eq('published',true);const term=input.value.trim().replace(/[\\%,.*()]/g,' ').replace(/\s+/g,' ').trim();if(view==='year'){const y=String(yearSelect?.value||deathYearInput?.value||'').trim();if(/^\d{4}$/.test(y))q=q.gte('passing_date',y+'-01-01').lt('passing_date',(Number(y)+1)+'-01-01');else return null}if(view==='public')q=q.eq('is_celebrity',true);if(view==='family')q=q.eq('is_celebrity',false);if(term){const tokens=[...new Set(term.split(/\s+/).map(x=>x.trim()).filter(Boolean))];tokens.forEach(token=>{const pattern='%'+token+'%';q=q.or('full_name.ilike.'+pattern+',short_bio.ilike.'+pattern+',known_for.ilike.'+pattern+',profession.ilike.'+pattern+',memorial_message.ilike.'+pattern+',slug.ilike.'+pattern);});}const sort=sortEl?.value||'recent';if(view==='all'&&(!sortEl?.value||sort==='recent'))q=q.order('full_name',{ascending:true});else if(sort==='name')q=q.order('full_name',{ascending:true});else if(sort==='name-desc')q=q.order('full_name',{ascending:false});else if(sort==='passing')q=q.order('passing_date',{ascending:false,nullsFirst:false});else if(sort==='passing-old')q=q.order('passing_date',{ascending:true,nullsFirst:false});else q=q.order('created_at',{ascending:false});return q};
- const run=async(reset=true)=>{syncUrl();if(loading)return;if(reset){offset=0;grid.innerHTML='<div class="archive-loading">Loading memorials…</div>'}const q=baseQuery();if(!q){grid.innerHTML='<div class="empty"><h2>Pick a year</h2><p>Choose a year above to explore the archive.</p></div>';status.textContent='Choose a year to begin.';if(more)more.hidden=true;return}loading=true;const size=Number(sizeEl?.value||48);let result;try{result=await Promise.race([q.range(offset,offset+size-1),new Promise((_,reject)=>setTimeout(()=>reject(new Error('The archive request timed out. Please try again.')),15000))])}catch(error){loading=false;status.textContent=error.message;countEl&&(countEl.textContent='—');if(!offset)grid.innerHTML='<div class="empty"><h2>Archive unavailable</h2><p>'+esc(error.message)+'</p><button class="text-btn" type="button" onclick="location.reload()">Retry</button></div>';return}const {data,error,count}=result;loading=false;if(error){status.textContent='The archive could not be loaded.';if(!offset)grid.innerHTML='<div class="empty"><h2>Archive unavailable</h2><p>'+esc(error.message)+'</p><button class="text-btn" onclick="location.reload()">Retry</button></div>';return}total=count||0;if(reset)grid.innerHTML='';const temp=document.createElement('div');await renderCards(data,temp);grid.insertAdjacentHTML('beforeend',temp.innerHTML);offset+=data?.length||0;const labels={recent:'Recently added',year:'Year archive',public:'Public lives',family:'Family lives',all:'All archives'};const term=input.value.trim();status.textContent=(labels[view]||'Archive')+'.';if(searchStatus&&searchStatusText){searchStatus.hidden=!term;searchStatusText.textContent=term?(total.toLocaleString()+' memorials matching “'+term+'”.'):(total.toLocaleString()+' memorials available.')}if(searchClear)searchClear.hidden=!term;if(countEl)countEl.textContent=total.toLocaleString()+' memorials';if(more)more.hidden=offset>=total||!data?.length;grid.setAttribute('aria-busy','false');};
- filters.forEach(btn=>btn.addEventListener('click',()=>{filters.forEach(x=>x.classList.remove('active'));btn.classList.add('active');view=btn.dataset.view;yearPicker.hidden=view!=='year';run(true)}));
- yearSelect?.addEventListener('change',()=>{if(yearSelect.value)setYear(yearSelect.value)});
-document.getElementById('prevYear')?.addEventListener('click',()=>{const y=Number(yearSelect?.value||deathYearInput?.value);if(y)setYear(y-1)});
-document.getElementById('nextYear')?.addEventListener('click',()=>{const y=Number(yearSelect?.value||deathYearInput?.value);if(y)setYear(y+1)});
-deathYearBtn?.addEventListener('click',()=>{const y=String(deathYearInput?.value||'').trim();if(!/^\d{4}$/.test(y)){status.textContent='Enter a four-digit year of death.';deathYearInput?.focus();return}setYear(y)});
-deathYearInput?.addEventListener('keydown',e=>e.key==='Enter'&&deathYearBtn?.click());
-sortEl?.addEventListener('change',()=>run(true));sizeEl?.addEventListener('change',()=>run(true));more?.addEventListener('click',()=>run(false));
- searchForm?.addEventListener('submit',e=>{e.preventDefault();run(true)});searchClear?.addEventListener('click',()=>{if(!input)return;input.value='';input.focus();run(true)});input?.addEventListener('keydown',e=>{if(e.key==='Escape'&&input.value){e.preventDefault();input.value='';run(true)}});
- let timer;input?.addEventListener('input',()=>{if(searchClear)searchClear.hidden=!input.value.trim();clearTimeout(timer);timer=setTimeout(()=>run(true),350)});
- await loadYears();
- const params=new URLSearchParams(location.search);const initialQ=params.get('q')||'';if(input&&initialQ)input.value=initialQ;const initialView=params.get('view');if(initialView&&['recent','year','public','family','all'].includes(initialView))view=initialView;const initialSort=params.get('sort');if(sortEl&&initialSort)sortEl.value=initialSort;const initialSize=params.get('size');if(sizeEl&&['24','48','96'].includes(initialSize))sizeEl.value=initialSize;
- const requestedYear=params.get('deathYear');
- if(requestedYear&&/^\d{4}$/.test(requestedYear)&&deathYearInput&&yearSelect){
-   deathYearInput.value=requestedYear;if(![...yearSelect.options].some(o=>o.value===requestedYear)){yearSelect.add(new Option(requestedYear+' · search',requestedYear))}yearSelect.value=requestedYear;view='year';yearPicker.hidden=false;
+ const grid=document.getElementById('pageGrid');
+ const input=document.getElementById('archiveSearch');
+ const searchForm=document.getElementById('archiveSearchForm');
+ const searchClear=document.getElementById('searchClear');
+ const searchStatus=document.getElementById('searchStatus');
+ const searchStatusText=document.getElementById('searchStatusText');
+ const status=document.getElementById('status');
+ const countEl=document.getElementById('archiveCount');
+ const yearPicker=document.getElementById('yearPicker');
+ const yearSelect=document.getElementById('archiveYear');
+ const sortEl=document.getElementById('archiveSort');
+ const sizeEl=document.getElementById('archivePageSize');
+ const more=document.getElementById('loadMore');
+ const filters=[...document.querySelectorAll('.archive-filter')];
+ const deathYearInput=document.getElementById('deathYearSearch');
+ const deathYearBtn=document.getElementById('deathYearBtn');
+ if(!grid)return;
+
+ let view='recent',offset=0,total=0,loading=false,requestId=0;
+
+ const setBusy=value=>grid.setAttribute('aria-busy',value?'true':'false');
+ const showError=(title,message,allowRetry=true)=>{
+   setBusy(false);
+   grid.innerHTML='<div class="empty"><h2>'+esc(title)+'</h2><p>'+esc(message)+'</p>'+(allowRetry?'<button class="text-btn" type="button" id="archiveRetry">Retry</button>':'')+'</div>';
+   document.getElementById('archiveRetry')?.addEventListener('click',()=>run(true));
+ };
+
+ const loadYears=async()=>{
+   try{
+     const {data,error}=await sb.from('memorials').select('passing_date').eq('published',true).not('passing_date','is',null).order('passing_date',{ascending:false}).limit(5000);
+     if(error)throw error;
+     const counts={};
+     (data||[]).forEach(row=>{
+       const y=String(row.passing_date||'').slice(0,4);
+       if(/^\\d{4}$/.test(y))counts[y]=(counts[y]||0)+1;
+     });
+     const years=Object.keys(counts).sort((a,b)=>Number(b)-Number(a));
+     if(yearSelect)yearSelect.innerHTML='<option value="">Select a year…</option>'+years.map(y=>'<option value="'+y+'">'+y+' · '+counts[y]+'</option>').join('');
+     const chips=document.getElementById('yearChips');
+     if(chips)chips.innerHTML=years.map(y=>'<button type="button" class="year-chip" data-year="'+y+'">'+y+' <span>'+counts[y]+'</span></button>').join('');
+     const summary=document.getElementById('yearSummary');
+     if(summary)summary.textContent=years.length?years[0]+'–'+years[years.length-1]+' · '+Object.values(counts).reduce((a,b)=>a+b,0).toLocaleString()+' published lives with a recorded passing year.':'No recorded passing years available.';
+     const rail=document.getElementById('decadeRail');
+     if(rail){
+       const decades=[...new Set(years.map(y=>Math.floor(Number(y)/10)*10))].sort((a,b)=>b-a);
+       rail.innerHTML=decades.map(d=>'<button type="button" class="decade-btn" data-decade="'+d+'">'+d+'s</button>').join('');
+       rail.querySelectorAll('.decade-btn').forEach(btn=>btn.addEventListener('click',()=>setYearForDecade(btn.dataset.decade)));
+     }
+     chips?.querySelectorAll('.year-chip').forEach(btn=>btn.addEventListener('click',()=>setYear(btn.dataset.year)));
+   }catch(error){
+     console.error('Memorial archive year load:',error);
+     if(status)status.textContent='Year index could not be loaded. You can still search the archive.';
+   }
+ };
+
+ const setYear=year=>{
+   const y=String(year||'').trim();
+   if(!/^\\d{4}$/.test(y))return;
+   view='year';
+   if(deathYearInput)deathYearInput.value=y;
+   if(yearSelect){
+     if(![...yearSelect.options].some(o=>o.value===y))yearSelect.add(new Option(y+' · search',y));
+     yearSelect.value=y;
+   }
+   yearPicker.hidden=false;
    filters.forEach(x=>x.classList.toggle('active',x.dataset.view==='year'));
-   document.querySelectorAll('.year-chip').forEach(x=>x.classList.toggle('active',x.dataset.year===requestedYear));
+   document.querySelectorAll('.year-chip').forEach(x=>x.classList.toggle('active',x.dataset.year===y));
+   run(true);
+ };
+
+ const setYearForDecade=decade=>{
+   const years=[...yearSelect?.options||[]].map(o=>o.value).filter(y=>/^\\d{4}$/.test(y)&&Math.floor(Number(y)/10)*10===Number(decade));
+   setYear(years[0]||String(decade));
+ };
+
+ const syncUrl=()=>{
+   const p=new URLSearchParams();
+   const term=input?.value.trim();
+   if(term)p.set('q',term);
+   if(view==='year'&&yearSelect?.value)p.set('deathYear',yearSelect.value);
+   if(view!=='recent')p.set('view',view);
+   if(sortEl?.value&&sortEl.value!=='recent')p.set('sort',sortEl.value);
+   if(sizeEl?.value&&sizeEl.value!=='48')p.set('size',sizeEl.value);
+   history.replaceState(null,'',location.pathname+(p.toString()?'?'+p.toString():''));
+ };
+
+ const baseQuery=()=>{
+   let q=sb.from('memorials')
+     .select('id,slug,full_name,birth_date,passing_date,short_bio,profession,is_celebrity,known_for,memorial_message,portrait_url,created_at',{count:'exact'})
+     .eq('published',true);
+
+   const term=(input?.value||'').trim().replace(/[\\%,.*()]/g,' ').replace(/\s+/g,' ').trim();
+   if(view==='year'){
+     const y=String(yearSelect?.value||deathYearInput?.value||'').trim();
+     if(!/^\\d{4}$/.test(y))return null;
+     q=q.gte('passing_date',y+'-01-01').lt('passing_date',(Number(y)+1)+'-01-01');
+   }
+   if(view==='public')q=q.eq('is_celebrity',true);
+   if(view==='family')q=q.eq('is_celebrity',false);
+
+   if(term){
+     const tokens=[...new Set(term.split(/\s+/).filter(Boolean))];
+     tokens.forEach(token=>{
+       const pattern='%'+token+'%';
+       q=q.or('full_name.ilike.'+pattern+',short_bio.ilike.'+pattern+',known_for.ilike.'+pattern+',profession.ilike.'+pattern+',memorial_message.ilike.'+pattern+',slug.ilike.'+pattern);
+     });
+   }
+
+   const sort=sortEl?.value||'recent';
+   if(sort==='name')q=q.order('full_name',{ascending:true});
+   else if(sort==='name-desc')q=q.order('full_name',{ascending:false});
+   else if(sort==='passing')q=q.order('passing_date',{ascending:false,nullsFirst:false});
+   else if(sort==='passing-old')q=q.order('passing_date',{ascending:true,nullsFirst:false});
+   else if(view==='all')q=q.order('full_name',{ascending:true});
+   else q=q.order('created_at',{ascending:false});
+   return q;
+ };
+
+ const run=async(reset=true)=>{
+   const myRequest=++requestId;
+   if(loading)return;
+   if(reset){
+     offset=0;
+     if(more)more.hidden=true;
+     setBusy(true);
+     grid.innerHTML='<div class="archive-loading">Loading memorials…</div>';
+   }
+   const q=baseQuery();
+   if(!q){
+     setBusy(false);
+     grid.innerHTML='<div class="empty"><h2>Choose a year</h2><p>Select a year of death to browse that part of the archive.</p></div>';
+     if(status)status.textContent='Choose a year to begin.';
+     if(countEl)countEl.textContent='—';
+     return;
+   }
+
+   loading=true;
+   try{
+     const size=Math.min(96,Math.max(1,Number(sizeEl?.value)||48));
+     const result=await Promise.race([
+       q.range(offset,offset+size-1),
+       new Promise((_,reject)=>setTimeout(()=>reject(new Error('The archive request timed out.')),15000))
+     ]);
+     if(myRequest!==requestId)return;
+     const {data,error,count}=result;
+     if(error)throw error;
+     const rows=data||[];
+     total=Number(count||0);
+     if(reset)grid.innerHTML='';
+     const temp=document.createElement('div');
+     await renderCards(rows,temp);
+     if(rows.length)grid.insertAdjacentHTML('beforeend',temp.innerHTML);
+     offset+=rows.length;
+     setBusy(false);
+
+     const term=(input?.value||'').trim();
+     const labels={recent:'Recently added',year:'Year archive',public:'Public lives',family:'Family lives',all:'A–Z archive'};
+     if(status)status.textContent=(labels[view]||'Archive')+' · '+total.toLocaleString()+' memorials.';
+     if(searchStatus&&searchStatusText){
+       searchStatus.hidden=!term;
+       searchStatusText.textContent=term?total.toLocaleString()+' memorials matching “'+term+'”.':'';
+     }
+     if(searchClear)searchClear.hidden=!term;
+     if(countEl)countEl.textContent=total.toLocaleString()+' memorials';
+     if(more)more.hidden=offset>=total||rows.length===0;
+     if(!rows.length&&reset)grid.innerHTML='<div class="empty"><h2>No memorials found</h2><p>Try another name, keyword, or year.</p></div>';
+   }catch(error){
+     if(myRequest!==requestId)return;
+     console.error('Memorial archive query:',error);
+     setBusy(false);
+     if(status)status.textContent='The archive could not be loaded.';
+     if(countEl)countEl.textContent='—';
+     if(offset===0)showError('Archive unavailable',error?.message||'An unexpected database error occurred.');
+   }finally{
+     if(myRequest===requestId)loading=false;
+   }
+ };
+
+ filters.forEach(btn=>btn.addEventListener('click',()=>{
+   filters.forEach(x=>x.classList.remove('active'));
+   btn.classList.add('active');
+   view=btn.dataset.view;
+   yearPicker.hidden=view!=='year';
+   run(true);
+ }));
+ yearSelect?.addEventListener('change',()=>yearSelect.value&&setYear(yearSelect.value));
+ document.getElementById('prevYear')?.addEventListener('click',()=>{
+   const y=Number(yearSelect?.value||deathYearInput?.value);if(y)setYear(y-1);
+ });
+ document.getElementById('nextYear')?.addEventListener('click',()=>{
+   const y=Number(yearSelect?.value||deathYearInput?.value);if(y)setYear(y+1);
+ });
+ deathYearBtn?.addEventListener('click',()=>{
+   const y=String(deathYearInput?.value||'').trim();
+   if(!/^\\d{4}$/.test(y)){if(status)status.textContent='Enter a four-digit year of death.';deathYearInput?.focus();return;}
+   setYear(y);
+ });
+ deathYearInput?.addEventListener('keydown',e=>{if(e.key==='Enter')deathYearBtn?.click()});
+ sortEl?.addEventListener('change',()=>run(true));
+ sizeEl?.addEventListener('change',()=>run(true));
+ more?.addEventListener('click',()=>run(false));
+ searchForm?.addEventListener('submit',e=>{e.preventDefault();run(true)});
+ searchClear?.addEventListener('click',()=>{if(input){input.value='';input.focus();run(true)}});
+ input?.addEventListener('keydown',e=>{
+   if(e.key==='Escape'&&input.value){e.preventDefault();input.value='';run(true);}
+ });
+ let timer;
+ input?.addEventListener('input',()=>{
+   if(searchClear)searchClear.hidden=!input.value.trim();
+   clearTimeout(timer);
+   timer=setTimeout(()=>run(true),400);
+ });
+
+ await loadYears();
+
+ const params=new URLSearchParams(location.search);
+ if(input)input.value=params.get('q')||'';
+ if(params.get('view')&&['recent','year','public','family','all'].includes(params.get('view')))view=params.get('view');
+ if(sortEl&&['recent','name','name-desc','passing','passing-old'].includes(params.get('sort')))sortEl.value=params.get('sort');
+ if(sizeEl&&['24','48','96'].includes(params.get('size')))sizeEl.value=params.get('size');
+
+ const requestedYear=params.get('deathYear');
+ if(requestedYear&&/^\\d{4}$/.test(requestedYear)){
+   if(deathYearInput)deathYearInput.value=requestedYear;
+   if(yearSelect){
+     if(![...yearSelect.options].some(o=>o.value===requestedYear))yearSelect.add(new Option(requestedYear+' · search',requestedYear));
+     yearSelect.value=requestedYear;
+   }
+   view='year';
+   yearPicker.hidden=false;
  }
+ filters.forEach(x=>x.classList.toggle('active',x.dataset.view===view));
+ if(searchClear)searchClear.hidden=!(input?.value.trim());
  run(true);
 }
 async function onThisDay(){
