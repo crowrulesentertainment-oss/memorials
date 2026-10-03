@@ -124,7 +124,7 @@ async function archives(){
      .select('id,slug,full_name,birth_date,passing_date,short_bio,profession,is_celebrity,known_for,memorial_message,portrait_url,created_at',{count:'exact'})
      .eq('published',true);
 
-   const term=(input?.value||'').trim().replace(/[\\%,.*()]/g,' ').replace(/\s+/g,' ').trim();
+   const term=(input?.value||'').trim().replace(/[\\%,.*()]/g,' ').replace(/\s+/g,' ').trim().slice(0,120);
    if(view==='year'){
      const y=String(yearSelect?.value||deathYearInput?.value||'').trim();
      if(!/^\\d{4}$/.test(y))return null;
@@ -134,7 +134,7 @@ async function archives(){
    if(view==='family')q=q.eq('is_celebrity',false);
 
    if(term){
-     const tokens=[...new Set(term.split(/\s+/).filter(Boolean))];
+     const tokens=[...new Set(term.split(/\s+/).filter(Boolean))].slice(0,8);
      tokens.forEach(token=>{
        const pattern='%'+token+'%';
        q=q.or('full_name.ilike.'+pattern+',short_bio.ilike.'+pattern+',known_for.ilike.'+pattern+',profession.ilike.'+pattern+',memorial_message.ilike.'+pattern+',slug.ilike.'+pattern);
@@ -179,7 +179,7 @@ async function archives(){
      if(myRequest!==requestId)return;
      const {data,error,count}=result;
      if(error)throw error;
-     const rows=data||[];
+     const rows=Array.isArray(data)?data:[];
      total=Number(count||0);
      if(reset)grid.innerHTML='';
      const temp=document.createElement('div');
