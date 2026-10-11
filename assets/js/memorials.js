@@ -66,6 +66,9 @@
     $("#stat-memories").textContent=entries.length.toLocaleString();
     const years=memorials.map(m=>{const p=dateParts(birthDate(m));return p?new Date().getFullYear()-Number(shortDate(birthDate(m))):0;}).filter(n=>n>0);
     $("#stat-years").textContent=years.length?Math.max(...years).toLocaleString():"—";
+    const passingYears={};memorials.forEach(m=>{const y=shortDate(deathDate(m));if(y)passingYears[y]=(passingYears[y]||0)+1;});
+    const peak=Object.entries(passingYears).sort((a,b)=>b[1]-a[1]||Number(b[0])-Number(a[0]))[0];
+    $("#stat-peak-year").textContent=peak?peak[0]:"—";
   }
   function renderCandles() {
     $("#candle-wall").innerHTML=candles.slice(0,8).map(c=>'<span class="candle-token"><span>🕯</span>'+escapeHTML(c.memorial_name||c.name||"A loved one")+'</span>').join("");
