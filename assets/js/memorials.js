@@ -5,7 +5,7 @@
   const cfg = window.CROW_MEMORIALS_CONFIG || {};
   const hasSupabase = Boolean(cfg.supabaseUrl && cfg.supabaseKey);
   const PAGE_SIZE = 12;
-  let memorials = [], filtered = [], visibleCount = PAGE_SIZE, candles = [], entries = [], candleTotal = 0, entryTotal = 0;
+  let memorials = [], filtered = [], visibleCount = PAGE_SIZE, candles = [], entries = [], memorialTotal = 0, candleTotal = 0, entryTotal = 0;
   const escapeHTML = value => String(value ?? "").replace(/[&<>"']/g, c => ({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[c]));
   const safeURL = value => { try { const u = new URL(value, location.href); return ["http:","https:"].includes(u.protocol) ? u.href : ""; } catch { return ""; } };
   const formatDate = value => { if (!value) return ""; const d = new Date(value + (String(value).length === 10 ? "T12:00:00" : "")); return Number.isNaN(d.getTime()) ? "" : d.toLocaleDateString(undefined,{month:"short",day:"numeric",year:"numeric"}); };
@@ -61,7 +61,7 @@
     $("#today-results").innerHTML=matches.length?matches.map(m=>'<a class="today-item" href="#archive" data-slug="'+escapeHTML(slugOf(m))+'"><strong>'+escapeHTML(nameOf(m))+'</strong><span>'+((dateParts(deathDate(m))||{}).month===month&&(dateParts(deathDate(m))||{}).day===day?"Remembered on this day":"A birthday on this day")+'</span></a>').join(""):'<p class="today-empty">Every day can be a day of remembrance. Search the archive for a name or story that matters to you.</p>';
   }
   function renderStats() {
-    $("#stat-total").textContent=memorials.length.toLocaleString();
+    $("#stat-total").textContent=(memorialTotal || memorials.length).toLocaleString();
     $("#stat-candles").textContent=candleTotal.toLocaleString();
     $("#stat-memories").textContent=entryTotal.toLocaleString();
     const years=new Set(memorials.map(m=>shortDate(deathDate(m))).filter(Boolean));
@@ -95,6 +95,8 @@
     try {
       const r=await db("memorials?select=*&published=eq.true&order=created_at.desc&limit=2000");
       memorials=(r.data||[]).filter(isPublished);
+      // Use Supabase count=exact for the headline total; REST row limits can cap the returned archive rows.
+      memorialTotal = r.count ?? memorials.length;
       renderFeatured();renderArchive();renderToday();renderStats();updateImagePlaceholders();
     } catch(e) {
       $("#featured-grid").innerHTML='<div class="loading-card"><span class="loading-flower">✧</span><p>We could not open the memorial archive. Check the public key, table access, and published records.</p></div>';
