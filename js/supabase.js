@@ -1,3 +1,0 @@
-const CROW_MEMORIALS_SUPABASE_URL="https://cevylpnoexugwgygvtgu.supabase.co";
-const CROW_MEMORIALS_SUPABASE_KEY="sb_publishable_AdfM5y6RqvF3tbvEVzDZSg_JuGTQLD-";
-window.CROW_MEMORIALS=Object.freeze({url:CROW_MEMORIALS_SUPABASE_URL,key:CROW_MEMORIALS_SUPABASE_KEY});
