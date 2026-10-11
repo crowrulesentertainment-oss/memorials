@@ -5,7 +5,7 @@
   const cfg = window.CROW_MEMORIALS_CONFIG || {};
   const hasSupabase = Boolean(cfg.supabaseUrl && cfg.supabaseKey);
   const PAGE_SIZE = 12;
-  let memorials = [], filtered = [], visibleCount = PAGE_SIZE, candles = [], entries = [];
+  let memorials = [], filtered = [], visibleCount = PAGE_SIZE, candles = [], entries = [], candleTotal = 0, entryTotal = 0;
   const escapeHTML = value => String(value ?? "").replace(/[&<>"']/g, c => ({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[c]));
   const safeURL = value => { try { const u = new URL(value, location.href); return ["http:","https:"].includes(u.protocol) ? u.href : ""; } catch { return ""; } };
   const formatDate = value => { if (!value) return ""; const d = new Date(value + (String(value).length === 10 ? "T12:00:00" : "")); return Number.isNaN(d.getTime()) ? "" : d.toLocaleDateString(undefined,{month:"short",day:"numeric",year:"numeric"}); };
@@ -14,7 +14,7 @@
   const deathDate = m => m.passing_date || m.date_of_death || m.death_date || "";
   const birthDate = m => m.birth_date || m.date_of_birth || "";
   const imageOf = m => safeURL(m.portrait_url || m.image_url || m.portrait || "");
-  const descriptionOf = m => m.biography || m.description || m.summary || m.legacy || "";
+  const descriptionOf = m => m.short_bio || m.memorial_message || m.biography || m.description || m.summary || m.legacy || "";
   const slugOf = m => m.slug || String(nameOf(m)).toLowerCase().trim().replace(/[^a-z0-9]+/g,"-").replace(/^-|-$/g,"");
   const isFeatured = m => m.featured === true || m.is_featured === true;
   const isPublished = m => m.published !== false && m.is_published !== false;
@@ -62,21 +62,21 @@
   }
   function renderStats() {
     $("#stat-total").textContent=memorials.length.toLocaleString();
-    $("#stat-candles").textContent=candles.length.toLocaleString();
-    $("#stat-memories").textContent=entries.length.toLocaleString();
-    const years=memorials.map(m=>{const p=dateParts(birthDate(m));return p?new Date().getFullYear()-Number(shortDate(birthDate(m))):0;}).filter(n=>n>0);
-    $("#stat-years").textContent=years.length?Math.max(...years).toLocaleString():"—";
+    $("#stat-candles").textContent=candleTotal.toLocaleString();
+    $("#stat-memories").textContent=entryTotal.toLocaleString();
+    const years=new Set(memorials.map(m=>shortDate(deathDate(m))).filter(Boolean));
+    $("#stat-years").textContent=years.size?years.size.toLocaleString():"—";
     const passingYears={};memorials.forEach(m=>{const y=shortDate(deathDate(m));if(y)passingYears[y]=(passingYears[y]||0)+1;});
     const peak=Object.entries(passingYears).sort((a,b)=>b[1]-a[1]||Number(b[0])-Number(a[0]))[0];
     $("#stat-peak-year").textContent=peak?peak[0]:"—";
   }
   function renderCandles() {
     $("#candle-wall").innerHTML=candles.slice(0,8).map(c=>'<span class="candle-token"><span>🕯</span>'+escapeHTML(c.memorial_name||c.name||"A loved one")+'</span>').join("");
-    $("#stat-candles").textContent=candles.length.toLocaleString();
+    $("#stat-candles").textContent=candleTotal.toLocaleString();
   }
   function renderEntries() {
-    $("#guestbook-entries").innerHTML=entries.length?entries.slice(0,5).map(e=>'<article class="memory-entry"><strong>'+escapeHTML(e.display_name||e.name||"A friend")+'</strong>'+(e.memorial_name?'<span class="memory-for">for '+escapeHTML(e.memorial_name)+'</span>':'')+'<p>'+escapeHTML(e.message||e.content||"")+'</p>'+(e.created_at?'<time datetime="'+escapeHTML(e.created_at)+'">'+escapeHTML(formatDate(e.created_at))+'</time>':'')+'</article>').join(""):'<div class="guestbook-placeholder">No public memories have been shared yet. Your kind words can begin this collection.</div>';
-    $("#stat-memories").textContent=entries.length.toLocaleString();
+    $("#guestbook-entries").innerHTML=entries.length?entries.slice(0,5).map(e=>'<article class="memory-entry"><strong>'+escapeHTML(e.author_name||e.display_name||e.name||"A friend")+'</strong>'+(e.memorial_name?'<span class="memory-for">for '+escapeHTML(e.memorial_name)+'</span>':'')+'<p>'+escapeHTML(e.message||e.content||"")+'</p>'+(e.created_at?'<time datetime="'+escapeHTML(e.created_at)+'">'+escapeHTML(formatDate(e.created_at))+'</time>':'')+'</article>').join(""):'<div class="guestbook-placeholder">No public memories have been shared yet. Your kind words can begin this collection.</div>';
+    $("#stat-memories").textContent=entryTotal.toLocaleString();
   }
   function updateImagePlaceholders() { $$(".memorial-portrait").forEach(p=>{const img=$("img",p),ph=$(".portrait-placeholder",p);if(img&&ph){if(img.complete&&img.naturalWidth>0)ph.style.display="none";img.addEventListener("load",()=>ph.style.display="none",{once:true});img.addEventListener("error",()=>ph.style.display="grid",{once:true});}}); }
   function findMemorial(slug) { return memorials.find(m=>slugOf(m)===slug); }
@@ -106,22 +106,22 @@
   async function loadCommunity() {
     if(!hasSupabase)return;
     // Optional tables: if these have not been created, the rest of the page remains usable.
-    try { const r=await db("memorial_candles?select=id,memorial_name,created_at&order=created_at.desc&limit=30");candles=r.data||[];renderCandles(); } catch(e) { console.info("Candle table not connected yet:",e.message); }
-    try { const r=await db("memorial_guestbook?select=id,display_name,memorial_name,message,created_at&approved=eq.true&order=created_at.desc&limit=20");entries=r.data||[];renderEntries(); } catch(e) { console.info("Guestbook table not connected yet:",e.message); }
+    try { const r=await db("memorial_candles?select=id,memorial_name,author_name,created_at&order=created_at.desc&limit=30");candles=r.data||[];candleTotal=r.count??candles.length;renderCandles(); } catch(e) { console.info("Candle table not connected yet:",e.message); }
+    try { const r=await db("memorial_guestbook?select=id,author_name,memorial_name,message,created_at&published=eq.true&order=created_at.desc&limit=20");entries=r.data||[];entryTotal=r.count??entries.length;renderEntries(); } catch(e) { console.info("Guestbook table not connected yet:",e.message); }
   }
   async function submitCandle(event) {
     event.preventDefault();const status=$("#candle-status"),name=$("#candle-name").value.trim(),message=$("#candle-message").value.trim();
-    if(!hasSupabase){status.textContent="Candle not saved yet: connect the Supabase public key and create the memorial_candles table.";showToast("The candle feature needs a database connection.");return;}
+    if(!hasSupabase){status.textContent="Candle not saved yet: check the public key and memorial_candles table permissions.";showToast("The candle feature needs a database connection.");return;}
     status.textContent="Lighting your candle…";
-    try { await db("memorial_candles",{method:"POST",body:JSON.stringify({memorial_name:name||null,message:message||null})});$("#candle-form").reset();status.textContent="Your candle has been lit. Thank you for taking a moment to remember.";showToast("A candle has been lit in remembrance.");await loadCommunity(); }
+    try { await db("memorial_candles",{method:"POST",body:JSON.stringify({memorial_name:name||null,author_name:null,message:message||null})});$("#candle-form").reset();status.textContent="Your candle has been lit. Thank you for taking a moment to remember.";showToast("A candle has been lit in remembrance.");await loadCommunity(); }
     catch(e){status.textContent="Your candle could not be saved. "+e.message;showToast("The candle could not be saved.");}
   }
   async function submitGuestbook(event) {
     event.preventDefault();const status=$("#guestbook-status"),name=$("#guest-name").value.trim(),memorialName=$("#guest-memorial").value.trim(),message=$("#guest-message").value.trim();
     if(!name||!message)return;
-    if(!hasSupabase){status.textContent="Memory not submitted: connect the Supabase public key and configure the memorial_guestbook table.";showToast("The guestbook needs a database connection.");return;}
+    if(!hasSupabase){status.textContent="Memory not submitted: check the public key and memorial_guestbook table permissions.";showToast("The guestbook needs a database connection.");return;}
     status.textContent="Submitting your memory…";
-    try { await db("memorial_guestbook",{method:"POST",body:JSON.stringify({display_name:name,memorial_name:memorialName||null,message,approved:false})});$("#guestbook-form").reset();status.textContent="Thank you. Your memory was submitted for review before it appears publicly.";showToast("Your memory was submitted for review."); }
+    try { await db("memorial_guestbook",{method:"POST",body:JSON.stringify({author_name:name,memorial_name:memorialName||null,message,published:false})});$("#guestbook-form").reset();status.textContent="Thank you. Your memory was submitted for review before it appears publicly.";showToast("Your memory was submitted for review."); }
     catch(e){status.textContent="Your memory could not be submitted. "+e.message;showToast("The guestbook entry could not be saved.");}
   }
   function handleCardActivation(event) {
