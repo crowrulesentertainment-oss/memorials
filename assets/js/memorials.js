@@ -141,7 +141,7 @@
     status.textContent="Sending your submission for review…";
     const button=form.querySelector('button[type="submit"]');button.disabled=true;
     try {
-      await db("memorial_submissions",{method:"POST",body:JSON.stringify(payload)});
+      await db("memorial_submissions",{method:"POST",headers:{"Prefer":"return=minimal"},body:JSON.stringify(payload)});
       form.reset();
       status.textContent="Thank you for helping keep their story alive. Your submission has been received and will be reviewed before any public listing.";
       showToast("Memorial submission received for review.");
