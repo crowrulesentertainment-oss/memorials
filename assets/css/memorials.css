@@ -23,3 +23,31 @@
 .submission-honeypot{position:absolute!important;left:-10000px!important;width:1px!important;height:1px!important;overflow:hidden!important}
 @media(max-width:850px){.submission-section{grid-template-columns:1fr;padding-top:75px;padding-bottom:75px}.submission-intro{position:static}.submission-form{max-width:100%}}
 @media(max-width:520px){.submission-fields{grid-template-columns:1fr}.submission-wide{grid-column:auto}.submission-form{padding:18px}}
+
+
+/* Visual refinement: keep the submission experience in the same quiet, cinematic language. */
+.submission-section{position:relative;isolation:isolate;overflow:hidden;background:radial-gradient(ellipse at 85% 20%,rgba(219,166,174,.055),transparent 38%),linear-gradient(180deg,rgba(255,255,255,.012),transparent 65%)}
+.submission-section:before{content:"";position:absolute;left:0;right:0;top:0;height:1px;background:linear-gradient(90deg,transparent,rgba(219,166,174,.38),rgba(217,191,141,.25),transparent);pointer-events:none}
+.submission-intro .eyebrow{color:var(--gold)}
+.submission-intro h2{max-width:540px}
+.submission-form{position:relative;box-shadow:0 22px 70px rgba(0,0,0,.18);border-color:rgba(219,166,174,.19);border-radius:3px}
+.submission-form:before{content:"";position:absolute;top:0;left:0;right:0;height:2px;background:linear-gradient(90deg,transparent,var(--rose),var(--gold),transparent);opacity:.8}
+.submission-form-heading{display:flex;align-items:flex-start;gap:15px;padding-bottom:22px;margin-bottom:23px;border-bottom:1px solid var(--line)}
+.submission-form-mark{display:grid;place-items:center;flex:0 0 40px;height:40px;border:1px solid rgba(219,166,174,.35);border-radius:50%;color:var(--gold);font-size:1.35rem}
+.submission-form-heading .eyebrow{margin:0 0 5px;font-size:.62rem;letter-spacing:.16em;color:var(--gold)}
+.submission-form-heading h3{font-family:var(--serif);font-size:1.65rem;line-height:1.25;font-weight:400;margin:0 0 5px;color:var(--cream)}
+.submission-form-heading>div>p:last-child{margin:0;color:var(--muted);font-size:.77rem;line-height:1.7}
+.submission-field label{letter-spacing:.01em}
+.submission-field input,.submission-field textarea{font-size:.87rem;transition:border-color .2s,background .2s;accent-color:var(--rose)}
+.submission-field input:hover,.submission-field textarea:hover{border-color:rgba(219,166,174,.35)}
+.submission-field input:focus,.submission-field textarea:focus{border-color:var(--rose);background:#151014;outline:2px solid rgba(219,166,174,.14);outline-offset:1px}
+.submission-field input[type=date],.submission-field input[type=url],.submission-field input[type=email]{color-scheme:dark}
+.submission-field textarea{min-height:100px}
+.submission-consent{padding:13px 14px;background:rgba(255,255,255,.025);border:1px solid rgba(255,255,255,.07);border-radius:2px}
+.submission-consent input{width:16px;height:16px}
+.submission-form>.button{justify-content:center;min-height:49px;letter-spacing:.015em}
+.submission-form>.button:disabled{opacity:.6;cursor:wait}
+.submission-form .form-note{padding-left:2px}
+#memorial-submission-status[aria-live]{min-height:1.5em}
+@media(max-width:850px){.submission-section{background:radial-gradient(ellipse at 90% 5%,rgba(219,166,174,.05),transparent 35%),var(--night)}}
+@media(max-width:520px){.submission-form-heading{gap:11px;padding-bottom:18px;margin-bottom:18px}.submission-form-mark{flex-basis:34px;height:34px;font-size:1.1rem}.submission-form-heading h3{font-size:1.4rem}.submission-form-heading>div>p:last-child{font-size:.73rem}.submission-consent{padding:11px;font-size:.72rem}}
