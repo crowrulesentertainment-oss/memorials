@@ -111,6 +111,46 @@
     try { const r=await db("memorial_candles?select=id,memorial_name,author_name,created_at&order=created_at.desc&limit=30");candles=r.data||[];candleTotal=r.count??candles.length;renderCandles(); } catch(e) { console.info("Candle table not connected yet:",e.message); }
     try { const r=await db("memorial_guestbook?select=id,author_name,memorial_name,message,created_at&published=eq.true&order=created_at.desc&limit=20");entries=r.data||[];entryTotal=r.count??entries.length;renderEntries(); } catch(e) { console.info("Guestbook table not connected yet:",e.message); }
   }
+
+  async function submitMemorial(event) {
+    event.preventDefault();
+    const form=$("#memorial-submission-form"),status=$("#memorial-submission-status");
+    if($("#submission-website").value.trim()) { status.textContent="Thank you. Your submission has been received for review."; form.reset(); return; }
+    const fullName=$("#submission-full-name").value.trim();
+    const passingDate=$("#submission-passing-date").value;
+    const birthDateValue=$("#submission-birth-date").value;
+    const sourceUrl=$("#submission-source").value.trim();
+    if(!fullName||!passingDate) return;
+    if(birthDateValue && passingDate && birthDateValue>passingDate) { status.textContent="Please check the dates: the date of birth must be before the date of passing."; return; }
+    if(!hasSupabase) { status.textContent="Submissions are temporarily unavailable because the database connection is not configured."; return; }
+    if(sourceUrl) { try { const u=new URL(sourceUrl); if(!["http:","https:"].includes(u.protocol)) throw new Error(); } catch { status.textContent="Please enter a valid https:// or http:// source link."; return; } }
+    const payload={
+      full_name:fullName,
+      birth_date:birthDateValue||null,
+      passing_date:passingDate,
+      location:$("#submission-location").value.trim()||null,
+      relationship:$("#submission-relationship").value.trim()||null,
+      profession:$("#submission-profession").value.trim()||null,
+      short_bio:$("#submission-story").value.trim()||null,
+      memorial_message:$("#submission-tribute").value.trim()||null,
+      source_url:sourceUrl||null,
+      submitter_name:$("#submission-your-name").value.trim()||null,
+      submitter_email:$("#submission-your-email").value.trim()||null,
+      status:"pending"
+    };
+    status.textContent="Sending your submission for review…";
+    const button=form.querySelector('button[type="submit"]');button.disabled=true;
+    try {
+      await db("memorial_submissions",{method:"POST",body:JSON.stringify(payload)});
+      form.reset();
+      status.textContent="Thank you for helping keep their story alive. Your submission has been received and will be reviewed before any public listing.";
+      showToast("Memorial submission received for review.");
+    } catch(e) {
+      status.textContent="We could not save your submission. "+e.message;
+      showToast("The memorial submission could not be saved.");
+    } finally { button.disabled=false; }
+  }
+
   async function submitCandle(event) {
     event.preventDefault();const status=$("#candle-status"),name=$("#candle-name").value.trim(),message=$("#candle-message").value.trim();
     if(!hasSupabase){status.textContent="Candle not saved yet: check the public key and memorial_candles table permissions.";showToast("The candle feature needs a database connection.");return;}
@@ -140,6 +180,7 @@
     $("#load-more").addEventListener("click",()=>{visibleCount+=PAGE_SIZE;renderArchive();updateImagePlaceholders();});
     $("#clear-search").addEventListener("click",()=>{$("#archive-search").value="";visibleCount=PAGE_SIZE;renderArchive();});
     $("#candle-form").addEventListener("submit",submitCandle);
+    $("#memorial-submission-form").addEventListener("submit",submitMemorial);
     $("#guestbook-form").addEventListener("submit",submitGuestbook);
     $("#featured-grid").addEventListener("click",handleCardActivation);$("#archive-grid").addEventListener("click",handleCardActivation);$("#today-results").addEventListener("click",e=>{const a=e.target.closest("[data-slug]");if(a){e.preventDefault();openMemorial(a.dataset.slug);}});
     $("#archive-grid").addEventListener("keydown",e=>{if((e.key==="Enter"||e.key===" ")&&e.target.matches("[data-slug]")){e.preventDefault();openMemorial(e.target.dataset.slug);}});
