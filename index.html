@@ -32,6 +32,7 @@
       <a class="active" href="#home">Home</a>
       <a href="#featured">Featured</a>
       <a href="#archive">Memorial Archive</a>
+      <a href="#submit-memorial">Submit a Life</a>
       <a href="#on-this-day">On This Day</a>
       <a href="#guestbook">Guestbook</a>
     </nav>
@@ -99,6 +100,68 @@
       <div class="memorial-grid archive-grid" id="archive-grid" aria-live="polite"><div class="loading-card"><span class="loading-flower">✧</span><p>Opening the archive…</p></div></div>
       <div class="archive-empty" id="archive-empty" hidden><span>✧</span><h3>No memorials found</h3><p>Try another name or clear your search to explore the archive.</p><button class="button button-outline" id="clear-search" type="button">Clear search</button></div>
       <div class="archive-more"><button class="button button-outline" id="load-more" type="button" hidden>Load more memorials <span>↓</span></button></div>
+    </section>
+
+
+    <section class="submission-section section-wrap" id="submit-memorial">
+      <div class="submission-intro">
+        <p class="eyebrow">HELP KEEP THEIR STORY ALIVE</p>
+        <h2>Submit a life to be <em>remembered.</em></h2>
+        <p>Honor someone who has passed by sharing their name and story with CrowRules Memorials. Every submission is reviewed by our team before it can be added to the public archive.</p>
+        <p class="submission-note">Please submit only accurate information you have permission to share. Contact details are used only if we need to clarify your submission and are not displayed publicly.</p>
+      </div>
+      <form id="memorial-submission-form" class="submission-form">
+        <div class="submission-fields">
+          <div class="submission-field">
+            <label for="submission-full-name">Full name <span>Required</span></label>
+            <input id="submission-full-name" name="full_name" maxlength="160" required autocomplete="name" placeholder="Their full name">
+          </div>
+          <div class="submission-field">
+            <label for="submission-relationship">Your connection <span>Optional</span></label>
+            <input id="submission-relationship" name="relationship" maxlength="120" placeholder="Family, friend, fan, community member…">
+          </div>
+          <div class="submission-field">
+            <label for="submission-birth-date">Date of birth <span>Optional</span></label>
+            <input id="submission-birth-date" name="birth_date" type="date">
+          </div>
+          <div class="submission-field">
+            <label for="submission-passing-date">Date of passing <span>Required</span></label>
+            <input id="submission-passing-date" name="passing_date" type="date" required>
+          </div>
+          <div class="submission-field">
+            <label for="submission-location">Place associated with their life <span>Optional</span></label>
+            <input id="submission-location" name="location" maxlength="160" placeholder="City, region, or country">
+          </div>
+          <div class="submission-field">
+            <label for="submission-profession">Work or role <span>Optional</span></label>
+            <input id="submission-profession" name="profession" maxlength="160" placeholder="Artist, teacher, parent, volunteer…">
+          </div>
+          <div class="submission-field submission-wide">
+            <label for="submission-story">Their story <span>Optional</span></label>
+            <textarea id="submission-story" name="short_bio" maxlength="3000" rows="5" placeholder="Share a little about their life, what mattered to them, and how they will be remembered."></textarea>
+          </div>
+          <div class="submission-field submission-wide">
+            <label for="submission-tribute">A remembrance message <span>Optional</span></label>
+            <textarea id="submission-tribute" name="memorial_message" maxlength="2000" rows="3" placeholder="A few words you would like the review team to consider for their memorial."></textarea>
+          </div>
+          <div class="submission-field submission-wide">
+            <label for="submission-source">Reliable source or obituary link <span>Optional</span></label>
+            <input id="submission-source" name="source_url" type="url" maxlength="500" placeholder="https://…">
+          </div>
+          <div class="submission-field">
+            <label for="submission-your-name">Your name <span>Optional</span></label>
+            <input id="submission-your-name" name="submitter_name" maxlength="120" autocomplete="name" placeholder="How we can address you">
+          </div>
+          <div class="submission-field">
+            <label for="submission-your-email">Your email <span>Optional</span></label>
+            <input id="submission-your-email" name="submitter_email" type="email" maxlength="254" autocomplete="email" placeholder="If we need to follow up">
+          </div>
+        </div>
+        <label class="submission-consent"><input id="submission-confirm" type="checkbox" required><span>I confirm this person has passed away, the information is shared in good faith, and I understand this submission is a request for review—not an automatic public listing.</span></label>
+        <button class="button button-rose" type="submit">Send for remembrance review <span>✧</span></button>
+        <p class="form-note" id="memorial-submission-status" role="status">Submissions remain private while pending review.</p>
+        <div class="submission-honeypot" aria-hidden="true"><label for="submission-website">Leave this field blank</label><input id="submission-website" name="website" tabindex="-1" autocomplete="off"></div>
+      </form>
     </section>
 
     <section class="candle-section" id="candle">
