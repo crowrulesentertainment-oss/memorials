@@ -1,0 +1,178 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="theme-color" content="#101713">
+  <meta name="description" content="Celebrate a life, share treasured photographs, and preserve meaningful videos with CrowRules Memorials.">
+  <title>Memorial | CrowRules Memorials</title>
+
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700&family=Playfair+Display:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="assets/css/styles.css">
+
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2" defer></script>
+  <script src="assets/js/app.js" defer></script>
+  <script src="assets/js/memorial-gallery.js" defer></script>
+</head>
+<body>
+  <header class="site-header">
+    <a class="brand" href="index.html">
+      <span class="brand-mark">CR</span>
+      <span>CROWRULES <small>MEMORIALS</small></span>
+    </a>
+
+    <button class="menu-toggle" aria-label="Toggle navigation"
+      aria-expanded="false">☰</button>
+
+    <nav class="main-nav" aria-label="Main navigation">
+      <a href="index.html">Home</a>
+      <a href="archive.html">Memorial Archive</a>
+      <a href="stories.html">Life Stories</a>
+      <a href="candlelight.html">Candlelight</a>
+      <a href="calendar.html">Remembrance Calendar</a>
+      <a class="nav-cta" href="submit.html">Create a Memorial</a>
+    </nav>
+  </header>
+
+  <main>
+    <section class="page-hero memorial-page-hero">
+      <p class="eyebrow">A LIFE. A STORY. A LEGACY.</p>
+      <h1 id="memorial-heading">A Life Remembered</h1>
+      <p>Every person deserves to be remembered with dignity.</p>
+    </section>
+
+    <section class="section-wrap">
+      <div id="memorial-detail" class="memorial-detail" aria-live="polite">
+        <p>Loading memorial…</p>
+      </div>
+    </section>
+
+    <section class="gallery-section section-wrap" id="photo-gallery-section">
+      <div class="section-heading">
+        <div>
+          <p class="eyebrow">MOMENTS THAT LAST</p>
+          <h2>Photo Gallery</h2>
+          <p class="muted">A collection of photographs and cherished memories.</p>
+        </div>
+        <span class="gallery-count" id="photo-count">0 photographs</span>
+      </div>
+
+      <div class="gallery-upload-panel">
+        <div class="upload-icon" aria-hidden="true">＋</div>
+        <div class="upload-copy">
+          <h3>Add to the photo gallery</h3>
+          <p>Share family photographs, favorite places, celebrations, and special moments.</p>
+          <p class="form-help">Images: JPG, PNG, WebP, or GIF. Maximum 10 MB per image.</p>
+        </div>
+
+        <label for="photo-upload" class="button button-gold upload-button">
+          Select Photos
+        </label>
+        <input id="photo-upload" class="visually-hidden" type="file"
+          accept="image/jpeg,image/png,image/webp,image/gif" multiple>
+      </div>
+
+      <form id="photo-caption-form" class="gallery-caption-form" hidden>
+        <div class="form-group">
+          <label for="photo-caption">Caption for selected photos</label>
+          <input class="field" id="photo-caption" maxlength="200"
+            placeholder="A special day, a family gathering, a favorite place...">
+        </div>
+        <button class="button button-gold" type="submit">Upload Selected Photos</button>
+        <button class="button button-outline" id="cancel-photo-upload" type="button">Cancel</button>
+      </form>
+
+      <p class="gallery-status" id="photo-status" role="status" aria-live="polite"></p>
+      <div class="media-grid photo-grid" id="photo-gallery">
+        <p class="muted">Loading photographs…</p>
+      </div>
+    </section>
+
+    <section class="gallery-section video-gallery-section section-wrap" id="video-gallery-section">
+      <div class="section-heading">
+        <div>
+          <p class="eyebrow">VOICES, MOMENTS & MEMORIES</p>
+          <h2>Video Gallery</h2>
+          <p class="muted">Preserve spoken memories, family recordings, and meaningful milestones.</p>
+        </div>
+        <span class="gallery-count" id="video-count">0 videos</span>
+      </div>
+
+      <div class="gallery-upload-panel">
+        <div class="upload-icon" aria-hidden="true">▶</div>
+        <div class="upload-copy">
+          <h3>Add to the video gallery</h3>
+          <p>Share meaningful recordings that help tell a person's story.</p>
+          <p class="form-help">MP4, WebM, or Ogg video. Maximum 100 MB per video.</p>
+        </div>
+
+        <label for="video-upload" class="button button-gold upload-button">
+          Select Videos
+        </label>
+        <input id="video-upload" class="visually-hidden" type="file"
+          accept="video/mp4,video/webm,video/ogg" multiple>
+      </div>
+
+      <form id="video-caption-form" class="gallery-caption-form" hidden>
+        <div class="form-group">
+          <label for="video-caption">Caption for selected videos</label>
+          <input class="field" id="video-caption" maxlength="200"
+            placeholder="A birthday message, a favorite performance, a family memory...">
+        </div>
+        <button class="button button-gold" type="submit">Upload Selected Videos</button>
+        <button class="button button-outline" id="cancel-video-upload" type="button">Cancel</button>
+      </form>
+
+      <p class="gallery-status" id="video-status" role="status" aria-live="polite"></p>
+      <div class="media-grid video-grid" id="video-gallery">
+        <p class="muted">Loading videos…</p>
+      </div>
+    </section>
+
+    <section class="gallery-guidelines">
+      <div class="section-wrap">
+        <p class="eyebrow">SHARED WITH CARE</p>
+        <h2>Every memory deserves respect.</h2>
+        <p>
+          Upload only photographs and recordings you have permission to share.
+          Before public launch, submissions should be reviewed for consent,
+          privacy, copyright, and accuracy.
+        </p>
+        <a class="button button-outline" href="about.html">Our Memorial Guidelines</a>
+      </div>
+    </section>
+
+    <section class="closing-section">
+      <p class="eyebrow">KEEP THEIR STORY ALIVE</p>
+      <h2>Memories connect us<br>across generations.</h2>
+      <div class="hero-actions" style="justify-content:center">
+        <a class="button button-gold" href="candlelight.html">Light a Candle</a>
+        <a class="button button-outline" href="archive.html">Back to Archive</a>
+      </div>
+    </section>
+  </main>
+
+  <dialog id="media-lightbox" class="media-lightbox" aria-label="Gallery media viewer">
+    <button type="button" id="lightbox-close" class="lightbox-close"
+      aria-label="Close gallery viewer">×</button>
+    <div id="lightbox-content"></div>
+    <p id="lightbox-caption"></p>
+  </dialog>
+
+  <footer class="site-footer">
+    <a class="brand" href="index.html">
+      <span class="brand-mark">CR</span>
+      <span>CROWRULES <small>MEMORIALS</small></span>
+    </a>
+    <div class="footer-links">
+      <a href="about.html">Our Mission</a>
+      <a href="archive.html">Memorial Archive</a>
+      <a href="submit.html">Create a Memorial</a>
+    </div>
+    <p class="copyright">© <span data-year></span> CrowRules Memorials. A CrowRules Entertainment division.</p>
+  </footer>
+</body>
+</html>
