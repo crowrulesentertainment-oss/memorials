@@ -1,343 +1,112 @@
-
+/* CrowRules Memorials — sitewide Supabase integration.
+ * Browser code uses only the public anon key. RLS and moderation policies stay enabled.
+ */
 "use strict";
-
-const memorials = [
-  {
-    id: "sample-01",
-    name: "Evelyn Rose Carter",
-    born: "1948",
-    died: "2024",
-    category: "Community",
-    location: "Pacific Northwest",
-    description: "Remembering a life shaped by kindness, family, and generosity.",
-    story: "Evelyn's story is a demonstration profile for CrowRules Memorials. Replace this text with a verified biography shared by an authorized family member or representative.",
-    featured: true,
-    approved: true,
-    initials: "EC"
-  },
-  {
-    id: "sample-02",
-    name: "James Michael Bennett",
-    born: "1956",
-    died: "2023",
-    category: "Family",
-    location: "Pacific Northwest",
-    description: "A tribute to a devoted friend, storyteller, and family man.",
-    story: "This sample tribute demonstrates how a memorial can preserve personal stories, meaningful traditions, and the memories people cherish.",
-    featured: true,
-    approved: true,
-    initials: "JB"
-  },
-  {
-    id: "sample-03",
-    name: "Margaret Louise Hayes",
-    born: "1939",
-    died: "2025",
-    category: "Arts",
-    location: "Pacific Northwest",
-    description: "Celebrating a creative spirit and a lifetime of inspiration.",
-    story: "This fictional example shows how contributors could celebrate a person's creativity, achievements, relationships, and lasting influence.",
-    featured: true,
-    approved: true,
-    initials: "MH"
-  },
-  {
-    id: "sample-04",
-    name: "Robert Daniel Wilson",
-    born: "1962",
-    died: "2024",
-    category: "Service",
-    location: "Washington",
-    description: "A sample remembrance centered on service and compassion.",
-    story: "A real memorial should use information shared with permission and reviewed before public publication.",
-    featured: false,
-    approved: true,
-    initials: "RW"
-  },
-  {
-    id: "sample-05",
-    name: "Patricia Anne Morgan",
-    born: "1950",
-    died: "2022",
-    category: "Family",
-    location: "Washington",
-    description: "A sample tribute to a person whose warmth touched many lives.",
-    story: "Family memories, photographs, favorite sayings, and life milestones can help tell a fuller story.",
-    featured: false,
-    approved: true,
-    initials: "PM"
-  },
-  {
-    id: "sample-06",
-    name: "Thomas Edward Brooks",
-    born: "1944",
-    died: "2021",
-    category: "Community",
-    location: "Pacific Northwest",
-    description: "A demonstration memorial about connection and community.",
-    story: "This placeholder profile is not intended to represent a real deceased person.",
-    featured: false,
-    approved: true,
-    initials: "TB"
-  }
-];
-
+const CROW_MEMORIALS_CONFIG = Object.freeze({
+  supabaseUrl: "https://cevylpnoexugwgygvtgu.supabase.co",
+  supabaseKey: "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImNldnlscG5vZXh1Z3dneWd2dGd1Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3ODg4MTYxOTYsImV4cCI6MjEwNDM5MjE5Nn0.bvSF3qRqFNvCtaF5CSDeeEO3yJnsnYt9CXmgUaBWjNQ"
+});
+window.CROW_MEMORIALS_CONFIG = window.CROW_MEMORIALS_CONFIG || CROW_MEMORIALS_CONFIG;
 const $ = (selector, root = document) => root.querySelector(selector);
 const $$ = (selector, root = document) => [...root.querySelectorAll(selector)];
-
-function escapeHTML(value = "") {
-  return String(value).replace(/[&<>"']/g, char => ({
-    "&": "&amp;",
-    "<": "&lt;",
-    ">": "&gt;",
-    '"': "&quot;",
-    "'": "&#39;"
-  })[char]);
+let memorials = [];
+let communityCandles = [];
+const esc = value => String(value ?? "").replace(/[&<>"']/g, c => ({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[c]));
+const cfg = window.CROW_MEMORIALS_CONFIG;
+async function db(path, options = {}) {
+  const method = (options.method || "GET").toUpperCase();
+  const headers = { apikey: cfg.supabaseKey, Authorization: "Bearer " + cfg.supabaseKey, "Content-Type": "application/json", Prefer: method === "POST" ? "return=representation" : "count=exact", ...(options.headers || {}) };
+  const res = await fetch(cfg.supabaseUrl.replace(/\/$/, "") + "/rest/v1/" + path, { ...options, method, headers });
+  if (!res.ok) {
+    let message = "";
+    try { const body = await res.json(); message = body.message || body.details || body.hint || ""; } catch {}
+    throw new Error(message || ("Supabase request failed (" + res.status + ")."));
+  }
+  if (res.status === 204) return [];
+  return res.json();
 }
-
-function getMemorial(id) {
-  return memorials.find(item => item.id === id && item.approved);
+const fullName = m => m.full_name || m.name || "Remembered with love";
+const born = m => m.birth_date || "";
+const died = m => m.passing_date || "";
+const categoryOf = m => m.category || m.profession || m.memorial_type || (m.is_celebrity ? "Public figure" : "In remembrance");
+const descriptionOf = m => m.short_bio || m.memorial_message || m.known_for || "A life remembered. A story that continues to matter.";
+const slugOf = m => m.slug || fullName(m).toLowerCase().trim().replace(/[^a-z0-9]+/g,"-").replace(/^-|-$/g,"");
+const yearOf = v => v ? String(v).slice(0,4) : "";
+const formatDate = v => { if (!v) return ""; const d = new Date(String(v).slice(0,10) + "T12:00:00"); return Number.isNaN(d.getTime()) ? "" : d.toLocaleDateString(undefined,{month:"short",day:"numeric",year:"numeric"}); };
+function memorialCard(m) {
+  const name=fullName(m), id=m.id, portrait=m.portrait_url;
+  const dates=[yearOf(born(m)),yearOf(died(m))].filter(Boolean).join(" — ");
+  return `<article class="memorial-card"><a href="memorial.html?id=${encodeURIComponent(id)}" aria-label="View memorial for ${esc(name)}"><div class="memorial-image" ${portrait?'':'aria-hidden="true"'}>${portrait?'<img loading="lazy" src="'+esc(portrait)+'" alt="Portrait of '+esc(name)+'" onerror="this.remove()">':esc(name.split(/\s+/).map(x=>x[0]).slice(0,2).join("").toUpperCase())}</div></a><div class="memorial-info"><p class="eyebrow">${esc(categoryOf(m))}</p><h3>${esc(name)}</h3><p class="memorial-dates">${esc(dates)}</p><p class="memorial-description">${esc(descriptionOf(m)).slice(0,240)}</p><a class="text-link" href="memorial.html?id=${encodeURIComponent(id)}">View memorial →</a></div></article>`;
 }
-
-function memorialCard(item) {
-  return `
-    <article class="memorial-card">
-      <a href="memorial.html?id=${encodeURIComponent(item.id)}"
-         aria-label="View memorial for ${escapeHTML(item.name)}">
-        <div class="memorial-image" aria-hidden="true">
-          ${escapeHTML(item.initials)}
-        </div>
-      </a>
-      <div class="memorial-info">
-        <p class="eyebrow">${escapeHTML(item.category)}</p>
-        <h3>${escapeHTML(item.name)}</h3>
-        <p class="memorial-dates">${escapeHTML(item.born)} — ${escapeHTML(item.died)}</p>
-        <p class="memorial-description">${escapeHTML(item.description)}</p>
-        <a class="text-link"
-           href="memorial.html?id=${encodeURIComponent(item.id)}">
-          View memorial →
-        </a>
-      </div>
-    </article>`;
-}
-
 function renderFeatured() {
-  const target = $("#featured-memorials");
-  if (!target) return;
-
-  const items = memorials.filter(item => item.featured && item.approved);
-  target.innerHTML = items.length
-    ? items.map(memorialCard).join("")
-    : "<p>No featured memorials are available yet.</p>";
+  const target=$("#featured-memorials"); if(!target)return;
+  const items=memorials.filter(m=>m.featured===true||m.is_featured===true).slice(0,6);
+  target.innerHTML=items.length?items.map(memorialCard).join(""):'<p class="muted">No featured memorials are marked yet. Explore the full archive to find a remembrance.</p>';
 }
-
 function renderArchive() {
-  const target = $("#archive-results");
-  if (!target) return;
-
-  const search = ($("#archive-search")?.value || "").trim().toLowerCase();
-  const category = $("#archive-category")?.value || "all";
-  const sort = $("#archive-sort")?.value || "name";
-
-  let items = memorials.filter(item => item.approved);
-
-  if (search) {
-    items = items.filter(item =>
-      [item.name, item.description, item.location, item.category]
-        .some(value => value.toLowerCase().includes(search))
-    );
-  }
-
-  if (category !== "all") {
-    items = items.filter(item => item.category === category);
-  }
-
-  items.sort((a, b) => {
-    if (sort === "newest") return Number(b.died) - Number(a.died);
-    return a.name.localeCompare(b.name);
-  });
-
-  target.innerHTML = items.length
-    ? items.map(memorialCard).join("")
-    : "<p>No memorials match your search. Try a different term.</p>";
-
-  const count = $("#archive-count");
-  if (count) count.textContent = `${items.length} memorial${items.length === 1 ? "" : "s"}`;
+  const target=$("#archive-results"); if(!target)return;
+  const search=($("#archive-search")?.value||"").trim().toLocaleLowerCase();
+  const category=$("#archive-category")?.value||"all", sort=$("#archive-sort")?.value||"name";
+  let items=memorials.filter(m=>!search||[fullName(m),descriptionOf(m),m.location,categoryOf(m),m.nationality,m.known_for].some(v=>String(v||"").toLocaleLowerCase().includes(search)));
+  if(category!=="all")items=items.filter(m=>categoryOf(m)===category);
+  items.sort((a,b)=>sort==="newest"?(String(died(b)).localeCompare(String(died(a)))):fullName(a).localeCompare(fullName(b)));
+  target.innerHTML=items.length?items.map(memorialCard).join(""):'<p class="muted">No memorials match your search. Try a different term.</p>';
+  const count=$("#archive-count"); if(count)count.textContent=items.length.toLocaleString()+" published memorial"+(items.length===1?"":"s");
 }
-
+function populateCategories() {
+  const select=$("#archive-category"); if(!select)return;
+  const current=select.value||"all", categories=[...new Set(memorials.map(categoryOf).filter(Boolean))].sort((a,b)=>a.localeCompare(b));
+  select.innerHTML='<option value="all">All categories</option>'+categories.map(c=>'<option value="'+esc(c)+'">'+esc(c)+'</option>').join("");
+  select.value=categories.includes(current)?current:"all";
+}
 function renderMemorialDetail() {
-  const target = $("#memorial-detail");
-  if (!target) return;
-
-  const id = new URLSearchParams(location.search).get("id");
-  const item = getMemorial(id);
-
-  if (!item) {
-    target.innerHTML = `
-      <h1>Memorial not found</h1>
-      <p>This memorial may not exist or may not be publicly available.</p>
-      <a class="button button-gold" href="archive.html">Return to archive</a>`;
-    return;
-  }
-
-  document.title = `${item.name} | CrowRules Memorials`;
-
-  target.innerHTML = `
-    <div class="detail-banner" aria-hidden="true">${escapeHTML(item.initials)}</div>
-    <p class="eyebrow">${escapeHTML(item.category)} · ${escapeHTML(item.location)}</p>
-    <h1>${escapeHTML(item.name)}</h1>
-    <p class="memorial-dates">${escapeHTML(item.born)} — ${escapeHTML(item.died)}</p>
-    <p class="section-copy">${escapeHTML(item.description)}</p>
-    <div class="detail-body"><p>${escapeHTML(item.story)}</p></div>
-    <div class="hero-actions">
-      <a class="button button-gold" href="candlelight.html">Light a Candle</a>
-      <a class="button button-outline" href="archive.html">Back to Archive</a>
-    </div>
-    <p class="form-help">Demonstration content only. Real profiles require verification and appropriate authorization.</p>`;
+  const target=$("#memorial-detail"); if(!target)return;
+  const params=new URLSearchParams(location.search), id=params.get("id")||params.get("memorial_id"), slug=params.get("slug");
+  const item=memorials.find(m=>(id&&String(m.id)===id)||(slug&&slugOf(m)===slug));
+  if(!item){target.innerHTML='<h1>Memorial not found</h1><p>This memorial may not exist or may not be publicly available.</p><a class="button button-gold" href="archive.html">Return to archive</a>';return;}
+  const name=fullName(item);document.title=name+" | CrowRules Memorials";
+  const dates=[formatDate(born(item)),formatDate(died(item))].filter(Boolean).join(" — ");
+  $("#memorial-heading") && ($("#memorial-heading").textContent=name);
+  target.innerHTML=`<div class="detail-banner" aria-hidden="true">${item.portrait_url?'<img src="'+esc(item.portrait_url)+'" alt="Portrait of '+esc(name)+'">':esc(name.split(/\s+/).map(x=>x[0]).slice(0,2).join("").toUpperCase())}</div><p class="eyebrow">${esc(categoryOf(item))}${item.location?' · '+esc(item.location):''}</p><h1>${esc(name)}</h1><p class="memorial-dates">${esc(dates)}</p><p class="section-copy">${esc(descriptionOf(item))}</p>${item.known_for?'<p><strong>Known for:</strong> '+esc(item.known_for)+'</p>':''}${item.official_url?'<p><a class="text-link" href="'+esc(item.official_url)+'" target="_blank" rel="noopener noreferrer">Learn more from a public source →</a></p>':''}<div class="detail-body"><p>${esc(item.memorial_message||item.short_bio||descriptionOf(item))}</p></div><div class="hero-actions"><a class="button button-gold" href="candlelight.html">Light a Candle</a><a class="button button-outline" href="archive.html">Back to Archive</a></div><section class="detail-guestbook"><h2>Share a <em>memory</em></h2><form id="detail-guestbook-form"><div class="form-group"><label for="detail-guest-name">Your name</label><input class="field" id="detail-guest-name" name="author_name" maxlength="100" required></div><div class="form-group"><label for="detail-guest-message">Your memory</label><textarea class="field" id="detail-guest-message" name="message" maxlength="2000" required></textarea></div><button class="button button-gold" type="submit">Submit memory for review</button><p id="detail-guest-status" class="form-status" role="status"></p></form><div id="detail-guestbook-entries"></div></section>`;
+  loadDetailGuestbook(item);
 }
-
-function readLocalList(key) {
-  try {
-    const value = JSON.parse(localStorage.getItem(key) || "[]");
-    return Array.isArray(value) ? value : [];
-  } catch {
-    return [];
-  }
+async function loadDetailGuestbook(item) {
+  const target=$("#detail-guestbook-entries"); if(!target)return;
+  try{const rows=await db("memorial_guestbook?select=id,author_name,message,created_at&memorial_id=eq."+encodeURIComponent(item.id)+"&published=eq.true&order=created_at.desc&limit=20");target.innerHTML=rows.length?rows.map(r=>'<article class="story-card"><h3>'+esc(r.author_name||"A friend")+'</h3><p>'+esc(r.message)+'</p><small class="muted">'+esc(formatDate(r.created_at))+'</small></article>').join(""):'<p class="muted">No public memories have been shared yet.</p>';}catch{target.innerHTML='<p class="muted">Public memories are temporarily unavailable.</p>'}
+  $("#detail-guestbook-form")?.addEventListener("submit",async e=>{e.preventDefault();const form=e.currentTarget,status=$("#detail-guest-status"),data=new FormData(form);status.textContent="Sending your memory for review…";try{await db("memorial_guestbook",{method:"POST",body:JSON.stringify({memorial_id:item.id,memorial_name:fullName(item),author_name:String(data.get("author_name")).trim(),message:String(data.get("message")).trim(),published:false})});form.reset();status.textContent="Thank you. Your memory has been submitted for review.";}catch(err){status.textContent="Your memory could not be saved: "+err.message;}});
 }
-
 function renderCandles() {
-  const wall = $("#candle-wall");
-  if (!wall) return;
-
-  const candles = readLocalList("cr-memorial-candles");
-  wall.innerHTML = candles.length
-    ? candles.slice().reverse().map(candle => `
-      <article class="candle-card">
-        <div class="candle-flame" aria-hidden="true">🕯️</div>
-        <strong>${escapeHTML(candle.name || "In loving memory")}</strong>
-        <p>${escapeHTML(candle.message || "Remembered with love.")}</p>
-        <small class="muted">${escapeHTML(candle.date || "")}</small>
-      </article>`).join("")
-    : "<p class='muted'>Be the first to light a demonstration candle on this device.</p>";
+  const wall=$("#candle-wall");if(!wall)return;
+  wall.innerHTML=communityCandles.length?communityCandles.map(c=>'<article class="candle-card"><div class="candle-flame" aria-hidden="true">🕯️</div><strong>'+esc(c.memorial_name||"In loving memory")+'</strong><p>'+esc(c.message||"Remembered with love.")+'</p><small class="muted">'+esc(formatDate(c.created_at))+'</small></article>').join(""):'<p class="muted">No candles are displayed yet. You can be the first to leave a remembrance.</p>';
 }
-
 function setupCandleForm() {
-  const form = $("#candle-form");
-  if (!form) return;
-
-  form.addEventListener("submit", event => {
-    event.preventDefault();
-    const data = new FormData(form);
-    const name = String(data.get("name") || "").trim();
-    const message = String(data.get("message") || "").trim();
-
-    if (!name || !message) return;
-
-    const candles = readLocalList("cr-memorial-candles");
-    candles.push({
-      name: name.slice(0, 100),
-      message: message.slice(0, 500),
-      date: new Date().toLocaleDateString()
-    });
-
-    try {
-      localStorage.setItem("cr-memorial-candles", JSON.stringify(candles));
-      form.reset();
-      renderCandles();
-      $("#candle-status").textContent =
-        "Your demonstration candle has been added on this device only.";
-    } catch {
-      $("#candle-status").textContent =
-        "Your browser could not save this candle. Try another browser or device.";
-    }
-  });
+  const form=$("#candle-form");if(!form)return;
+  form.addEventListener("submit",async event=>{event.preventDefault();if(!form.reportValidity())return;const data=new FormData(form),name=String(data.get("name")||"").trim(),message=String(data.get("message")||"").trim(),status=$("#candle-status");status.textContent="Lighting your candle…";try{await db("memorial_candles",{method:"POST",body:JSON.stringify({memorial_name:name,author_name:null,message})});form.reset();status.textContent="Your candle has been lit. Thank you for taking a moment to remember.";await loadCandles();}catch(err){status.textContent="Your candle could not be saved: "+err.message+" Please try again later.";}}
+  );
 }
-
+async function loadCandles(){try{communityCandles=await db("memorial_candles?select=id,memorial_id,memorial_name,author_name,message,created_at&order=created_at.desc&limit=30");renderCandles();}catch(err){const wall=$("#candle-wall");if(wall)wall.innerHTML='<p class="muted">Candles could not be loaded right now. '+esc(err.message)+'</p>';}}
+function parseDateOrYear(value) {
+  const v=String(value||"").trim();if(!v)return null;
+  if(/^\d{4}$/.test(v))return v+"-01-01";
+  if(/^\d{4}-\d{2}-\d{2}$/.test(v))return v;
+  const d=new Date(v);if(Number.isNaN(d.getTime()))return null;
+  return d.toISOString().slice(0,10);
+}
 function setupSubmissionForm() {
-  const form = $("#memorial-form");
-  if (!form) return;
-
-  form.addEventListener("submit", event => {
-    event.preventDefault();
-    const status = $("#submission-status");
-
-    if (!form.reportValidity()) return;
-
-    status.textContent =
-      "Demo only: this form is not connected to a server and nothing was submitted. " +
-      "A secure backend must be configured before accepting real memorial submissions.";
+  const form=$("#memorial-form");if(!form)return;
+  form.addEventListener("submit",async event=>{event.preventDefault();const status=$("#submission-status");if(!form.reportValidity())return;const data=new FormData(form),birth=parseDateOrYear(data.get("birthDate")),passing=parseDateOrYear(data.get("deathDate"));
+    if(data.get("birthDate")&&!birth){status.textContent="Please enter a valid birth date or four-digit year.";return;}
+    if(data.get("deathDate")&&!passing){status.textContent="Please enter a valid passing date or four-digit year.";return;}
+    if(birth&&passing&&birth>passing){status.textContent="Date of birth must be before date of passing.";return;}
+    const payload={full_name:String(data.get("personName")||"").trim(),birth_date:birth,passing_date:passing,short_bio:String(data.get("story")||"").trim(),memorial_message:String(data.get("story")||"").trim(),submitter_name:String(data.get("submitterName")||"").trim(),submitter_email:String(data.get("email")||"").trim(),relationship:String(data.get("relationship")||"").trim()||null};
+    status.textContent="Sending your memorial submission for review…";
+    try{await db("memorial_submissions",{method:"POST",body:JSON.stringify(payload)});form.reset();status.textContent="Thank you. Your submission has been received for review. It will not appear publicly until approved.";}
+    catch(err){status.textContent="Your submission could not be saved: "+err.message+" Please try again later.";}
   });
 }
-
-function setupNavigation() {
-  const toggle = $(".menu-toggle");
-  const nav = $(".main-nav");
-  if (!toggle || !nav) return;
-
-  toggle.addEventListener("click", () => {
-    const open = nav.classList.toggle("open");
-    toggle.setAttribute("aria-expanded", String(open));
-    toggle.textContent = open ? "✕" : "☰";
-  });
-}
-
-function renderStories() {
-  const target = $("#stories-list");
-  if (!target) return;
-
-  const items = memorials.filter(item => item.approved);
-  target.innerHTML = items.map(item => `
-    <article class="story-card">
-      <p class="story-meta">LIFE STORY · ${escapeHTML(item.category.toUpperCase())}</p>
-      <h2>${escapeHTML(item.name)}</h2>
-      <p class="memorial-dates">${escapeHTML(item.born)} — ${escapeHTML(item.died)}</p>
-      <p>${escapeHTML(item.description)}</p>
-      <a class="text-link" href="memorial.html?id=${encodeURIComponent(item.id)}">
-        Read tribute →
-      </a>
-    </article>`).join("");
-}
-
-function renderCalendar() {
-  const target = $("#calendar-list");
-  if (!target) return;
-
-  target.innerHTML = `
-    <article class="calendar-item">
-      <div class="calendar-date">01<br><small>JAN</small></div>
-      <div><h3>New Year of Remembrance</h3>
-        <p class="muted">A gentle moment to carry memories forward.</p></div>
-    </article>
-    <article class="calendar-item">
-      <div class="calendar-date">May<br><small>ANNUAL</small></div>
-      <div><h3>Memorial Day</h3>
-        <p class="muted">Remembering those who died in military service.</p></div>
-    </article>
-    <article class="calendar-item">
-      <div class="calendar-date">Dec<br><small>ANNUAL</small></div>
-      <div><h3>Season of Remembrance</h3>
-        <p class="muted">Making room for reflection, stories, and connection.</p></div>
-    </article>
-    <p class="form-help">This is a starter calendar, not a live calendar of verified individual anniversaries.</p>`;
-}
-
-document.addEventListener("DOMContentLoaded", () => {
-  $$("[data-year]").forEach(element => {
-    element.textContent = String(new Date().getFullYear());
-  });
-
-  setupNavigation();
-  renderFeatured();
-  renderArchive();
-  renderMemorialDetail();
-  renderStories();
-  renderCalendar();
-  renderCandles();
-  setupCandleForm();
-  setupSubmissionForm();
-
-  ["#archive-search", "#archive-category", "#archive-sort"].forEach(selector => {
-    $(selector)?.addEventListener("input", renderArchive);
-    $(selector)?.addEventListener("change", renderArchive);
-  });
-});
+function setupNavigation(){const toggle=$(".menu-toggle"),nav=$(".main-nav");if(!toggle||!nav)return;toggle.addEventListener("click",()=>{const open=nav.classList.toggle("open");toggle.setAttribute("aria-expanded",String(open));toggle.textContent=open?"✕":"☰";});}
+function renderStories(){const target=$("#stories-list");if(!target)return;const items=memorials.filter(m=>m.short_bio||m.memorial_message).slice(0,200);target.innerHTML=items.length?items.map(m=>'<article class="story-card"><p class="story-meta">LIFE STORY · '+esc(String(categoryOf(m)).toUpperCase())+'</p><h2>'+esc(fullName(m))+'</h2><p class="memorial-dates">'+esc([yearOf(born(m)),yearOf(died(m))].filter(Boolean).join(" — "))+'</p><p>'+esc(descriptionOf(m))+'</p><a class="text-link" href="memorial.html?id='+encodeURIComponent(m.id)+'">Read tribute →</a></article>').join(""):'<p class="muted">No published life stories are available yet.</p>';}
+function renderCalendar(){const target=$("#calendar-list");if(!target)return;const now=new Date(),matches=memorials.filter(m=>[born(m),died(m)].some(v=>v&&new Date(v+"T12:00:00").getMonth()===now.getMonth()&&new Date(v+"T12:00:00").getDate()===now.getDate()));const cards=matches.map(m=>'<article class="calendar-item"><div class="calendar-date">'+esc(formatDate(born(m)||died(m)))+'</div><div><h3>'+esc(fullName(m))+'</h3><p class="muted">'+(born(m)&&new Date(born(m)+"T12:00:00").getMonth()===now.getMonth()&&new Date(born(m)+"T12:00:00").getDate()===now.getDate()?"Birthday remembrance":"Anniversary of passing")+'</p><a class="text-link" href="memorial.html?id='+encodeURIComponent(m.id)+'">Remember their story →</a></div></article>').join("");target.innerHTML=cards||'<p class="muted">There are no published memorial dates for today. Visit the archive to remember someone whose story matters to you.</p>';}
+function setupArchiveControls(){["#archive-search","#archive-category","#archive-sort"].forEach(s=>{$(s)?.addEventListener("input",renderArchive);$(s)?.addEventListener("change",renderArchive);});}
+async function loadMemorials(){try{memorials=await db("memorials?select=id,slug,full_name,birth_date,passing_date,location,short_bio,portrait_url,featured,published,created_at,memorial_type,is_celebrity,profession,category,nationality,known_for,memorial_message,official_url&published=eq.true&order=created_at.desc&limit=2000");populateCategories();renderFeatured();renderArchive();renderMemorialDetail();renderStories();renderCalendar();}catch(err){console.error("CrowRules Memorials Supabase connection failed:",err);["#featured-memorials","#archive-results","#memorial-detail","#stories-list","#calendar-list"].forEach(s=>{const el=$(s);if(el)el.innerHTML='<p class="muted">Memorial data is temporarily unavailable. Please try again later.</p>';});const count=$("#archive-count");if(count)count.textContent="Archive temporarily unavailable";}}
+document.addEventListener("DOMContentLoaded",async()=>{$$("[data-year]").forEach(el=>el.textContent=String(new Date().getFullYear()));setupNavigation();setupArchiveControls();setupCandleForm();setupSubmissionForm();await loadMemorials();await loadCandles();});
