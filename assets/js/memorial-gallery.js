@@ -227,7 +227,7 @@ const MEMORIAL_GALLERY_CONFIG = {
     try {
       for (const file of files) {
         const extension = fileExtension(file);
-        const path = `${currentMemorialId}/${user.id}/${crypto.randomUUID()}.${extension}`;
+        const path = `memorials/${currentMemorialId}/${user.id}/${crypto.randomUUID()}.${extension}`;
 
         const { error: storageError } = await supabase.storage
           .from(MEMORIAL_GALLERY_CONFIG.bucket)
