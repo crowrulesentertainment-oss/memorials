@@ -144,43 +144,20 @@ const MEMORIAL_GALLERY_CONFIG = {
   }
 
   async function loadApprovedMedia() {
-    if (!supabase || !currentMemorialId) {
-      renderGallery("photo");
-      renderGallery("video");
-      return;
-    }
-
+    if (!supabase || !currentMemorialId) { renderGallery("photo"); renderGallery("video"); return; }
     for (const type of ["photo", "video"]) {
       const target = type === "photo" ? photoGallery : videoGallery;
       target.innerHTML = '<p class="muted">Loading approved media…</p>';
-
-      const { data, error } = await supabase
-        .from("memorial_media")
-        .select("id, memorial_id, media_type, storage_path, caption, created_at")
-        .eq("memorial_id", currentMemorialId)
-        .eq("media_type", type)
-        .eq("approved", true)
-        .order("created_at", { ascending: false });
-
-      if (error) {
-        target.innerHTML = '<p class="muted">The gallery could not be loaded. Check the database configuration.</p>';
-        continue;
-      }
-
+      const query = type === "photo"
+        ? supabase.from("memorial_photos").select("id, memorial_id, image_url, caption, created_at, storage_path").eq("memorial_id", currentMemorialId).eq("published", true).eq("review_status", "approved").order("created_at", { ascending: false })
+        : supabase.from("memorial_videos").select("id, memorial_id, video_url, title, thumbnail_url, description, created_at, published, status").eq("memorial_id", currentMemorialId).eq("published", true).eq("status", "published").order("created_at", { ascending: false });
+      const { data, error } = await query;
+      if (error) { target.innerHTML = '<p class="muted">The gallery could not be loaded. ' + escapeHTML(error.message) + '</p>'; continue; }
       localItems[type] = (data || []).map(row => {
-        const { data: urlData } = supabase.storage
-          .from(MEMORIAL_GALLERY_CONFIG.bucket)
-          .getPublicUrl(row.storage_path);
-
-        return {
-          id: row.id,
-          type,
-          url: urlData.publicUrl,
-          caption: row.caption || "A cherished memory",
-          local: false
-        };
-      });
-
+        let url = type === "photo" ? row.image_url : row.video_url;
+        if (!url && row.storage_path) url = supabase.storage.from(MEMORIAL_GALLERY_CONFIG.bucket).getPublicUrl(row.storage_path)?.data?.publicUrl || "";
+        return { id: row.id, type, url: url || "", caption: type === "photo" ? (row.caption || "A cherished memory") : (row.title || row.description || "A video memory"), local: false };
+      }).filter(item => item.url);
       renderGallery(type);
     }
   }
@@ -264,16 +241,14 @@ const MEMORIAL_GALLERY_CONFIG = {
           continue;
         }
 
+        const publicUrl = supabase.storage.from(MEMORIAL_GALLERY_CONFIG.bucket).getPublicUrl(path)?.data?.publicUrl || "";
+        const memorialName = document.querySelector("#memorial-heading")?.textContent || null;
+        const rowPayload = type === "photo"
+          ? { memorial_id: currentMemorialId, image_url: publicUrl, caption: (caption || file.name).slice(0, 200), alt_text: (caption || file.name).slice(0, 200), uploaded_by: user.id, published: false, review_status: "pending", storage_path: path }
+          : { memorial_id: currentMemorialId, title: (caption || file.name).slice(0, 200), video_url: publicUrl, description: (caption || file.name).slice(0, 200), person_name: memorialName, memorial_name: memorialName, uploaded_by: user.id, published: false, status: "pending" };
         const { error: rowError } = await supabase
-          .from("memorial_media")
-          .insert({
-            memorial_id: currentMemorialId,
-            media_type: type,
-            storage_path: path,
-            caption: (caption || file.name).slice(0, 200),
-            uploaded_by: user.id,
-            approved: false
-          });
+          .from(type === "photo" ? "memorial_photos" : "memorial_videos")
+          .insert(rowPayload);
 
         if (rowError) {
           failures.push(`${file.name}: file uploaded, but its review record could not be saved.`);
