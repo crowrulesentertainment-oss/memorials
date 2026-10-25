@@ -14,9 +14,9 @@
 const MEMORIAL_GALLERY_CONFIG = {
   supabaseUrl: window.CROW_MEMORIALS_CONFIG?.supabaseUrl || "https://cevylpnoexugwgygvtgu.supabase.co",
   publishableKey: window.CROW_MEMORIALS_CONFIG?.supabaseKey || "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImNldnlscG5vZXVnZ3dneWd2dGd1Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3ODg4MTYxOTYsImV4cCI6MjEwNDM5MjE5Nn0.bvSF3qRqFNvCtaF5CSDeeEO3yJnsnYt9CXmgUaBWjNQ",
-  bucket: "memorial-media",
+  bucket: "memorials",
   imageMaxBytes: 10 * 1024 * 1024,
-  videoMaxBytes: 100 * 1024 * 1024
+  videoMaxBytes: 20 * 1024 * 1024
 };
 
 (() => {
