@@ -11,12 +11,21 @@
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Barlow+Condensed:wght@500;600;700;800&family=DM+Sans:wght@400;500;600;700;800&family=Playfair+Display:wght@400;500;600;700&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="../assets/css/styles.css">
+  <script defer src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2.119.0"></script>
+  <script defer src="https://crowrulesentertainment-oss.github.io/crowrulesentertainment/assets/js/universal-admin-auth.js?v=20261112-sso1"></script>
   <link rel="stylesheet" href="https://crowrulesentertainment-oss.github.io/crowrulesentertainment/assets/css/universal-admin-theme.css?v=20261112">
   <style>
     :root{--memorial-gold:#d1b77e;--memorial-ink:#080b10}
     body{min-height:100vh;background:#080b10}
     body:before{background-image:linear-gradient(90deg,rgba(4,8,13,.92),rgba(4,8,13,.68) 58%,rgba(4,8,13,.42)),linear-gradient(0deg,#080b10 2%,transparent 70%),url('https://images.unsplash.com/photo-1500530850856-8a6d6a1b0f3a?auto=format&fit=crop&w=2200&q=85');background-position:center;background-size:cover}
     .mem-admin{width:min(1240px,calc(100% - 36px));margin:34px auto 70px}
+    .mem-login{min-height:100vh;display:grid;place-items:center;padding:24px;background:linear-gradient(120deg,rgba(4,8,13,.94),rgba(4,8,13,.72)),url('https://images.unsplash.com/photo-1500530850856-8a6d6a1b0f3a?auto=format&fit=crop&w=2200&q=85') center/cover}
+    .mem-login-card{width:min(430px,100%);padding:30px;border:1px solid rgba(209,183,126,.35);border-radius:18px;background:rgba(9,15,22,.95);box-shadow:0 24px 90px #0009}
+    .mem-login-card .mark{font-size:30px;color:var(--memorial-gold)}.mem-login-card h1{font:500 34px/1.05 'Playfair Display',Georgia,serif;color:#f5f2eb;margin:12px 0}.mem-login-card p{font-size:12px;line-height:1.7;color:#aebdca}
+    .mem-login-card label{display:block;margin:14px 0 6px;color:#c4d0da;font-size:10px;letter-spacing:1px}.mem-login-card input{width:100%;padding:12px;border:1px solid rgba(190,207,222,.2);border-radius:8px;background:#080e15;color:white}
+    .mem-login-card button{width:100%;margin-top:18px;padding:12px;border:0;border-radius:8px;background:linear-gradient(135deg,#d1b77e,#a98d5d);color:#111820;font-weight:800}
+    #memAuthStatus{min-height:18px;margin-top:10px;color:#ffaaa4;font-size:11px}
+    .mem-head-links button{color:#d4dfeb;text-decoration:none;border:1px solid rgba(190,207,222,.2);border-radius:8px;padding:9px 12px;font-size:11px;background:transparent;cursor:pointer}
     .mem-head{display:flex;justify-content:space-between;align-items:center;gap:18px;padding:20px 0;border-bottom:1px solid rgba(207,220,232,.18)}
     .mem-brand{display:flex;align-items:center;gap:12px;color:#f3f5f7;text-decoration:none}
     .mem-mark{display:grid;place-items:center;width:44px;height:44px;border:1px solid rgba(209,183,126,.5);border-radius:12px;color:var(--memorial-gold);font-size:22px;background:rgba(12,18,25,.8)}
@@ -35,12 +44,26 @@
   </style>
 </head>
 <body>
-  <div class="mem-admin">
+  <section class="mem-login" id="memLogin">
+    <form class="mem-login-card" id="memLoginForm">
+      <div class="mark" aria-hidden="true">🕯</div>
+      <p class="eyebrow">CROWRULES ENTERTAINMENT · SECURE ACCESS</p>
+      <h1>Memorials Administration</h1>
+      <p>Use your Universal Admin credentials. Your verified administrator session is shared across CrowRules workspaces.</p>
+      <label for="memEmail">ADMINISTRATOR EMAIL</label>
+      <input id="memEmail" type="email" autocomplete="username" required>
+      <label for="memPassword">PASSWORD</label>
+      <input id="memPassword" type="password" autocomplete="current-password" required>
+      <button id="memSignIn" type="submit">SIGN IN SECURELY ↗</button>
+      <div id="memAuthStatus" role="alert"></div>
+    </form>
+  </section>
+  <div class="mem-admin" id="memAdminContent" hidden>
     <header class="mem-head">
       <a class="mem-brand" href="../index.html"><span class="mem-mark" aria-hidden="true">🕯</span><span><strong>CROWRULES ENTERTAINMENT</strong><small>MEMORIALS · ADMIN WORKSPACE</small></span></a>
       <nav class="mem-head-links" aria-label="Workspace links">
         <a href="https://crowrulesentertainment-oss.github.io/crowrulesentertainment/universal-admin.html">← Universal Admin</a>
-        <a href="../index.html">Public Memorials</a>
+        <a href="../index.html">Public Memorials</a><button id="memSignOut" type="button">Sign out</button>
       </nav>
     </header>
     <main>
@@ -68,5 +91,17 @@
     </main>
     <footer class="mem-foot">CrowRules Memorials · A CrowRules Entertainment division · “One company. One universe.”<br>Existing public Memorials pages and Supabase integration remain unchanged by this administration preview.</footer>
   </div>
+  <script>
+  (() => {
+    const gate=document.getElementById("memLogin"),content=document.getElementById("memAdminContent");
+    const form=document.getElementById("memLoginForm"),status=document.getElementById("memAuthStatus"),button=document.getElementById("memSignIn");
+    function showGate(message){gate.hidden=false;content.hidden=true;status.textContent=message||"";}
+    async function enter(){try{const result=await window.CrowRulesAdminAuth.authorize();if(!result.ok){showGate(result.message);return;}gate.hidden=true;content.hidden=false;}catch(error){showGate(error.message||"Could not verify administrator access.");}}
+    form.addEventListener("submit",async event=>{event.preventDefault();button.disabled=true;button.textContent="VERIFYING ACCESS…";status.textContent="";try{const {error}=await window.CrowRulesAdminAuth.signIn(document.getElementById("memEmail").value,document.getElementById("memPassword").value);if(error)throw error;await enter();}catch(error){status.textContent=error.message||"Sign-in failed.";}finally{button.disabled=false;button.textContent="SIGN IN SECURELY ↗";}});
+    document.getElementById("memSignOut").addEventListener("click",async()=>{await window.CrowRulesAdminAuth.signOut();showGate("You have signed out.");});
+    window.CrowRulesAdminAuth.client.auth.onAuthStateChange((event,session)=>{if(event==="SIGNED_OUT")showGate("Your shared session has ended.");else if(event==="SIGNED_IN"&&session)setTimeout(enter,0);});
+    enter();
+  })();
+  </script>
 </body>
 </html>
