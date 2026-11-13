@@ -92,7 +92,7 @@
     <footer class="mem-foot">CrowRules Memorials · A CrowRules Entertainment division · “One company. One universe.”<br>Existing public Memorials pages and Supabase integration remain unchanged by this administration preview.</footer>
   </div>
   <script>
-  (() => {
+  document.addEventListener("DOMContentLoaded", () => {
     const gate=document.getElementById("memLogin"),content=document.getElementById("memAdminContent");
     const form=document.getElementById("memLoginForm"),status=document.getElementById("memAuthStatus"),button=document.getElementById("memSignIn");
     function showGate(message){gate.hidden=false;content.hidden=true;status.textContent=message||"";}
@@ -101,7 +101,7 @@
     document.getElementById("memSignOut").addEventListener("click",async()=>{await window.CrowRulesAdminAuth.signOut();showGate("You have signed out.");});
     window.CrowRulesAdminAuth.client.auth.onAuthStateChange((event,session)=>{if(event==="SIGNED_OUT")showGate("Your shared session has ended.");else if(event==="SIGNED_IN"&&session)setTimeout(enter,0);});
     enter();
-  })();
+  });
   </script>
 </body>
 </html>
