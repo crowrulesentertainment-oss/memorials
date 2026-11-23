@@ -1,0 +1,40 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<meta name="description" content="Sign in or create a CrowRules Memorials account.">
+<title>Your Account | CrowRules Memorials</title>
+<link rel="stylesheet" href="assets/css/main.css">
+<script defer src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+<script defer src="assets/js/config.js"></script>
+<script defer src="assets/js/auth.js"></script>
+<script defer src="assets/js/site.js"></script>
+</head>
+<body>
+<div data-site-header></div>
+<main class="page">
+<header class="page-hero"><p class="eyebrow">YOUR CROWRULES MEMORIALS ACCOUNT</p><h1>A place to <em>belong.</em></h1><p class="lead">Sign in to contribute memories and, when authorized, help care for a memorial.</p></header>
+<section class="form-wrap">
+<div class="memorial-form" id="auth-panel">
+<div class="notice"><strong>Account access</strong><p>Use your email address. If email confirmation is enabled in the connected Supabase project, new accounts must confirm their address before signing in. This page does not grant family or moderator permissions.</p></div>
+<div id="signed-out">
+<div class="filters" role="group" aria-label="Account action"><button class="chip" type="button" data-mode="signin" aria-pressed="true">Sign in</button><button class="chip" type="button" data-mode="signup" aria-pressed="false">Create account</button><button class="chip" type="button" data-mode="reset" aria-pressed="false">Reset password</button></div>
+<form id="auth-form" novalidate>
+<label for="auth-email">Email address</label><input id="auth-email" name="email" type="email" autocomplete="email" maxlength="254" required>
+<div id="password-wrap"><label for="auth-password">Password</label><input id="auth-password" name="password" type="password" autocomplete="current-password" minlength="8" maxlength="128" required></div>
+<div id="confirm-wrap" hidden><label for="auth-confirm">Confirm password</label><input id="auth-confirm" name="confirm" type="password" autocomplete="new-password" minlength="8" maxlength="128"></div>
+<button class="button gold" id="auth-submit" type="submit">Sign in</button>
+<p class="form-feedback" id="auth-feedback" role="status" aria-live="polite"></p>
+</form>
+</div>
+<div id="signed-in" hidden>
+<h2>You're signed in.</h2><p id="account-email" class="muted"></p>
+<p class="muted">Your account does not automatically provide access to private memorials or management tools. Those permissions require a separate verified invitation or approval.</p>
+<button class="button outline" id="signout-button" type="button">Sign out</button>
+<p class="form-feedback" id="session-feedback" role="status" aria-live="polite"></p>
+</div>
+</div>
+</section>
+</main>
+<div data-site-footer></div>
+</body></html>
