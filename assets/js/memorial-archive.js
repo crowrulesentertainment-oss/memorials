@@ -56,7 +56,7 @@
   const card = (m, isRecent=false) => {
     const name = m.full_name || m.name || "Name not provided";
     const date = m.passing_date || m.death_date;
-    const info = m.short_bio || m.known_for || m.profession || "";
+    const info = m.memorial_message || m.known_for || m.profession || "";
     const source = m.source_url || m.source || "";
     const article = document.createElement("article");
     article.style.cssText = "padding:1.15rem;border:1px solid rgba(160,140,110,.28);border-radius:14px;background:rgba(255,255,255,.035);min-width:0";
@@ -67,7 +67,7 @@
   let archive = [];
   const draw = () => {
     const term = (search?.value || "").trim().toLocaleLowerCase();
-    const filtered = archive.filter(m => [m.full_name,m.name,m.profession,m.category,m.known_for,m.short_bio].filter(Boolean).join(" ").toLocaleLowerCase().includes(term));
+    const filtered = archive.filter(m => [m.full_name,m.name,m.profession,m.category,m.known_for,m.memorial_message].filter(Boolean).join(" ").toLocaleLowerCase().includes(term));
     grid.replaceChildren(...filtered.map(m => card(m)));
     recentGrid.replaceChildren(...recent.filter(m => [m.name,m.profession,m.known].join(" ").toLocaleLowerCase().includes(term)).map(m => card({...m,known_for:m.known,source_url:m.source,category:"Newly reported"},true)));
     status.textContent = `${filtered.length.toLocaleString()} published Supabase memorials shown${term ? " matching your search" : ""}. ${recent.length} additional public-figure reports found in the November 25 review.`;
@@ -82,7 +82,7 @@
       url.searchParams.set("select",select);
       url.searchParams.set("order", table === "memorials" ? "passing_date.desc.nullslast" : "death_date.desc.nullslast");
       if (filter) url.searchParams.set(filter[0],filter[1]);
-      const response = await fetch(url,{headers:{apikey:SUPABASE_KEY,Authorization:"Bearer "+SUPABASE_KEY,Range:`${offset}-${offset+PAGE_SIZE-1}`,Prefer:"count=none"}});
+      const response = await fetch(url,{headers:{apikey:SUPABASE_KEY,Range:`${offset}-${offset+PAGE_SIZE-1}`,Prefer:"count=none"}});
       if (!response.ok) throw new Error(table + " returned HTTP " + response.status);
       const batch = await response.json();
       rows.push(...batch);
@@ -92,7 +92,7 @@
   }
 
   Promise.all([
-    fetchAll("memorials","id,full_name,passing_date,profession,category,known_for,short_bio,source_url,published",["published","eq.true"]),
+    fetchAll("memorials","id,full_name,passing_date,profession,category,known_for,memorial_message,source_url,published",["published","eq.true"]),
     fetchAll("celebrity_deaths","id,name,death_date,profession,category,known_for,bio,source_url,is_published",["is_published","eq.true"])
   ]).then(([memorialRows,celebrityRows]) => {
     const seen = new Set();
