@@ -24,18 +24,32 @@ async function checkAccess(){
  show("dashboard-view");await loadDashboard();
 }
 async function loadDashboard(){
- const [all,total,pub,candles]=await Promise.all([
- client.from("memorials").select("id,full_name,slug,category,featured,published,passing_date,created_at").order("created_at",{ascending:false}).limit(1000),
- client.from("memorials").select("id",{count:"exact",head:true}).eq("published",true),
- client.from("memorial_candles").select("id",{count:"exact",head:true})
- ]);
- if(all.error){$("records-list").textContent=authError(all.error);return;}
- records=all.data||[];
- $("stat-total").textContent=(total.count??records.length).toLocaleString();
- $("stat-published").textContent=(pub.count??records.filter(r=>r.published).length).toLocaleString();
- $("stat-drafts").textContent=records.filter(r=>!r.published).length.toLocaleString();
- $("stat-candles").textContent=(candles.count??"—").toLocaleString();
- renderRecords();loadActivity();
+ const box=$("records-list");
+ box.textContent="Loading memorial records…";
+ try{
+  const [all,total,pub,candles]=await Promise.all([
+   client.from("memorials").select("id,full_name,slug,category,featured,published,passing_date,created_at").order("created_at",{ascending:false}).limit(1000),
+   client.from("memorials").select("id",{count:"exact",head:true}),
+   client.from("memorials").select("id",{count:"exact",head:true}).eq("published",true),
+   client.from("memorial_candles").select("id",{count:"exact",head:true})
+  ]);
+  if(all.error) throw all.error;
+  records=all.data||[];
+  $("stat-total").textContent=(total.error?"—":(total.count??records.length)).toLocaleString();
+  $("stat-published").textContent=(pub.error?"—":(pub.count??records.filter(r=>r.published).length)).toLocaleString();
+  $("stat-drafts").textContent=records.filter(r=>!r.published).length.toLocaleString();
+  $("stat-candles").textContent=(candles.error||candles.count===null?"—":candles.count).toLocaleString();
+  renderRecords();
+  if(total.error) console.warn("Total memorial count unavailable:",total.error.message);
+  if(pub.error) console.warn("Published memorial count unavailable:",pub.error.message);
+  if(candles.error) console.warn("Candle count unavailable:",candles.error.message);
+  await loadActivity();
+ }catch(error){
+  console.error("Memorials dashboard could not load:",error);
+  box.textContent="Dashboard data could not be loaded: "+authError(error);
+  $("stat-total").textContent="—";$("stat-published").textContent="—";
+  $("stat-drafts").textContent="—";$("stat-candles").textContent="—";
+ }
 }
 function formData(){
  const name=val("full-name");
