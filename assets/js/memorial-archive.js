@@ -43,6 +43,26 @@
   const profileContent=profile.querySelector(".memorial-profile-content");
   profile.querySelector(".memorial-profile-close").addEventListener("click",()=>profile.close());
   profile.addEventListener("click",e=>{if(e.target===profile)profile.close();});
+  const candleCounts=new Map();
+  const candleKey=m=>m.__memorialId?"id:"+m.__memorialId:"name:"+norm(m.full_name||m.name);
+  async function loadCandleCounts(){
+    try{const url=new URL(SUPABASE_URL+"/rest/v1/memorial_candles");url.searchParams.set("select","memorial_id,memorial_name");
+      const r=await fetch(url,{headers:{apikey:SUPABASE_KEY}});if(!r.ok)throw new Error("HTTP "+r.status);
+      (await r.json()).forEach(row=>{const k=row.memorial_id?"id:"+row.memorial_id:"name:"+norm(row.memorial_name);if(k!=="name:")candleCounts.set(k,(candleCounts.get(k)||0)+1);});
+    }catch(e){console.warn("Candle totals unavailable:",e);}
+  }
+  const candleStorageKey=m=>"cr-memorial-candle-"+candleKey(m);
+  function alreadyLit(m){try{return !!localStorage.getItem(candleStorageKey(m));}catch(_){return false;}}
+  async function lightCandle(m,button,countNode){
+    if(button.disabled||alreadyLit(m))return;button.disabled=true;button.textContent="Lighting candle…";
+    const payload={memorial_id:m.__memorialId||null,memorial_name:m.full_name||m.name||"",author_name:null,message:null};
+    try{const r=await fetch(SUPABASE_URL+"/rest/v1/memorial_candles",{method:"POST",headers:{apikey:SUPABASE_KEY,"Content-Type":"application/json",Prefer:"return=minimal"},body:JSON.stringify(payload)});
+      if(!r.ok)throw new Error("Could not save candle ("+r.status+").");
+      const k=candleKey(m),n=(candleCounts.get(k)||0)+1;candleCounts.set(k,n);countNode.textContent=n.toLocaleString()+" candles have been lit";
+      try{localStorage.setItem(candleStorageKey(m),new Date().toISOString());}catch(_){}
+      button.textContent="🕯 Candle lit";button.setAttribute("aria-pressed","true");
+    }catch(e){button.disabled=false;button.textContent="🕯 Light a candle";countNode.textContent=e.message||"The candle could not be saved. Please try again."; }
+  }
   const imageCache=new Map();
   async function wikiProfile(name){
     if(imageCache.has(name))return imageCache.get(name);
@@ -66,6 +86,12 @@
     const story=m.memorial_message||m.known_for||m.bio||"";
     const source=m.source_url||m.source||"";
     profileContent.innerHTML='<div class="memorial-profile-photo memorial-profile-placeholder">'+esc(initials(name))+'</div><p class="eyebrow">LIFE REMEMBERED</p><h2>'+esc(name)+'</h2><p class="muted">'+esc(dateLabel(date))+'</p>'+(profession?'<p class="memorial-profile-profession">'+esc(profession)+'</p>':"")+(story?'<p>'+esc(story)+'</p>':"")+'<div class="memorial-wiki-bio"><p class="muted">Looking for an attributed biography and portrait…</p></div>'+(source?'<p><a class="text-link" href="'+esc(source)+'" target="_blank" rel="noopener noreferrer">Memorial / source record ↗</a></p>':"");
+    const candlePanel=document.createElement("section");candlePanel.className="memorial-candle-panel";candlePanel.setAttribute("aria-label","Light a candle");
+    const candleCount=document.createElement("p");candleCount.className="memorial-candle-count";candleCount.textContent=(candleCounts.get(candleKey(m))||0).toLocaleString()+" candles have been lit";
+    const candleButton=document.createElement("button");candleButton.type="button";candleButton.className="memorial-candle-button";candleButton.textContent="🕯 Light a candle";
+    const candleNote=document.createElement("p");candleNote.className="memorial-candle-note";candleNote.textContent="Leave a small light in remembrance.";
+    if(alreadyLit(m)){candleButton.disabled=true;candleButton.textContent="🕯 Candle already lit";candleButton.setAttribute("aria-pressed","true");}
+    candleButton.addEventListener("click",()=>lightCandle(m,candleButton,candleCount));candlePanel.append(candleCount,candleButton,candleNote);profileContent.append(candlePanel);
     if(typeof profile.showModal==="function")profile.showModal();else profile.setAttribute("open","");
     wikiProfile(name).then(w=>{
       if(!profile.open||profileContent.querySelector("h2")?.textContent!==name)return;
@@ -114,12 +140,13 @@
     }
     return rows;
   }
+  loadCandleCounts();
   Promise.all([
     fetchAll("memorials","id,full_name,passing_date,profession,category,known_for,memorial_message,source_url,published",["published","eq.true"]),
     fetchAll("celebrity_deaths","id,name,death_date,profession,category,known_for,bio,source_url,is_published",["is_published","eq.true"])
   ]).then(([memorialRows,celebrityRows])=>{
     const seen=new Set();
-    archive=[...memorialRows,...celebrityRows].filter(m=>{
+    archive=[...memorialRows.map(m=>({...m,__memorialId:m.id})),...celebrityRows].filter(m=>{
       const key=norm(m.full_name||m.name)+"|"+(m.passing_date||m.death_date||"");
       if(!key||seen.has(key))return false;seen.add(key);return true;
     }).sort((a,b)=>String(b.passing_date||b.death_date||"").localeCompare(String(a.passing_date||a.death_date||"")));
