@@ -22,9 +22,8 @@
     {name:"Steven Hack",date:"2026-11-19",profession:"Actor and graphic artist",known:"Original Broadway cast member of Cats and performer in television productions.",source:"https://www.usmagazine.com/celebrity-news/pictures/celebrity-deaths-of-2026-grateful-deads-bob-weir-and-more-stars-we-lost/"},
     {name:"Tom Jackson",date:"2026-11-20",profession:"Former NFL player and sports broadcaster",known:"Denver Broncos linebacker and longtime ESPN analyst on NFL Primetime and Sunday NFL Countdown.",source:"https://www.legacy.com/groups/notable-deaths/celebrities"},
     {name:"Paolo Bulgari",date:"2026-11-21",profession:"Businessman and jewelry designer",known:"Helped develop the family-founded Bulgari jewelry house into an international luxury brand.",source:"https://www.legacy.com/groups/notable-deaths/celebrities"},
-    {name:"Pete Edochie",date:"2026-11-25",profession:"Nigerian actor",known:"Veteran Nollywood performer celebrated for major roles in Nigerian film and television.",source:"https://www.dead-people.com/Deaths-in-November-2026"},
-    {name:"Thomas Menamparampil",date:"2026-11-25",profession:"Catholic archbishop",known:"Indian prelate and former Archbishop of Guwahati.",source:"https://www.dead-people.com/Deaths-in-November-2026"},
-    {name:"Michael Carttiss",date:"2026-11-24",profession:"British politician and teacher",known:"Former Conservative Member of Parliament for Great Yarmouth.",source:"https://www.dead-people.com/Deaths-in-November-2026"}
+    {name:"Pete Edochie",date:"2026-11-25",profession:"Nigerian actor",known:"Veteran Nollywood performer celebrated for major roles in Nigerian film and television.",source:"https://www.punchng.com/veteran-actor-pete-edochie-dies-at-79/"},
+    {name:"Thomas Menamparampil",date:"2026-11-25",profession:"Catholic archbishop",known:"Indian prelate and former Archbishop of Guwahati.",source:"https://donboscosouthasia.org/News-Info?id=13152&title=Guwahati-Archbishop-Emeritus-Thomas-Menamparampil-SDB-Passes-Away-at-90"}
   ];
 
   const escapeHTML = value => String(value ?? "").replace(/[&<>"']/g, c => ({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[c]));
