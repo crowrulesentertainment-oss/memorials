@@ -46,7 +46,7 @@ function resetForm(){
 }
 function editRecord(r){
  $("record-id").value=r.id;$("full-name").value=r.full_name||"";$("slug").value=r.slug||"";$("birth-date").value=r.birth_date||"";$("passing-date").value=r.passing_date||"";
- ["category","profession","location","nationality","portrait-url","short-bio","known-for","memorial-message","source-name","source-url","official-url"].forEach((id)=>{const map={"portrait-url":"portrait_url","short-bio":"short_bio","known-for":"known_for","memorial-message":"memorial_message","source-name":"source_name","source-url":"source_url","official-url":"official_url"};$(id).value=r[map[id]||id]||"";});
+ ["category","profession","location","nationality","portrait-url","portrait-credit","short-bio","known-for","memorial-message","source-name","source-url","official-url"].forEach((id)=>{const map={"portrait-url":"portrait_url","portrait-credit":"portrait_credit","short-bio":"short_bio","known-for":"known_for","memorial-message":"memorial_message","source-name":"source_name","source-url":"source_url","official-url":"official_url"};$(id).value=r[map[id]||id]||"";});
  $("featured").checked=!!r.featured;$("is-celebrity").checked=!!r.is_celebrity;$("published").checked=!!r.published;$("editor-title").textContent="Edit memorial";$("save-record").textContent="Update memorial";activateTab("editor");window.scrollTo({top:0,behavior:"smooth"});
 }
 async function audit(action,id,name,details={}){
