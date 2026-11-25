@@ -21,3 +21,10 @@
 .memorial-wiki-bio{margin-top:1.4rem;padding-top:1rem;border-top:1px solid #ffffff24}
 .memorial-image-credit{font-size:.8rem;color:#b9b0a5}
 @media(max-width:420px){.memorial-card-photo{flex-basis:92px;width:92px;min-height:128px}.memorial-card-copy{padding-right:.55rem}}
+/* Memorial candle tribute control */
+.memorial-candle-panel{margin:1.5rem 0;padding:1rem;border:1px solid rgba(211,170,103,.35);border-radius:14px;background:linear-gradient(135deg,rgba(176,119,43,.13),rgba(255,255,255,.025))}
+.memorial-candle-count{margin:.1rem 0 .75rem;color:#e5c995;font-weight:650}
+.memorial-candle-button{display:inline-flex;align-items:center;gap:.5rem;padding:.75rem 1.1rem;border:1px solid #c69a58;border-radius:999px;background:#6e4822;color:#fff7e9;font:inherit;font-weight:700;cursor:pointer;transition:transform .18s ease,background .18s ease}
+.memorial-candle-button:hover:not(:disabled){background:#8a5b2b;transform:translateY(-1px)}
+.memorial-candle-button:disabled{opacity:.78;cursor:default}
+.memorial-candle-note{margin:.6rem 0 0;color:#b9b0a5;font-size:.85rem}
