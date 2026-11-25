@@ -58,7 +58,7 @@
     const payload={memorial_id:m.__memorialId||null,memorial_name:m.full_name||m.name||"",author_name:null,message:null};
     try{const r=await fetch(SUPABASE_URL+"/rest/v1/memorial_candles",{method:"POST",headers:{apikey:SUPABASE_KEY,"Content-Type":"application/json",Prefer:"return=minimal"},body:JSON.stringify(payload)});
       if(!r.ok)throw new Error("Could not save candle ("+r.status+").");
-      const k=candleKey(m),n=(candleCounts.get(k)||0)+1;candleCounts.set(k,n);countNode.textContent=n.toLocaleString()+" candles have been lit";
+      const k=candleKey(m),n=(candleCounts.get(k)||0)+1;candleCounts.set(k,n);countNode.textContent=n.toLocaleString()+(n===1?" candle has":" candles have")+" been lit";
       try{localStorage.setItem(candleStorageKey(m),new Date().toISOString());}catch(_){}
       button.textContent="🕯 Candle lit";button.setAttribute("aria-pressed","true");
     }catch(e){button.disabled=false;button.textContent="🕯 Light a candle";countNode.textContent=e.message||"The candle could not be saved. Please try again."; }
@@ -87,7 +87,7 @@
     const source=m.source_url||m.source||"";
     profileContent.innerHTML='<div class="memorial-profile-photo memorial-profile-placeholder">'+esc(initials(name))+'</div><p class="eyebrow">LIFE REMEMBERED</p><h2>'+esc(name)+'</h2><p class="muted">'+esc(dateLabel(date))+'</p>'+(profession?'<p class="memorial-profile-profession">'+esc(profession)+'</p>':"")+(story?'<p>'+esc(story)+'</p>':"")+'<div class="memorial-wiki-bio"><p class="muted">Looking for an attributed biography and portrait…</p></div>'+(source?'<p><a class="text-link" href="'+esc(source)+'" target="_blank" rel="noopener noreferrer">Memorial / source record ↗</a></p>':"");
     const candlePanel=document.createElement("section");candlePanel.className="memorial-candle-panel";candlePanel.setAttribute("aria-label","Light a candle");
-    const candleCount=document.createElement("p");candleCount.className="memorial-candle-count";candleCount.textContent=(candleCounts.get(candleKey(m))||0).toLocaleString()+" candles have been lit";
+    const candleCount=document.createElement("p");candleCount.className="memorial-candle-count";const currentCandles=candleCounts.get(candleKey(m))||0;candleCount.textContent=currentCandles.toLocaleString()+(currentCandles===1?" candle has":" candles have")+" been lit";
     const candleButton=document.createElement("button");candleButton.type="button";candleButton.className="memorial-candle-button";candleButton.textContent="🕯 Light a candle";
     const candleNote=document.createElement("p");candleNote.className="memorial-candle-note";candleNote.textContent="Leave a small light in remembrance.";
     if(alreadyLit(m)){candleButton.disabled=true;candleButton.textContent="🕯 Candle already lit";candleButton.setAttribute("aria-pressed","true");}
