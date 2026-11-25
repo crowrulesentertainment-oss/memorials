@@ -35,14 +35,14 @@ async function loadDashboard(){
   ]);
   if(all.error) throw all.error;
   records=all.data||[];
-  $("stat-total").textContent=(total.error?"—":(total.count??records.length)).toLocaleString();
-  $("stat-published").textContent=(pub.error?"—":(pub.count??records.filter(r=>r.published).length)).toLocaleString();
+  $("stat-total").textContent=(total?.error?"—":(total?.count??records.length)).toLocaleString();
+  $("stat-published").textContent=(pub?.error?"—":(pub?.count??records.filter(r=>r.published).length)).toLocaleString();
   $("stat-drafts").textContent=records.filter(r=>!r.published).length.toLocaleString();
-  $("stat-candles").textContent=(candles.error||candles.count===null?"—":candles.count).toLocaleString();
+  $("stat-candles").textContent=(candles?.error||candles?.count==null?"—":candles.count).toLocaleString();
   renderRecords();
-  if(total.error) console.warn("Total memorial count unavailable:",total.error.message);
-  if(pub.error) console.warn("Published memorial count unavailable:",pub.error.message);
-  if(candles.error) console.warn("Candle count unavailable:",candles.error.message);
+  if(total?.error) console.warn("Total memorial count unavailable:",total.error.message);
+  if(pub?.error) console.warn("Published memorial count unavailable:",pub.error.message);
+  if(candles?.error) console.warn("Candle count unavailable:",candles.error.message);
   await loadActivity();
  }catch(error){
   console.error("Memorials dashboard could not load:",error);
