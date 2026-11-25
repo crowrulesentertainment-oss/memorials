@@ -24,14 +24,14 @@ async function checkAccess(){
  show("dashboard-view");await loadDashboard();
 }
 async function loadDashboard(){
- const [all,pub,candles]=await Promise.all([
+ const [all,total,pub,candles]=await Promise.all([
  client.from("memorials").select("id,full_name,slug,category,featured,published,passing_date,created_at").order("created_at",{ascending:false}).limit(1000),
  client.from("memorials").select("id",{count:"exact",head:true}).eq("published",true),
  client.from("memorial_candles").select("id",{count:"exact",head:true})
  ]);
  if(all.error){$("records-list").textContent=authError(all.error);return;}
  records=all.data||[];
- $("stat-total").textContent=records.length.toLocaleString();
+ $("stat-total").textContent=(total.count??records.length).toLocaleString();
  $("stat-published").textContent=(pub.count??records.filter(r=>r.published).length).toLocaleString();
  $("stat-drafts").textContent=records.filter(r=>!r.published).length.toLocaleString();
  $("stat-candles").textContent=(candles.count??"—").toLocaleString();
@@ -39,7 +39,7 @@ async function loadDashboard(){
 }
 function formData(){
  const name=val("full-name");
- return {full_name:name,slug:val("slug")||slugify(name),birth_date:val("birth-date"),passing_date:val("passing-date"),category:val("category"),profession:val("profession"),location:val("location"),nationality:val("nationality"),portrait_url:val("portrait-url"),short_bio:val("short-bio"),known_for:val("known-for"),memorial_message:val("memorial-message"),source_name:val("source-name"),source_url:val("source-url"),official_url:val("official-url"),featured:$("featured").checked,is_celebrity:$("is-celebrity").checked,published:$("published").checked,memorial_type:"person"};
+ return {full_name:name,slug:val("slug")||slugify(name),birth_date:val("birth-date"),passing_date:val("passing-date"),category:val("category"),profession:val("profession"),location:val("location"),nationality:val("nationality"),portrait_url:val("portrait-url"),portrait_credit:val("portrait-credit"),short_bio:val("short-bio"),known_for:val("known-for"),memorial_message:val("memorial-message"),source_name:val("source-name"),source_url:val("source-url"),official_url:val("official-url"),featured:$("featured").checked,is_celebrity:$("is-celebrity").checked,published:$("published").checked,memorial_type:"person"};
 }
 function resetForm(){
  $("memorial-form").reset();$("record-id").value="";$("editor-title").textContent="Create a memorial";$("save-record").textContent="Save memorial";msg("save-message","");
