@@ -1,0 +1,35 @@
+<!doctype html>
+<html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<meta name="description" content="Authorized CrowRules Memorials administration.">
+<title>Admin Center | CrowRules Memorials</title>
+<link rel="stylesheet" href="../assets/css/main.css">
+<script defer src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+<script defer src="assets/admin.js"></script>
+</head><body>
+<header class="site-header"><a class="brand" href="../index.html"><span class="brand-mark">◈</span><span>CROWRULES<small>MEMORIALS ADMIN</small></span></a><nav class="nav" style="display:flex"><a href="../hall-of-remembrance.html">Public Hall</a><a href="../index.html">Memorials Home</a></nav></header>
+<main class="admin-page">
+<header class="admin-hero"><p class="eyebrow">PRIVATE ADMINISTRATION</p><h1>Memorials <em>Admin Center</em></h1><p>Care for the archive. Preserve every story with accuracy and respect.</p></header>
+<section id="auth-view" class="admin-panel admin-auth">
+<h2>Administrator sign in</h2><p class="muted">Sign in with your CrowRules Memorials account. Access is granted only to accounts explicitly authorized in the database.</p>
+<form id="login-form" class="admin-form"><label>Email address<input id="email" type="email" autocomplete="username" required></label><label>Password<input id="password" type="password" autocomplete="current-password" required></label><button class="button gold" type="submit">Sign in</button><p id="login-message" class="form-feedback" role="status"></p></form>
+</section>
+<section id="setup-view" class="admin-panel" hidden><h2>Administrator authorization required</h2><p id="setup-message">Your account is signed in, but it does not have an administrator grant.</p><p class="muted">For security, the first administrator must be approved by the Supabase project owner. Copy this SQL and run it in the Supabase SQL Editor after verifying this is your account.</p><pre id="bootstrap-sql" class="admin-code"></pre><button id="copy-sql" class="button outline" type="button">Copy authorization SQL</button><p class="muted">After the grant is added, sign out and sign in again or refresh this page. Do not share your password or service-role key.</p><button id="setup-signout" class="button outline" type="button">Sign out</button></section>
+<section id="dashboard-view" hidden>
+<div class="admin-toolbar"><div><p class="eyebrow">CROWRULES CONTROL DESK</p><h2>Archive overview</h2><p id="admin-identity" class="muted"></p></div><button id="signout" class="button outline" type="button">Sign out</button></div>
+<div class="admin-stats"><article><strong id="stat-total">—</strong><span>Total memorials</span></article><article><strong id="stat-published">—</strong><span>Published</span></article><article><strong id="stat-drafts">—</strong><span>Drafts / archived</span></article><article><strong id="stat-candles">—</strong><span>Candles lit</span></article></div>
+<div class="admin-layout">
+<aside class="admin-panel admin-sidebar"><button class="admin-tab active" data-tab="editor">＋ Add memorial</button><button class="admin-tab" data-tab="records">Manage memorials</button><button class="admin-tab" data-tab="activity">Change history</button><a class="admin-tab" href="../hall-of-remembrance.html">View public Hall ↗</a></aside>
+<div class="admin-main">
+<section id="editor-panel" class="admin-panel"><div class="admin-section-head"><div><p class="eyebrow">MEMORIAL EDITOR</p><h2 id="editor-title">Create a memorial</h2></div><button id="new-record" class="button outline" type="button">New record</button></div>
+<form id="memorial-form" class="admin-form">
+<input id="record-id" type="hidden">
+<div class="admin-form-grid"><label>Full name *<input id="full-name" maxlength="160" required></label><label>URL slug *<input id="slug" maxlength="180" required></label><label>Birth date<input id="birth-date" type="date"></label><label>Date of passing<input id="passing-date" type="date"></label><label>Category<select id="category"><option value="Community">Community</option><option value="Public Figure">Public Figure</option><option value="Historical">Historical</option><option value="Family & Friends">Family & Friends</option><option value="Other">Other</option></select></label><label>Profession / role<input id="profession" maxlength="180"></label><label>Location<input id="location" maxlength="180" placeholder="City, region, country"></label><label>Nationality<input id="nationality" maxlength="120"></label><label class="admin-wide">Portrait image URL<input id="portrait-url" type="url" maxlength="1000" placeholder="https://…"></label><label class="admin-wide">Portrait credit<input id="portrait-credit" maxlength="500" placeholder="Photographer, source, or license details (optional)"></label><label class="admin-wide">Short biography<textarea id="short-bio" rows="3" maxlength="3000"></textarea></label><label class="admin-wide">Known for<textarea id="known-for" rows="3" maxlength="3000"></textarea></label><label class="admin-wide">Remembrance message<textarea id="memorial-message" rows="4" maxlength="5000"></textarea></label><label>Source name<input id="source-name" maxlength="180"></label><label>Source URL<input id="source-url" type="url" maxlength="1000"></label><label>Official / family website<input id="official-url" type="url" maxlength="1000"></label></div>
+<div class="admin-checks"><label><input id="featured" type="checkbox"> Feature this memorial</label><label><input id="is-celebrity" type="checkbox"> Public figure</label><label><input id="published" type="checkbox"> Publish on public Hall</label></div>
+<div class="admin-actions"><button class="button gold" type="submit" id="save-record">Save memorial</button><button class="button outline" type="button" id="preview-record">Preview profile</button><span id="save-message" class="form-feedback" role="status"></span></div>
+</form></section>
+<section id="records-panel" class="admin-panel" hidden><div class="admin-section-head"><div><p class="eyebrow">ARCHIVE MANAGEMENT</p><h2>Memorial records</h2></div><button class="button gold" id="add-record" type="button">＋ Add memorial</button></div><div class="admin-filters"><input id="record-search" type="search" placeholder="Search memorials…"><select id="status-filter"><option value="all">All records</option><option value="published">Published</option><option value="draft">Draft / archived</option><option value="featured">Featured</option></select></div><div id="records-list" class="admin-records" aria-live="polite">Loading records…</div></section>
+<section id="activity-panel" class="admin-panel" hidden><p class="eyebrow">ACCOUNTABILITY</p><h2>Change history</h2><div id="activity-list" class="admin-records">Loading activity…</div></section>
+</div></div>
+</section>
+</main><footer class="site-footer"><div>© 2026 CrowRules Entertainment · Memorials Admin</div><div class="footer-links"><a href="../hall-of-remembrance.html">Public Hall</a><a href="mailto:crowrulesentertainment@gmail.com">Support</a></div></footer>
+</body></html>
